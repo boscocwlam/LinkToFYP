@@ -21,7 +21,7 @@ const StudentNav = () => {
       <div>
         <div className="mt-2">
           <Container>
-            <a href="/admin/main">
+            <a href="/student/main">
               <img className="photo" src={logo} alt="Logo" />
             </a>
           </Container>
