@@ -1,0 +1,14 @@
+.color-nav{
+    background-color: rgb(243, 52, 4);
+}
+
+.photo{
+    width: 20%;
+    max-width:280px;
+    min-width:160px;
+}
+
+.word{
+    font-weight:bold;
+    color: white;
+}

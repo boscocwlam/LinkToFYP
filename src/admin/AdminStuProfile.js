@@ -31,8 +31,9 @@ const AdminStuProfile = () => {
 
 
       <div>
-      <Container>
+
       <AdminNav />
+      <Container>
       {/* <h3>admin_AddAccount</h3> */}
         <header>
           <Table striped bordered hover>

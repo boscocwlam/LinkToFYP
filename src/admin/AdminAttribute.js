@@ -6,7 +6,6 @@ const AdminAttribute = () => {
     <div>
       <AdminNav />
       <h1>Admin_Attribute</h1>
-
     </div>
   );
 };

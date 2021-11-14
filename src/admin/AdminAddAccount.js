@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
 const AdminAddAccount = () => {
@@ -33,7 +33,8 @@ const AdminAddAccount = () => {
     const cGPA = event.target.cGPA.value;
     const year = event.target.year.value;
 
-    axios.post("http://localhost:3001/StudentCreate", {
+    axios
+      .post("http://localhost:3001/StudentCreate", {
         student_ID,
         first_name,
         last_name,
@@ -47,42 +48,46 @@ const AdminAddAccount = () => {
   };
 
   return (
+    <div>
+      <div>
+        <AdminNav />
+      </div>
+      <div>
+        <Container>
+          <Form onSubmit={submitForm}>
+            <Form.Group className="mb-3" controlId="student_ID">
+              <Form.Label>Student ID</Form.Label>
+              <Form.Control type="text" />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="first_name">
+              <Form.Label>First Name</Form.Label>
+              <Form.Control type="text" />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="last_name">
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control type="text" />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="cGPA">
+              <Form.Label>cGPA</Form.Label>
+              <Form.Control type="text" />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="year">
+              <Form.Label>Year</Form.Label>
+              <Form.Select aria-label="Default select example">
+                <option value="2018-2019">2018-2019</option>
+                <option value="2019-2020">2019-2020</option>
+                <option value="2020-2021">2020-2021</option>
+                <option value="2021-2022">2021-2022</option>
+              </Form.Select>
+            </Form.Group>
 
-
-    <Container>
-      <AdminNav />
-      <Form onSubmit={submitForm}>
-        <Form.Group className="mb-3" controlId="student_ID">
-          <Form.Label>Student ID</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="first_name">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="last_name">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="cGPA">
-          <Form.Label>cGPA</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="year">
-          <Form.Label>Year</Form.Label>
-          <Form.Select aria-label="Default select example">
-            <option value="2018-2019">2018-2019</option>
-            <option value="2019-2020">2019-2020</option>
-            <option value="2020-2021">2020-2021</option>
-            <option value="2021-2022">2021-2022</option>
-          </Form.Select>
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    </Container>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
+        </Container>
+      </div>
+    </div>
 
     // <form onSubmit={submitForm}>
 

@@ -2,7 +2,8 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import Offcanvas from "react-bootstrap/Offcanvas";
+import "./AdminCSSfile.css";
+import logo from "../LinkToFYP_logo.png";
 import NavDropdown from "react-bootstrap/NavDropdown";
 // import Form from "react-bootstrap/Form";
 // import FormControl from "react-bootstrap/FormControl";
@@ -11,32 +12,62 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 // import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 // import NavbarToggle from "react-bootstrap/NavbarToggle";
 // import NavbarOffcanvas from "react-bootstrap/NavbarOffcanvas";
-
+// import Offcanvas from "react-bootstrap/Offcanvas";
 
 
 const AdminNav = () => {
   return (
-    <Navbar bg="light" expand={false}>
-      <Container>
-        <Navbar.Brand href="/admin/main">LinkToFYP</Navbar.Brand>
-        <Navbar.Toggle aria-controls="offcanvasNavbar" />
-        <Navbar.Offcanvas id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" placement="end">
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id="offcanvasNavbarLabel">LinkToFYP</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link href="/admin/dashboard">Dashboard</Nav.Link>
-              <Nav.Link href="/admin/addaccount">Add Accounts</Nav.Link>
-              <Nav.Link href="/admin/attribute">Manage Attributes</Nav.Link>
-              <Nav.Link href="/admin/stuprofile">Manage Students' Profile</Nav.Link>
+    <div>
+      <div>
+        <div className="mt-2">
+          <Container>
+            <a href="/admin/main">
+              <img className="photo" src={logo} alt="Logo" />
+            </a>
+          </Container>
+        </div>
+        <div className="mt-2"></div>
+      </div>
+      <div>
+        <Navbar
+          collapseOnSelect
+          expand="lg"
+          className="color-nav"
+          variant="light"
+        >
+          <Container>
+            <Navbar.Brand></Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link href="/admin/main">
+                  <p1 className="word">HomePage</p1>
+                </Nav.Link>
+                <Nav.Link href="/admin/dashboard">
+                  <p1 className="word">Dashboard</p1>
+                </Nav.Link>
+                <Nav.Link href="/admin/addaccount">
+                  <p1 className="word">Add Account</p1>
+                </Nav.Link>
+                <Nav.Link href="/admin/attribute">
+                  <p1 className="word">Manage Attribute</p1>
+                </Nav.Link>
+                <Nav.Link href="/admin/stuprofile">
+                  <p1 className="word">Manage Students' Profile</p1>
+                </Nav.Link>
+              </Nav>
               <NavDropdown.Divider />
-              <Nav.Link href="/">Logout</Nav.Link>
-            </Nav>
-          </Offcanvas.Body>
-        </Navbar.Offcanvas>
-      </Container>
-    </Navbar>
+              <Nav>
+                <Nav.Link href="/">
+                  <p1 className="word">Logout</p1>
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+      </div>
+      <div className="mt-2"></div>
+    </div>
   );
 };
 

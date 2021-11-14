@@ -2,7 +2,8 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import Offcanvas from "react-bootstrap/Offcanvas";
+import "./EmployerCSSfile.css";
+import logo from "../LinkToFYP_logo.png";
 import NavDropdown from "react-bootstrap/NavDropdown";
 // import Form from "react-bootstrap/Form";
 // import FormControl from "react-bootstrap/FormControl";
@@ -11,30 +12,51 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 // import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 // import NavbarToggle from "react-bootstrap/NavbarToggle";
 // import NavbarOffcanvas from "react-bootstrap/NavbarOffcanvas";
-
+// import Offcanvas from "react-bootstrap/Offcanvas";
 
 
 const EmployerNav = () => {
   return (
-    <Navbar bg="light" expand={false}>
-      <Container>
-        <Navbar.Brand href="/employer/main">LinkToFYP</Navbar.Brand>
-        <Navbar.Toggle aria-controls="offcanvasNavbar" />
-        <Navbar.Offcanvas id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" placement="end">
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id="offcanvasNavbarLabel">LinkToFYP</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link href="/employer/profile">Your Profile</Nav.Link>
-              <Nav.Link href="/employer/search">Student Search</Nav.Link>
+
+    <div>
+      <div>
+        <div className="mt-2">
+          <Container>
+            <a href="/employer/main">
+              <img className="photo" src={logo} alt="Logo" />
+            </a>
+          </Container>
+        </div>
+        <div className="mt-2"></div>
+      </div>
+      <div>
+        <Navbar
+          collapseOnSelect
+          expand="lg"
+          className="color-nav"
+          variant="light"
+        >
+          <Container>
+            <Navbar.Brand></Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="me-auto">
+              <Nav.Link href="/employer/main"><p1 className="word">HomePage</p1></Nav.Link>
+              <Nav.Link href="/employer/profile"><p1 className="word">Your Personal Profile</p1></Nav.Link>
+              <Nav.Link href="/employer/search"><p1 className="word">Search Students</p1></Nav.Link>
+              </Nav>
               <NavDropdown.Divider />
-              <Nav.Link href="/">Logout</Nav.Link>
-            </Nav>
-          </Offcanvas.Body>
-        </Navbar.Offcanvas>
-      </Container>
-    </Navbar>
+              <Nav>
+                <Nav.Link href="/">
+                  <p1 className="word">Logout</p1>
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+      </div>
+      <div className="mt-2"></div>
+    </div>
   );
 };
 
