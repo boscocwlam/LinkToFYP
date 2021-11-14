@@ -2,9 +2,10 @@ import React from "react";
 import Table from "react-bootstrap/Table";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Studentprofile from "../page/StudentProfile";
+import Studentprofile from "./StudentProfile";
 import { useNavigate } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
+import AdminDashboard from "../admin/AdminDashboard";
 
 const SearchStudent = () => {
   const [studentData, setStudentData] = useState([]);
@@ -51,10 +52,12 @@ const SearchStudent = () => {
           </Table>
         </header>
         {/* <Studentprofile /> */}
+        {/* <AdminDashboard /> */}
         <button type="button" onClick={handleClick}>
           Go home
         </button>
       </Container>
+
     </div>
   );
 };
