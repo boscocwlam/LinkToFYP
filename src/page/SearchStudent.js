@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Studentprofile from "./StudentProfile";
 import { useNavigate } from "react-router-dom";
-import Container from 'react-bootstrap/Container';
+import Container from "react-bootstrap/Container";
 import AdminDashboard from "../admin/AdminDashboard";
 
 const SearchStudent = () => {
@@ -25,8 +25,8 @@ const SearchStudent = () => {
   }
 
   return (
-    <div>
-      <Container>
+    <Container>
+      <div>
         <header>
           <Table striped bordered hover>
             <thead>
@@ -35,6 +35,7 @@ const SearchStudent = () => {
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>cGPA</th>
+                <th>Year</th>
               </tr>
             </thead>
             <tbody>
@@ -45,6 +46,7 @@ const SearchStudent = () => {
                     <td>{item.first_name}</td>
                     <td>{item.last_name}</td>
                     <td>{item.cGPA}</td>
+                    <td>{item.year}</td>
                   </tr>
                 );
               })}
@@ -56,9 +58,8 @@ const SearchStudent = () => {
         <button type="button" onClick={handleClick}>
           Go home
         </button>
-      </Container>
-
-    </div>
+      </div>
+    </Container>
   );
 };
 

@@ -18,7 +18,7 @@ const AdminNav = () => {
   return (
     <Navbar bg="light" expand={false}>
       <Container>
-        <Navbar.Brand href="/admin_main">LinkToFYP</Navbar.Brand>
+        <Navbar.Brand href="/admin/main">LinkToFYP</Navbar.Brand>
         <Navbar.Toggle aria-controls="offcanvasNavbar" />
         <Navbar.Offcanvas id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" placement="end">
           <Offcanvas.Header closeButton>
@@ -26,10 +26,10 @@ const AdminNav = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link href="/admin_dashboard">Dashboard</Nav.Link>
-              <Nav.Link href="/admin_addaccount">Add Accounts</Nav.Link>
-              <Nav.Link href="/admin_attribute">Manage Attributes</Nav.Link>
-              <Nav.Link href="/admin_stuprofile">Manage Students' Profile</Nav.Link>
+              <Nav.Link href="/admin/dashboard">Dashboard</Nav.Link>
+              <Nav.Link href="/admin/addaccount">Add Accounts</Nav.Link>
+              <Nav.Link href="/admin/attribute">Manage Attributes</Nav.Link>
+              <Nav.Link href="/admin/stuprofile">Manage Students' Profile</Nav.Link>
               <NavDropdown.Divider />
               <Nav.Link href="/">Logout</Nav.Link>
             </Nav>

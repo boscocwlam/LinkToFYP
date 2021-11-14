@@ -25,7 +25,7 @@ const db = mysql.createConnection({
 app.get("/getStudent", (req, res) => {
   console.log(req.query.text);
   db.query(
-    "select student_ID, first_name, last_name, cGPA from students",
+    "select student_ID, first_name, last_name, cGPA, year from students",
     (err, result) => {
       if (err) {
         console.log(err);
@@ -42,10 +42,11 @@ app.post("/StudentCreate", (req, res) => {
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;
   const cGPA = req.body.cGPA;
+  const year = req.body.year;
   // const photo = req.body.photo;
   db.query(
-    "insert into Students (student_ID, first_name, last_name, cGPA) value (?,?,?,?)",
-    [student_ID, first_name, last_name, cGPA],
+    "insert into Students (student_ID, first_name, last_name, cGPA, year) value (?,?,?,?,?)",
+    [student_ID, first_name, last_name, cGPA, year],
     (err, result) => {
       if (err) {
         console.log(err);

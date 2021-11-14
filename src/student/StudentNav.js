@@ -16,7 +16,7 @@ const StudentNav = () => {
   return (
       <Navbar bg="light" expand={false}>
         <Container>
-          <Navbar.Brand href="/admin_main">LinkToFYP</Navbar.Brand>
+          <Navbar.Brand href="/student/main">LinkToFYP</Navbar.Brand>
           <Nav className="navbar-right">
             <Nav.Link href="/">Logout</Nav.Link>
           </Nav>

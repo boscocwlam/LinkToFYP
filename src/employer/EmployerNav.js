@@ -18,7 +18,7 @@ const EmployerNav = () => {
   return (
     <Navbar bg="light" expand={false}>
       <Container>
-        <Navbar.Brand href="/employer_main">LinkToFYP</Navbar.Brand>
+        <Navbar.Brand href="/employer/main">LinkToFYP</Navbar.Brand>
         <Navbar.Toggle aria-controls="offcanvasNavbar" />
         <Navbar.Offcanvas id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" placement="end">
           <Offcanvas.Header closeButton>
@@ -26,8 +26,8 @@ const EmployerNav = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link href="/employer_profile">Your Profile</Nav.Link>
-              <Nav.Link href="/employer_search">Student Search</Nav.Link>
+              <Nav.Link href="/employer/profile">Your Profile</Nav.Link>
+              <Nav.Link href="/employer/search">Student Search</Nav.Link>
               <NavDropdown.Divider />
               <Nav.Link href="/">Logout</Nav.Link>
             </Nav>

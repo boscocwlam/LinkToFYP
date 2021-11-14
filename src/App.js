@@ -1,12 +1,19 @@
+// Libraries
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 // import axios from 'axios'
 // import Table from 'react-bootstrap/Table'
 
+
+
+
+// Routes
+// Student
 import StudentMain from "./student/StudentMain";
 import StudentNav from "./student/StudentNav";
 
+// Admin
 import AdminMain from "./admin/AdminMain";
 import AdminAddAccount from "./admin/AdminAddAccount";
 import AdminDashboard from "./admin/AdminDashboard";
@@ -14,6 +21,7 @@ import AdminStuProfile from "./admin/AdminStuProfile";
 import AdminAttribute from "./admin/AdminAttribute";
 import AdminNav from "./admin/AdminNav";
 
+//Employer
 import EmployerMain from "./employer/EmployerMain";
 import EmployerProfile from "./employer/EmployerProfile";
 import EmployerSearch from "./employer/EmployerSearch";
@@ -21,6 +29,7 @@ import EmployerStuProfile from "./employer/EmployerStuProfile";
 import EmployerSurvey from "./employer/EmployerSurvey";
 import EmployerNav from "./employer/EmployerNav";
 
+//Page
 import SearchStudent from "./page/SearchStudent";
 import StudentProfile from "./page/StudentProfile";
 import StudentCreate from "./page/StudentCreate";
@@ -56,27 +65,27 @@ function App() {
       <Routes>
 
         {/* student */}
-        <Route exact path="/student_main" element={<StudentMain />} />
+        <Route exact path="/student/main" element={<StudentMain />} />
         {/* <Route exact path="/student_nav" element={<StudentNav />} /> */}
 
 
         {/* admin */}
 
-        <Route exact path="/admin_main" element={<AdminMain />} />
-        <Route exact path="/admin_dashboard" element={<AdminDashboard />} />
-        <Route exact path="/admin_attribute" element={<AdminAttribute />} />
-        <Route exact path="/admin_addaccount" element={<AdminAddAccount />} />
-        <Route exact path="/admin_stuprofile" element={<AdminStuProfile />} />
-        {/* <Route exact path="/admin_nav" element={<AdminNav />} /> */}
+        <Route exact path="/admin/main" element={<AdminMain />} />
+        <Route exact path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route exact path="/admin/attribute" element={<AdminAttribute />} />
+        <Route exact path="/admin/addaccount" element={<AdminAddAccount />} />
+        <Route exact path="/admin/stuprofile" element={<AdminStuProfile />} />
+        {/* <Route exact path="/admin/nav" element={<AdminNav />} /> */}
 
         {/* employers */}
 
-        <Route exact path="/employer_main" element={<EmployerMain />} />
-        <Route exact path="/employer_profile" element={<EmployerProfile />} />
-        <Route exact path="/employer_search" element={<EmployerSearch />} />
-        <Route exact path="/employer_stuprofile" element={<EmployerStuProfile />} />
-        <Route exact path="/employer_survey" element={<EmployerSurvey />} />
-        {/* <Route exact path="/employer_nav" element={<EmployerNav />} /> */}
+        <Route exact path="/employer/main" element={<EmployerMain />} />
+        <Route exact path="/employer/profile" element={<EmployerProfile />} />
+        <Route exact path="/employer/search" element={<EmployerSearch />} />
+        <Route exact path="/employer/stuprofile" element={<EmployerStuProfile />} />
+        <Route exact path="/employer/survey" element={<EmployerSurvey />} />
+        {/* <Route exact path="/employer/nav" element={<EmployerNav />} /> */}
 
         {/* page */}
 
