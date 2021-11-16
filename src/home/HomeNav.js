@@ -2,9 +2,9 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import "./AdminCSSfile.css";
+import "./HomeCSSfile.css";
 import logo from "../LinkToFYP_logo.png";
-import NavDropdown from "react-bootstrap/NavDropdown";
+// import NavDropdown from "react-bootstrap/NavDropdown";
 // import Form from "react-bootstrap/Form";
 // import FormControl from "react-bootstrap/FormControl";
 // import Button from "react-bootstrap/Button";
@@ -15,13 +15,13 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 // import Offcanvas from "react-bootstrap/Offcanvas";
 
 
-const AdminNav = () => {
+const HomeNav = () => {
   return (
     <div>
       <div>
         <div className="mt-2">
           <Container>
-            <a href="/admin/main">
+            <a href="/">
               <img className="photo" src={logo} alt="Logo" />
             </a>
           </Container>
@@ -40,26 +40,17 @@ const AdminNav = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link href="/admin/main">
-                  <p1 className="word">Applications</p1>
-                </Nav.Link>
-                <Nav.Link href="/admin/dashboard">
-                  <p1 className="word">Dashboard</p1>
-                </Nav.Link>
-                <Nav.Link href="/admin/addaccount">
-                  <p1 className="word">Add Account</p1>
-                </Nav.Link>
-                <Nav.Link href="/admin/attribute">
-                  <p1 className="word">Manage Attribute</p1>
-                </Nav.Link>
-                <Nav.Link href="/admin/stuprofile">
-                  <p1 className="word">Manage Students' Profile</p1>
-                </Nav.Link>
+                {/* <Nav.Link href="/">
+                  <p1 className="word">HomePage</p1>
+                </Nav.Link> */}
               </Nav>
-              <NavDropdown.Divider />
+              {/* <NavDropdown.Divider /> */}
               <Nav>
                 <Nav.Link href="/">
-                  <p1 className="word">Logout</p1>
+                  <p1 className="word">Sign In</p1>
+                </Nav.Link>
+                <Nav.Link href="/">
+                  <p1 className="word">Create Account</p1>
                 </Nav.Link>
               </Nav>
             </Navbar.Collapse>
@@ -71,4 +62,4 @@ const AdminNav = () => {
   );
 };
 
-export default AdminNav;
+export default HomeNav;

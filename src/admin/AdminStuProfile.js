@@ -6,7 +6,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AdminMain from "./AdminMain";
 import Container from "react-bootstrap/Container";
-import AdminDashboard from "../admin/AdminDashboard";
 
 const AdminStuProfile = () => {
   const [studentData, setStudentData] = useState([]);
@@ -22,7 +21,7 @@ const AdminStuProfile = () => {
 
   let navigate = useNavigate();
   function handleClick() {
-    navigate("./admin_main");
+    navigate("./admin/main");
   }
 
   return (

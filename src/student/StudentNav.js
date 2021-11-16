@@ -22,7 +22,7 @@ const StudentNav = () => {
         <div className="mt-2">
           <Container>
             <a href="/student/main">
-              <img className="photo" src={logo} alt="Logo" />
+              <img className="logo" src={logo} alt="Logo" />
             </a>
           </Container>
         </div>
@@ -40,9 +40,9 @@ const StudentNav = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link href="/student/main">
+                {/* <Nav.Link href="/student/main">
                   <p1 className="word">HomePage</p1>
-                </Nav.Link>
+                </Nav.Link> */}
               </Nav>
               <NavDropdown.Divider />
               <Nav>

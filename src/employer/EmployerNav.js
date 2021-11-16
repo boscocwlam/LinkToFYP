@@ -41,8 +41,8 @@ const EmployerNav = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
-              <Nav.Link href="/employer/main"><p1 className="word">HomePage</p1></Nav.Link>
-              <Nav.Link href="/employer/profile"><p1 className="word">Your Personal Profile</p1></Nav.Link>
+              {/* <Nav.Link href="/employer/main"><p1 className="word">HomePage</p1></Nav.Link> */}
+              <Nav.Link href="/employer/profile"><p1 className="word">Personal Profile</p1></Nav.Link>
               <Nav.Link href="/employer/search"><p1 className="word">Search Students</p1></Nav.Link>
               </Nav>
               <NavDropdown.Divider />

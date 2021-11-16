@@ -9,9 +9,11 @@ import React, { useEffect, useState } from "react";
 
 
 // Routes
+// Home
+import HomeMain from "./home/HomeMain";
+
 // Student
 import StudentMain from "./student/StudentMain";
-import StudentNav from "./student/StudentNav";
 
 // Admin
 import AdminMain from "./admin/AdminMain";
@@ -19,7 +21,6 @@ import AdminAddAccount from "./admin/AdminAddAccount";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminStuProfile from "./admin/AdminStuProfile";
 import AdminAttribute from "./admin/AdminAttribute";
-import AdminNav from "./admin/AdminNav";
 
 //Employer
 import EmployerMain from "./employer/EmployerMain";
@@ -27,7 +28,6 @@ import EmployerProfile from "./employer/EmployerProfile";
 import EmployerSearch from "./employer/EmployerSearch";
 import EmployerStuProfile from "./employer/EmployerStuProfile";
 import EmployerSurvey from "./employer/EmployerSurvey";
-import EmployerNav from "./employer/EmployerNav";
 
 //Page
 import SearchStudent from "./page/SearchStudent";
@@ -64,6 +64,9 @@ function App() {
     <Router>
       <Routes>
 
+        {/* home */}
+        <Route exact path="/" element={<HomeMain />} />
+
         {/* student */}
         <Route exact path="/student/main" element={<StudentMain />} />
         {/* <Route exact path="/student_nav" element={<StudentNav />} /> */}
@@ -83,7 +86,7 @@ function App() {
         <Route exact path="/employer/main" element={<EmployerMain />} />
         <Route exact path="/employer/profile" element={<EmployerProfile />} />
         <Route exact path="/employer/search" element={<EmployerSearch />} />
-        <Route exact path="/employer/stuprofile" element={<EmployerStuProfile />} />
+        <Route exact path="/employer/stuprofile/:id" element={<EmployerStuProfile />} />
         <Route exact path="/employer/survey" element={<EmployerSurvey />} />
         {/* <Route exact path="/employer/nav" element={<EmployerNav />} /> */}
 
