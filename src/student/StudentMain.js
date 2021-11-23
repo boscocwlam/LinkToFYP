@@ -11,8 +11,26 @@ import Col from "react-bootstrap/Col";
 import logo1 from "../LinkToFYP_logo.png";
 import logo2 from "../Picture2.png";
 import logo3 from "../Picture3.png";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-const StudentMain = () => {
+const StudentMain = ({ Student_ID}) => {
+  const [studentData, StudentDataFunc] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/getStudentOne", {
+        params: {
+          Student_ID
+          // textData: "local" 
+        },
+      })
+      .then((response) => {
+        // console.log(response.data);
+        StudentDataFunc(...response.data);
+      });
+  }, []);
+
   return (
     <div>
       <StudentNav />
@@ -30,32 +48,56 @@ const StudentMain = () => {
       </Carousel> 
       <div className="mt-4"></div>
       */}
-      
+
+      {/* <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>cGPA</th>
+            <th>Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          {studentData.map((item, index) => {
+            return (
+              <tr key={item.Student_ID}>
+                <td>{item.Student_ID}</td>
+                <td>{item.First_name}</td>
+                <td>{item.Last_name}</td>
+                <td>{item.cGPA}</td>
+                <td>{item.Year}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table> */}
 
       <Container>
-      <div className="mt-4"></div>
+        <div className="mt-4"></div>
         <Row>
           <Col xs={6}>
-        <Card>
-          <Card.Header as="h3">Lam Chun Wing, Bosco</Card.Header>
-          <Card.Body>
-            <Card.Text>
-              <h6>
-                <br />
-                Student ID: 18223109
-                <br />
-                Department of Computer Science, Hong Kong Baptist Univeristy
-                <Dropdown.Divider />
-                <br />
-                FYP Year: 2021-2022
-                <br />
-                cGPA: 3.32
-              </h6>
-            </Card.Text>
-            {/* <Button variant="primary">Go somewhere</Button> */}
-          </Card.Body>
-        </Card>
-        </Col>
+            <Card>
+              <Card.Header as="h3">Bosco</Card.Header>
+              <Card.Body>
+                <Card.Text>
+                  <h6>
+                    <br />
+                    Student ID: {Student_ID}
+                    <br />
+                    Department of Computer Science, Hong Kong Baptist Univeristy
+                    <Dropdown.Divider />
+                    <br />
+                    FYP Year: 2021-2022
+                    <br />
+                    cGPA: XXXX
+                  </h6>
+                </Card.Text>
+                {/* <Button variant="primary">Go somewhere</Button> */}
+              </Card.Body>
+            </Card>
+          </Col>
           <Col xs={6}></Col>
         </Row>
         <div className="mt-4"></div>
@@ -100,9 +142,7 @@ const StudentMain = () => {
       <Container>
         <div className="mt-4"></div>
         <Card>
-          <Card.Header as="h5">
-            Work Experience
-          </Card.Header>
+          <Card.Header as="h5">Work Experience</Card.Header>
           <Card.Body>
             <Table striped bordered hover>
               <thead>

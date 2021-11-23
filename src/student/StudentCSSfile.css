@@ -28,3 +28,9 @@
     /* background-color: rgb(50, 50, 50) !important; */
     color: white !important;
 }
+
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

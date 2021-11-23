@@ -25,8 +25,6 @@ const EmployerStuProfile = () => {
   // }, []);
 
 
-
-
   return (
     <div>
       <EmployerNav />
@@ -56,7 +54,7 @@ const EmployerStuProfile = () => {
                   <h6>
                     <br />
                     {/* {studentData.Student_ID} */}
-                    Student ID: 18223109
+                    Student ID: 18223XXX
                     <br />
                     {/* Department of {post.Department_name}, {post.University} */}
                     Department of Computer Science, Hong Kong Baptist Univeristy
@@ -66,7 +64,7 @@ const EmployerStuProfile = () => {
                     FYP Year: 2021-2022
                     <br />
                     {/* {studentData.cGPA} */}
-                    cGPA: 3.32
+                    cGPA: 3.20
                   </h6>
                 </Card.Text>
                 {/* <Button variant="primary">Go somewhere</Button> */}
@@ -134,7 +132,7 @@ const EmployerStuProfile = () => {
                 {/* {studentData.map((item, index) => {
                 return ( */}
                 <tr>
-                  <td>Accenture</td>
+                  <td>Company ABC</td>
                   <td>3 months</td>
                   <td>IT Support</td>
                   <td>

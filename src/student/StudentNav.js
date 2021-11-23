@@ -5,6 +5,7 @@ import Nav from "react-bootstrap/Nav";
 import "./StudentCSSfile.css";
 import logo from "../LinkToFYP_logo.png";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { useNavigate } from "react-router-dom";
 // import Form from "react-bootstrap/Form";
 // import FormControl from "react-bootstrap/FormControl";
 // import Button from "react-bootstrap/Button";
@@ -16,6 +17,12 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 
 
 const StudentNav = () => {
+
+  let navigate = useNavigate();
+  function handleClick() {
+    navigate("/");
+  }
+
   return (
     <div>
       <div>
@@ -46,7 +53,7 @@ const StudentNav = () => {
               </Nav>
               <NavDropdown.Divider />
               <Nav>
-                <Nav.Link href="/">
+                <Nav.Link href="/" onClick={()=>handleClick()}>
                   <p1 className="word">Logout</p1>
                 </Nav.Link>
               </Nav>
@@ -54,7 +61,7 @@ const StudentNav = () => {
           </Container>
         </Navbar>
       </div>
-      <div className="mt-2"></div>
+      {/* <div className="mt-2"></div> */}
     </div>
   );
 };

@@ -19,52 +19,48 @@ const AdminStuProfile = () => {
       });
   }, []);
 
-  let navigate = useNavigate();
-  function handleClick() {
-    navigate("./admin/main");
-  }
+  // let navigate = useNavigate();
+  // function handleClick() {
+  //   navigate("./admin/main");
+  // }
 
   return (
     <div>
- 
-
-
       <div>
-
-      <AdminNav />
-      <Container>
-      {/* <h3>admin_AddAccount</h3> */}
-        <header>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Student ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>cGPA</th>
-                <th>Year</th>
-              </tr>
-            </thead>
-            <tbody>
-              {studentData.map((item, index) => {
-                return (
-                  <tr key={item.student_ID}>
-                    <td>{item.student_ID}</td>
-                    <td>{item.first_name}</td>
-                    <td>{item.last_name}</td>
-                    <td>{item.cGPA}</td>
-                    <td>{item.year}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        </header>
-        {/* <Studentprofile /> */}
-        {/* <AdminDashboard /> */}
-        <button type="button" onClick={handleClick}>
+        <AdminNav />
+        <Container>
+          <div className="mt-4"></div>
+          <h3>Profile Management of Students' Records</h3>
+          <div className="mt-4"></div>
+          <header>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>cGPA</th>
+                  <th>Year</th>
+                </tr>
+              </thead>
+              <tbody>
+                {studentData.map((item, index) => {
+                  return (
+                    <tr key={item.student_ID}>
+                      <td>{item.student_ID}</td>
+                      <td>{item.first_name}</td>
+                      <td>{item.last_name}</td>
+                      <td>{item.cGPA}</td>
+                      <td>{item.year}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </header>
+          {/* <button type="button" onClick={handleClick}>
           Go home
-        </button>
+        </button> */}
         </Container>
       </div>
     </div>

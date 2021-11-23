@@ -15,6 +15,7 @@ const AdminMain = () => {
       })
       .then((response) => {
         setStatusData(response.data);
+        console.log(response.data);
       });
   }, []);
 
@@ -26,9 +27,21 @@ const AdminMain = () => {
   return (
     <div>
       <AdminNav />
-      <h1>AdminMain</h1>
+      {/* <h1>AdminMain</h1> */}
       <Container>
         <header>
+          <div className="mt-4"></div>
+          <h3>Welcome back, "Your Name"!</h3>
+          <div className="mt-1"></div>
+          <div className="mt-4"></div>
+          <h5>&nbsp;/\___/\</h5>
+          <h5>(=^ . ^ =)</h5>
+          <h5>&nbsp;&nbsp;(“) (“)__/</h5>
+          <h5>Here is Your Work Today!!!</h5>
+          <div className="mt-1"></div>
+          <div className="mt-4"></div>
+          <h5>Employers' Applications</h5>
+          <div className="mt-1"></div>
           <Table striped bordered hover>
             <thead>
               <tr>
@@ -47,10 +60,14 @@ const AdminMain = () => {
                   <tr>
                     <td>{item.Application_ID}</td>
                     <td>{item.Employer_ID}</td>
-                    <td>{item.Emp_first_name} {item.Emp_last_name}</td>
+                    <td>
+                      {item.Emp_first_name} {item.Emp_last_name}
+                    </td>
                     <td>{item.Student_ID}</td>
-                    <td>{item.Stu_first_name} {item.Stu_last_name}</td>
-                    <td>{item.Status_ID}</td>
+                    <td>
+                      {item.Stu_first_name} {item.Stu_last_name}
+                    </td>
+                    <td>{item.Status_name}</td>
                     <td>{item.Status_change_date}</td>
                   </tr>
                 );

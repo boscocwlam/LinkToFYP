@@ -41,7 +41,7 @@ const AdminNav = () => {
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
                 <Nav.Link href="/admin/main">
-                  <p1 className="word">Applications</p1>
+                  <p1 className="word">HomePage</p1>
                 </Nav.Link>
                 <Nav.Link href="/admin/dashboard">
                   <p1 className="word">Dashboard</p1>

@@ -46,7 +46,7 @@ const HomeNav = () => {
               </Nav>
               {/* <NavDropdown.Divider /> */}
               <Nav>
-                <Nav.Link href="/">
+                <Nav.Link href="/student/login">
                   <p1 className="word">Sign In</p1>
                 </Nav.Link>
                 <Nav.Link href="/">
