@@ -80,7 +80,7 @@ app.get("/getStudent", (req, res) => {
   );
 });
 
-//AdminAddAccount.js
+//AdminAddStuAccount.js, AdminAddAdmAccount.js, 
 app.get("/generateUserIDandPW", (req, res) => {
   console.log(req.query.text);
   db.query("select (MAX(User_ID) + 1) AS user_ID from Users", (err, result) => {
@@ -93,7 +93,7 @@ app.get("/generateUserIDandPW", (req, res) => {
   });
 });
 
-//AdminAddAccount.js
+//AdminAddStuAccount.js
 app.post("/StudentCreate", (req, res) => {
   const user_ID = req.body.user_ID;
   const student_ID = req.body.student_ID;
@@ -113,7 +113,7 @@ app.post("/StudentCreate", (req, res) => {
   );
 });
 
-//AdminAddAccount.js
+//AdminAddStuAccount.js
 app.post("/StudentCreate2", (req, res) => {
   const user_ID = req.body.user_ID;
   const first_name = req.body.first_name;
@@ -133,6 +133,65 @@ app.post("/StudentCreate2", (req, res) => {
     }
   );
 });
+
+//AdminAddAdmAccount.js
+app.get("/getDepartment", (req, res) => {
+  console.log(req.query.text);
+  db.query("select department_ID, department_name from departments", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send(result);
+    }
+  });
+});
+
+//AdminAddAdmAccount.js
+app.post("/StaffCreate", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const staff_ID = req.body.staff_ID;
+  const department_ID = req.body.department_ID;
+
+  db.query(
+    "insert into Staffs (user_ID, staff_ID, department_ID) value (?,?,?)",
+    [user_ID, staff_ID, department_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+//AdminAddAdmAccount.js
+app.post("/StaffCreate2", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const first_name = req.body.first_name;
+  const last_name = req.body.last_name;
+  const password = req.body.password;
+  const gender = req.body.gender;
+  const city = req.body.city;
+  const phone_no = req.body.phone_no;
+  const email_address = req.body.email_address;
+
+  db.query(
+    "insert into Users (user_ID, first_name, last_name, password, gender, city, phone_no, email_address) value (?,?,?,?,?,?,?,?)",
+    [user_ID, first_name, last_name, password, gender, city, phone_no, email_address],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////

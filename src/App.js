@@ -18,7 +18,8 @@ import StudentLogin from "./student/StudentLogin";
 
 // Admin
 import AdminMain from "./admin/AdminMain";
-import AdminAddAccount from "./admin/AdminAddAccount";
+import AdminAddStuAccount from "./admin/AdminAddStuAccount";
+import AdminAddAdmAccount from "./admin/AdminAddAdmAccount";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminStuProfile from "./admin/AdminStuProfile";
 import AdminAttribute from "./admin/AdminAttribute";
@@ -59,7 +60,7 @@ function App() {
   const [Student_ID, setStudent_ID] = useState("");
   const [Employer_ID, setEmployer_ID] = useState("");
   const [Staff_ID, setStaff_ID] = useState("");
-  const [Last_name, setLast_name] = useState("");
+  // const [Last_name, setLast_name] = useState("");
   // const token = getToken();
   // const { token, setToken } = StudentUseToken();
   // if (!token) {
@@ -79,7 +80,7 @@ function App() {
         {/* student */}
         <Route exact path={"/student/main/:Student_ID"} element={<StudentMain />} />
         {/* <Route exact path="/student/main" element={<StudentMain Student_ID={Student_ID} />} /> */}
-        <Route exact path="/student/login" element={<StudentLogin setStudent_ID={setStudent_ID} setLast_name={setLast_name}  />} />
+        <Route exact path="/student/login" element={<StudentLogin setStudent_ID={setStudent_ID} />} />
         {/* <Route exact path="/student_nav" element={<StudentNav />} /> */}
 
 
@@ -88,9 +89,10 @@ function App() {
         <Route exact path="/admin/main" element={<AdminMain />} />
         <Route exact path="/admin/dashboard" element={<AdminDashboard />} />
         <Route exact path="/admin/attribute" element={<AdminAttribute />} />
-        <Route exact path="/admin/addaccount" element={<AdminAddAccount />} />
+        <Route exact path="/admin/addstuaccount" element={<AdminAddStuAccount />} />
+        <Route exact path="/admin/addadmaccount" element={<AdminAddAdmAccount />} />
         <Route exact path="/admin/stuprofile" element={<AdminStuProfile />} />
-        <Route exact path="/admin/login" element={<AdminLogin setStaff_ID={setStaff_ID} setLast_name={setLast_name}  />} />
+        <Route exact path="/admin/login" element={<AdminLogin setStaff_ID={setStaff_ID} />} />
         {/* <Route exact path="/admin/nav" element={<AdminNav />} /> */}
 
         {/* employers */}
@@ -100,7 +102,7 @@ function App() {
         <Route exact path="/employer/search" element={<EmployerSearch />} />
         <Route exact path="/employer/stuprofile" element={<EmployerStuProfile />} />
         <Route exact path="/employer/survey" element={<EmployerSurvey />} />
-        <Route exact path="/employer/login" element={<EmployerLogin setEmployer_ID={setEmployer_ID} setLast_name={setLast_name}  />} />
+        <Route exact path="/employer/login" element={<EmployerLogin setEmployer_ID={setEmployer_ID} />} />
         {/* <Route exact path="/employer/nav" element={<EmployerNav />} /> */}
 
         {/* page */}

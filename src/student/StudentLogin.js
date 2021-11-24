@@ -64,7 +64,7 @@ export default function StudentLogin({ setStudent_ID }) {
               <Col></Col>
             </Row>
             <Button variant="primary" type="submit">
-              Submit
+              Login!
             </Button>
           </Form>
         </Container>

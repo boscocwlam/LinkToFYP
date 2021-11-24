@@ -46,15 +46,19 @@ const AdminNav = () => {
                 <Nav.Link href="/admin/dashboard">
                   <p1 className="word">Dashboard</p1>
                 </Nav.Link>
-                <Nav.Link href="/admin/addaccount">
-                  <p1 className="word">Add Account</p1>
+                <Nav.Link href="/admin/addadmaccount">
+                  <p1 className="word">Add Staffs</p1>
+                </Nav.Link>
+                <Nav.Link href="/admin/addstuaccount">
+                  <p1 className="word">Add Students</p1>
                 </Nav.Link>
                 <Nav.Link href="/admin/attribute">
-                  <p1 className="word">Manage Attribute</p1>
+                  <p1 className="word">Manage Attributes</p1>
                 </Nav.Link>
                 <Nav.Link href="/admin/stuprofile">
-                  <p1 className="word">Manage Students' Profile</p1>
+                  <p1 className="word">Students' Profiles</p1>
                 </Nav.Link>
+
               </Nav>
               <NavDropdown.Divider />
               <Nav>

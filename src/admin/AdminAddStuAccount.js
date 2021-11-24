@@ -10,7 +10,7 @@ import Table from "react-bootstrap/Table";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-const AdminAddAccount = () => {
+const AdminAddStuAccount = () => {
   const [studentData, setStudentData] = useState([]);
   useEffect(() => {
     // axios
@@ -107,7 +107,7 @@ const AdminAddAccount = () => {
               return (
                 <Row className="mb-3">
                   <Form.Group as={Col} controlId="user_ID">
-                    <Form.Label>User_ID</Form.Label>
+                    <Form.Label>User ID</Form.Label>
                     <Form.Control
                       type="text"
                       plaintext
@@ -164,7 +164,7 @@ const AdminAddAccount = () => {
             </Row>
 
             <Button variant="primary" type="submit">
-              Submit
+              Create
             </Button>
           </Form>
         </Container>
@@ -173,4 +173,4 @@ const AdminAddAccount = () => {
   );
 };
 
-export default AdminAddAccount;
+export default AdminAddStuAccount;

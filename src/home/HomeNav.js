@@ -4,15 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import "./HomeCSSfile.css";
 import logo from "../LinkToFYP_logo.png";
-// import NavDropdown from "react-bootstrap/NavDropdown";
-// import Form from "react-bootstrap/Form";
-// import FormControl from "react-bootstrap/FormControl";
-// import Button from "react-bootstrap/Button";
-// import NavbarBrand from "react-bootstrap/NavbarBrand";
-// import NavbarCollapse from "react-bootstrap/NavbarCollapse";
-// import NavbarToggle from "react-bootstrap/NavbarToggle";
-// import NavbarOffcanvas from "react-bootstrap/NavbarOffcanvas";
-// import Offcanvas from "react-bootstrap/Offcanvas";
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 
 const HomeNav = () => {
@@ -46,12 +38,20 @@ const HomeNav = () => {
               </Nav>
               {/* <NavDropdown.Divider /> */}
               <Nav>
-                <Nav.Link href="/student/login">
+                <NavDropdown title="Login" className="word" >
+                  <NavDropdown.Item href="/employer/login">Employers</NavDropdown.Item>
+                  <NavDropdown.Item href="/student/login">Students</NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/login">Staffs</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown title="Create Account" className="word" >
+                  <NavDropdown.Item>Employers</NavDropdown.Item>
+                </NavDropdown>
+                {/* <Nav.Link href="/student/login">
                   <p1 className="word">Sign In</p1>
-                </Nav.Link>
-                <Nav.Link href="/">
+                </Nav.Link> */}
+                {/* <Nav.Link href="/">
                   <p1 className="word">Create Account</p1>
-                </Nav.Link>
+                </Nav.Link> */}
               </Nav>
             </Navbar.Collapse>
           </Container>
