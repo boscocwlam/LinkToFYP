@@ -1,16 +1,17 @@
 .color-nav{
-    background-color: rgb(243, 52, 4);
+    /* background-color: rgb(243, 52, 4); */
+    background-color: rgb(255, 255, 255);
 }
 
 .photo{
     width: 20%;
-    max-width:280px;
+    max-width:250px;
     min-width:160px;
 }
 
 .word{
     font-weight:bold;
-    color: white;
+    color: red;
 }
 
 .bg1{

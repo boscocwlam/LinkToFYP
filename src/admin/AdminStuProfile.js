@@ -36,21 +36,15 @@ const AdminStuProfile = () => {
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>Student ID</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>cGPA</th>
-                  <th>Year</th>
+                  <th>Student Records</th>
+                  <th>Years</th>
                 </tr>
               </thead>
               <tbody>
                 {studentData.map((item, index) => {
                   return (
                     <tr key={item.student_ID}>
-                      <td>{item.student_ID}</td>
-                      <td>{item.first_name}</td>
-                      <td>{item.last_name}</td>
-                      <td>{item.cGPA}</td>
+                      <td>{item.student_ID} - {item.first_name} {item.last_name}</td>
                       <td>{item.year}</td>
                     </tr>
                   );

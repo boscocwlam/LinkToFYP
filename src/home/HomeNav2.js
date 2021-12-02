@@ -12,11 +12,11 @@ const HomeNav = () => {
     <div>
       <div>
         <div className="mt-2">
-          <Container>
+          {/* <Container>
             <a href="/">
               <img className="photo" src={logo} alt="Logo" />
             </a>
-          </Container>
+          </Container> */}
         </div>
         <div className="mt-2"></div>
       </div>
@@ -24,11 +24,14 @@ const HomeNav = () => {
         <Navbar
           collapseOnSelect
           expand="lg"
-          className="color-nav"
+          // className="color-nav"
           variant="light"
         >
           <Container>
             <Navbar.Brand></Navbar.Brand>
+            <a href="/">
+              <img className="photo" src={logo} alt="Logo" />
+            </a>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">

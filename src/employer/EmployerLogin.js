@@ -3,16 +3,17 @@ import "./EmployerCSSfile.css";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import HomeNav from "../home/HomeNav";
+import HomeNav from "../home/HomeNav2";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 
-export default function EmployerLogin({ setEmployer_ID }) {
+export default function EmployerLogin({ setEmail_address }) {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
+  const [loginStatus, setLoginStatus] = useState("");
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -24,8 +25,10 @@ export default function EmployerLogin({ setEmployer_ID }) {
       .then((response) => {
         console.log(response.data);
         if (response.data.message == "Login Successfully!") {
-          setEmployer_ID(username);
-          navigate("/student/main");
+          setEmail_address(username);
+          navigate("/employer/main");
+        }else{
+          setLoginStatus(response.data.message);
         }
       });
   };
@@ -39,12 +42,12 @@ export default function EmployerLogin({ setEmployer_ID }) {
       <div className="login-wrapper">
         <Container>
           <div className="mt-4"></div>
-          <h3>Hi Employer, Please Login!</h3>
+          <h3>Log In To Your Business Account</h3>
           <div className="mt-4"></div>
           <Form onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Form.Group as={Col} className="mb-3" controlId="employer_ID">
-                <Form.Label>Employer ID</Form.Label>
+            <Row>
+              <Form.Group as={Col} className="mb-3" controlId="email_address">
+                <Form.Label>Email Address</Form.Label>
                 <Form.Control
                   type="text"
                   onChange={(e) => setUserName(e.target.value)}
@@ -52,7 +55,7 @@ export default function EmployerLogin({ setEmployer_ID }) {
               </Form.Group>
               <Col></Col>
             </Row>
-            <Row className="mb-3">
+            <Row>
               <Form.Group as={Col} className="mb-3" controlId="password">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
@@ -62,9 +65,11 @@ export default function EmployerLogin({ setEmployer_ID }) {
               </Form.Group>
               <Col></Col>
             </Row>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" className="button-color" variant="danger" type="submit">
               Login!
             </Button>
+            <div className="mt-4"></div>
+            <h6 className="loginStatus">{loginStatus}</h6>
           </Form>
         </Container>
       </div>

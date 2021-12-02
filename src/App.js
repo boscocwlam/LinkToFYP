@@ -32,6 +32,7 @@ import EmployerSearch from "./employer/EmployerSearch";
 import EmployerStuProfile from "./employer/EmployerStuProfile";
 import EmployerSurvey from "./employer/EmployerSurvey";
 import EmployerLogin from "./employer/EmployerLogin";
+import EmployerAddAccount from "./employer/EmployerAddAccount";
 
 //Page
 import SearchStudent from "./page/SearchStudent";
@@ -58,7 +59,7 @@ import StudentCreate from "./page/StudentCreate";
 
 function App() {
   const [Student_ID, setStudent_ID] = useState("");
-  const [Employer_ID, setEmployer_ID] = useState("");
+  const [Email_address, setEmail_address] = useState("");
   const [Staff_ID, setStaff_ID] = useState("");
   // const [Last_name, setLast_name] = useState("");
   // const token = getToken();
@@ -102,7 +103,8 @@ function App() {
         <Route exact path="/employer/search" element={<EmployerSearch />} />
         <Route exact path="/employer/stuprofile" element={<EmployerStuProfile />} />
         <Route exact path="/employer/survey" element={<EmployerSurvey />} />
-        <Route exact path="/employer/login" element={<EmployerLogin setEmployer_ID={setEmployer_ID} />} />
+        <Route exact path="/employer/login" element={<EmployerLogin setEmail_address={setEmail_address} />} />
+        <Route exact path="/employer/addaccount" element={<EmployerAddAccount />} />
         {/* <Route exact path="/employer/nav" element={<EmployerNav />} /> */}
 
         {/* page */}

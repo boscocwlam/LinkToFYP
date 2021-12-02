@@ -107,7 +107,7 @@ const AdminAddStuAccount = () => {
               return (
                 <Row className="mb-3">
                   <Form.Group as={Col} controlId="user_ID">
-                    <Form.Label>User ID</Form.Label>
+                    <Form.Label>User ID (Auto-generated)</Form.Label>
                     <Form.Control
                       type="text"
                       plaintext
@@ -163,7 +163,7 @@ const AdminAddStuAccount = () => {
               <Col></Col>
             </Row>
 
-            <Button variant="primary" type="submit">
+            <Button type="submit" variant="danger">
               Create
             </Button>
           </Form>

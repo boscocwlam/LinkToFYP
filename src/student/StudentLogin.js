@@ -3,7 +3,7 @@ import "./StudentCSSfile.css";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import HomeNav from "../home/HomeNav";
+import HomeNav from "../home/HomeNav2";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
@@ -13,6 +13,7 @@ import Container from "react-bootstrap/Container";
 export default function StudentLogin({ setStudent_ID }) {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
+  const [loginStatus, setLoginStatus] = useState("");
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -27,6 +28,8 @@ export default function StudentLogin({ setStudent_ID }) {
           setStudent_ID(username);
           console.log("applertyu");
           navigate("/student/main");
+        }else{
+          setLoginStatus(response.data.message);
         }
       });
   };
@@ -40,10 +43,10 @@ export default function StudentLogin({ setStudent_ID }) {
       <div className="login-wrapper">
         <Container>
           <div className="mt-4"></div>
-          <h3>Hi Student, Please Login!</h3>
+          <h3>Log In To Your Student Account</h3>
           <div className="mt-4"></div>
           <Form onSubmit={handleSubmit}>
-            <Row className="mb-3">
+            <Row>
               <Form.Group as={Col} className="mb-3" controlId="student_ID">
                 <Form.Label>Student ID</Form.Label>
                 <Form.Control
@@ -53,7 +56,7 @@ export default function StudentLogin({ setStudent_ID }) {
               </Form.Group>
               <Col></Col>
             </Row>
-            <Row className="mb-3">
+            <Row>
               <Form.Group as={Col} className="mb-3" controlId="password">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
@@ -63,9 +66,11 @@ export default function StudentLogin({ setStudent_ID }) {
               </Form.Group>
               <Col></Col>
             </Row>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" variant="danger">
               Login!
             </Button>
+            <div className="mt-4"></div>
+            <h6 className="loginStatus">{loginStatus}</h6>
           </Form>
         </Container>
       </div>

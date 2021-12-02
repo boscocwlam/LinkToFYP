@@ -68,7 +68,7 @@ app.get("/getUpdatedStatusList", (req, res) => {
 app.get("/getStudent", (req, res) => {
   console.log(req.query.text);
   db.query(
-    "select student_ID, first_name, last_name, cGPA, year from Students, Users where Students.User_ID = Users.User_ID",
+    "select student_ID, first_name, last_name, year from Students, Users where Students.User_ID = Users.User_ID",
     (err, result) => {
       if (err) {
         console.log(err);
@@ -228,11 +228,12 @@ app.get("/getStudentLogin", (req, res) => {
 // Employer
 ///////////////////////////////////////////////////////////////////////////////
 
+// EmployerLogin.js
 app.get("/getEmployerLogin", (req, res) => {
   const username = req.query.username;
   const password = req.query.password;
   db.query(
-    "SELECT employer_ID, password from Employers emp, Users user where emp.User_ID = user.User_ID AND Employer_ID = ? AND password = ?",
+    "SELECT email_address, password FROM users WHERE user_ID = some (select user_ID from employers) AND email_address = ? AND password = ?",
     [username, password],
     (err, result) => {
       if (err) {
@@ -247,6 +248,60 @@ app.get("/getEmployerLogin", (req, res) => {
     }
   );
 });
+
+//EmployerAddAccount.js
+app.post("/EmployerCreate", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const employer_ID = req.body.employer_ID;
+
+  db.query(
+    "insert into Employers (user_ID, employer_ID) value (?,?)",
+    [user_ID, employer_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+//EmployerAddAccount.js
+app.post("/EmployerCreate2", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const email_address = req.body.email_address;
+  const password = req.body.password;
+
+  db.query(
+    "insert into Users (user_ID, email_address, password) value (?,?,?)",
+    [user_ID, email_address, password],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+//EmployerAddAccount.js
+app.get("/generateEmployer_ID", (req, res) => {
+  console.log(req.query.text);
+  db.query("select (MAX(Employer_ID) + 1) AS employer_ID from Employers", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send(result);
+    }
+  });
+});
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
