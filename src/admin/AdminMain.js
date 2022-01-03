@@ -34,9 +34,9 @@ const AdminMain = () => {
           <h3>Welcome back, "Your Name"!</h3>
           <div className="mt-1"></div>
           <div className="mt-4"></div>
-          <h5>&nbsp;/\___/\</h5>
+          {/* <h5>&nbsp;/\___/\</h5>
           <h5>(=^ . ^ =)</h5>
-          <h5>&nbsp;&nbsp;(“) (“)__/</h5>
+          <h5>&nbsp;&nbsp;(“) (“)__/</h5> */}
           <h5>Here is Your Work Today!!!</h5>
           <div className="mt-1"></div>
           <div className="mt-4"></div>

@@ -64,7 +64,7 @@ app.get("/getUpdatedStatusList", (req, res) => {
   );
 });
 
-// AdminStuProfile.js
+// AdminStuProfile.js, EmployerSearch.js
 app.get("/getStudent", (req, res) => {
   console.log(req.query.text);
   db.query(
@@ -192,6 +192,19 @@ app.post("/StaffCreate2", (req, res) => {
   );
 });
 
+//AdminDashboard.js
+app.get("/getPopularJobs", (req, res) => {
+  console.log(req.query.text);
+  db.query("SELECT job_type_name AS JobType, COUNT(emp.Job_type_ID) AS Frequency from Employers emp, Job_types job WHERE emp.Job_Type_ID = job.Job_Type_ID GROUP BY emp.Job_type_ID ORDER BY Frequency desc limit 10;", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send(result);
+    }
+  });
+});
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -301,6 +314,32 @@ app.get("/generateEmployer_ID", (req, res) => {
   });
 });
 
+//EmployerSurvey.js
+app.get("/getSkills", (req, res) => {
+  console.log(req.query.text);
+  db.query("select skill_ID, skill_name from Skills", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send(result);
+    }
+  });
+});
+
+//EmployerSurvey.js
+app.get("/getJobTypes", (req, res) => {
+  console.log(req.query.text);
+  db.query("select job_type_ID, job_type_name from Job_types", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send(result);
+    }
+  });
+});
+
 
 
 
@@ -357,16 +396,16 @@ app.get("/employerstuprofile", (req, res) => {
 
 
 app.get("/getStudentOne", (req, res) => {
-  // const Student_ID = req.query.Student_ID;
-  // const First_name = req.query.First_name;
-  // const Last_name = req.query.Last_name;
-  // const Preferred_name = req.query.Preferred_name;
+  const student_ID = req.query.student_ID;
+  // const first_name = req.query.first_name;
+  // const last_name = req.query.last_name;
+  // const preferred_name = req.query.preferred_name;
   // const cGPA = req.query.cGPA;
-  // const Year = req.query.Year;
+  // const year = req.query.year;
 
   db.query(
-    "SELECT Student_ID, First_name, Last_name, Preferred_name, cGPA, Year FROM Students WHERE Student_ID = ?",
-    [Student_ID],
+    "SELECT student_ID, first_name, last_name, preferred_name, cGPA, year FROM Students WHERE Student_ID = ?",
+    [student_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -377,7 +416,26 @@ app.get("/getStudentOne", (req, res) => {
   );
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.listen(3001, () => {
   console.log("listen to port 3001");
   console.log("set up database " + db);
 });
+
+
+
+
+

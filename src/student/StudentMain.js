@@ -15,21 +15,21 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const StudentMain = ({ Student_ID}) => {
-  const [studentData, StudentDataFunc] = useState([]);
+  const [studentData, setStudentData] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:3001/getStudentOne", {
         params: {
-          Student_ID
-          // textData: "local" 
+          textData: "local" 
         },
       })
       .then((response) => {
-        // console.log(response.data);
-        StudentDataFunc(...response.data);
+        console.log(response.data);
+        // setStudentData(response.data);
       });
   }, []);
+  
 
   return (
     <div>
@@ -49,7 +49,7 @@ const StudentMain = ({ Student_ID}) => {
       <div className="mt-4"></div>
       */}
 
-      {/* <Table striped bordered hover>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>Student ID</th>
@@ -60,31 +60,34 @@ const StudentMain = ({ Student_ID}) => {
           </tr>
         </thead>
         <tbody>
-          {studentData.map((item, index) => {
+        {studentData.map((item, index) => {
             return (
-              <tr key={item.Student_ID}>
-                <td>{item.Student_ID}</td>
-                <td>{item.First_name}</td>
-                <td>{item.Last_name}</td>
+              <tr key={item.student_ID}>
+                <td>{item.student_ID}</td>
+                <td>{item.first_name}</td>
+                <td>{item.last_name}</td>
                 <td>{item.cGPA}</td>
-                <td>{item.Year}</td>
+                <td>{item.year}</td>
               </tr>
             );
           })}
         </tbody>
-      </Table> */}
+      </Table>
 
-      <Container>
+
+      {/* <Container>
         <div className="mt-4"></div>
+        
         <Row>
           <Col xs={6}>
             <Card>
               <Card.Header as="h3">Bosco</Card.Header>
               <Card.Body>
+              {studentData.map((item) => {
                 <Card.Text>
                   <h6>
                     <br />
-                    Student ID: {Student_ID}
+                    Student ID: {item.Student_ID}
                     <br />
                     Department of Computer Science, Hong Kong Baptist Univeristy
                     <Dropdown.Divider />
@@ -94,7 +97,8 @@ const StudentMain = ({ Student_ID}) => {
                     cGPA: XXXX
                   </h6>
                 </Card.Text>
-                {/* <Button variant="primary">Go somewhere</Button> */}
+              })}
+                
               </Card.Body>
             </Card>
           </Col>
@@ -108,7 +112,7 @@ const StudentMain = ({ Student_ID}) => {
         <Card>
           <Card.Header as="h5">Final Year Project</Card.Header>
           <Card.Body>
-            {/* <Card.Title>Final Year Project</Card.Title> */}
+            
             <Card.Text>
               Project Name:
               <br />
@@ -154,8 +158,6 @@ const StudentMain = ({ Student_ID}) => {
                 </tr>
               </thead>
               <tbody>
-                {/* {studentData.map((item, index) => {
-                return ( */}
                 <tr>
                   <td>Accenture</td>
                   <td>3 months</td>
@@ -165,13 +167,14 @@ const StudentMain = ({ Student_ID}) => {
                     Scripting
                   </td>
                 </tr>
-                {/* );
-              })} */}
               </tbody>
             </Table>
           </Card.Body>
         </Card>
-      </Container>
+      </Container> */}
+
+      {/* <Button variant="primary">Go somewhere</Button> */}
+      {/* <Card.Title>Final Year Project</Card.Title> */}
     </div>
   );
 };

@@ -12,7 +12,9 @@ const SearchStudent = () => {
   useEffect(() => {
     axios
       .get("http://localhost:3001/getStudent", {
-        params: { textData: "local" },
+        params: { 
+          textData: "local" 
+        },
       })
       .then((response) => {
         setStudentData(response.data);

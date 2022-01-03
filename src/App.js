@@ -79,8 +79,8 @@ function App() {
         <Route exact path="/" element={<HomeMain />} />
 
         {/* student */}
-        <Route exact path={"/student/main/:Student_ID"} element={<StudentMain />} />
-        {/* <Route exact path="/student/main" element={<StudentMain Student_ID={Student_ID} />} /> */}
+        {/* <Route exact path={"/student/main/:Student_ID"} element={<StudentMain />} /> */}
+        <Route exact path="/student/main" element={<StudentMain setStudent_ID={setStudent_ID} />} />
         <Route exact path="/student/login" element={<StudentLogin setStudent_ID={setStudent_ID} />} />
         {/* <Route exact path="/student_nav" element={<StudentNav />} /> */}
 
@@ -109,9 +109,10 @@ function App() {
 
         {/* page */}
 
-        <Route exact path="/" element={<SearchStudent />} />
+        {/* <Route exact path="/" element={<SearchStudent />} /> */}
         <Route exact path="/studentProfile" element={<StudentProfile />} />
         <Route exact path="/studentCreate" element={<StudentCreate />} />
+        <Route exact path="/searchStudent" element={<SearchStudent />} />
 
 
 
