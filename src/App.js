@@ -22,7 +22,7 @@ import AdminAddStuAccount from "./admin/AdminAddStuAccount";
 import AdminAddAdmAccount from "./admin/AdminAddAdmAccount";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminStuProfile from "./admin/AdminStuProfile";
-import AdminAttribute from "./admin/AdminAttribute";
+import AdminOption from "./admin/AdminOption";
 import AdminLogin from "./admin/AdminLogin";
 
 //Employer
@@ -38,6 +38,7 @@ import EmployerAddAccount from "./employer/EmployerAddAccount";
 import SearchStudent from "./page/SearchStudent";
 import StudentProfile from "./page/StudentProfile";
 import StudentCreate from "./page/StudentCreate";
+import Testing from "./page/Testing";
 
 // import StudentUseToken from './students/StudentUseToken';
 
@@ -89,7 +90,7 @@ function App() {
 
         <Route exact path="/admin/main" element={<AdminMain />} />
         <Route exact path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route exact path="/admin/attribute" element={<AdminAttribute />} />
+        <Route exact path="/admin/option" element={<AdminOption />} />
         <Route exact path="/admin/addstuaccount" element={<AdminAddStuAccount />} />
         <Route exact path="/admin/addadmaccount" element={<AdminAddAdmAccount />} />
         <Route exact path="/admin/stuprofile" element={<AdminStuProfile />} />
@@ -113,8 +114,7 @@ function App() {
         <Route exact path="/studentProfile" element={<StudentProfile />} />
         <Route exact path="/studentCreate" element={<StudentCreate />} />
         <Route exact path="/searchStudent" element={<SearchStudent />} />
-
-
+        <Route exact path="/testing" element={<Testing />} />
 
       </Routes>
     </Router>

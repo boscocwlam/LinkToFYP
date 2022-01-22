@@ -52,8 +52,8 @@ const AdminNav = () => {
                 <Nav.Link href="/admin/addstuaccount">
                   <p1 className="word">Add Students</p1>
                 </Nav.Link>
-                <Nav.Link href="/admin/attribute">
-                  <p1 className="word">Manage Attributes</p1>
+                <Nav.Link href="/admin/option">
+                  <p1 className="word">Option Lists</p1>
                 </Nav.Link>
                 <Nav.Link href="/admin/stuprofile">
                   <p1 className="word">Students' Profiles</p1>

@@ -23,7 +23,6 @@ const db = mysql.createConnection({
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 // Admin
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +79,7 @@ app.get("/getStudent", (req, res) => {
   );
 });
 
-//AdminAddStuAccount.js, AdminAddAdmAccount.js, 
+//AdminAddStuAccount.js, AdminAddAdmAccount.js,
 app.get("/generateUserIDandPW", (req, res) => {
   console.log(req.query.text);
   db.query("select (MAX(User_ID) + 1) AS user_ID from Users", (err, result) => {
@@ -98,10 +97,10 @@ app.post("/StudentCreate", (req, res) => {
   const user_ID = req.body.user_ID;
   const student_ID = req.body.student_ID;
   const cGPA = req.body.cGPA;
-  const year = req.body.year;
+  const year_ID = req.body.year_ID;
   db.query(
-    "insert into Students (user_ID, student_ID, cGPA, year) value (?,?,?,?)",
-    [user_ID, student_ID, cGPA, year],
+    "insert into Students (user_ID, student_ID, cGPA, year_ID) value (?,?,?,?)",
+    [user_ID, student_ID, cGPA, year_ID],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -134,10 +133,10 @@ app.post("/StudentCreate2", (req, res) => {
   );
 });
 
-//AdminAddAdmAccount.js
-app.get("/getDepartment", (req, res) => {
+//AdminAddStuAccount.js
+app.get("/getYears", (req, res) => {
   console.log(req.query.text);
-  db.query("select department_ID, department_name from departments", (err, result) => {
+  db.query(`SELECT year_ID, year_name FROM Years where category = "ReadyInUse" `, (err, result) => {
     if (err) {
       console.log(err);
     } else {
@@ -145,6 +144,23 @@ app.get("/getDepartment", (req, res) => {
       res.send(result);
     }
   });
+});
+
+
+//AdminAddAdmAccount.js
+app.get("/getDepartment", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select department_ID, department_name from departments",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
 });
 
 //AdminAddAdmAccount.js
@@ -180,7 +196,16 @@ app.post("/StaffCreate2", (req, res) => {
 
   db.query(
     "insert into Users (user_ID, first_name, last_name, password, gender, city, phone_no, email_address) value (?,?,?,?,?,?,?,?)",
-    [user_ID, first_name, last_name, password, gender, city, phone_no, email_address],
+    [
+      user_ID,
+      first_name,
+      last_name,
+      password,
+      gender,
+      city,
+      phone_no,
+      email_address,
+    ],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -195,20 +220,329 @@ app.post("/StaffCreate2", (req, res) => {
 //AdminDashboard.js
 app.get("/getPopularJobs", (req, res) => {
   console.log(req.query.text);
-  db.query("SELECT job_type_name AS JobType, COUNT(emp.Job_type_ID) AS Frequency from Employers emp, Job_types job WHERE emp.Job_Type_ID = job.Job_Type_ID GROUP BY emp.Job_type_ID ORDER BY Frequency desc limit 10;", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result);
-      res.send(result);
+  db.query(
+    "SELECT job_type_name AS JobType, COUNT(emp.Job_type_ID) AS Frequency from Employers emp, Job_types job WHERE emp.Job_Type_ID = job.Job_Type_ID GROUP BY emp.Job_type_ID ORDER BY Frequency desc limit 10;",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
     }
-  });
+  );
+});
+
+
+//AdminOptionSkill.js
+app.get("/getOptionSkills", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select skill_ID, skill_name, category from Skills",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionSkill.js
+app.get("/generateSkillID", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select (MAX(skill_ID) + 1) AS newSkill_ID, null AS newSkill_name from Skills",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionSkill.js
+app.post("/postskills", (req, res) => {
+  const skill_ID = req.body.skill_ID;
+  const skill_name = req.body.skill_name;
+  const category = req.body.category;
+
+  db.query(
+    "INSERT INTO Skills (skill_ID, skill_name, category) value (?, ?, ?)",
+    [skill_ID, skill_name, category],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+//AdminOptionSkill.js
+app.post("/checkExistSkill", (req, res) => {
+  const skill_ID = req.body.id;
+  db.query(
+    "SELECT ((SELECT COALESCE(count(skill_ID),0) FROM Students_Skills where skill_ID = ?) + (SELECT COALESCE(count(skill_ID),0) FROM Employers_Scores where skill_ID = ?))AS checkNum", 
+    [skill_ID, skill_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionSkill.js
+app.put("/updateSkill", (req, res) => {
+  const skill_ID = req.body.skill_ID;
+  const category = req.body.category;
+
+  db.query(
+    "UPDATE Skills SET category = ? WHERE skill_ID = ?",
+    [category, skill_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value updated");
+      }
+    }
+  );
+});
+
+//AdminOptionSkill.js
+app.delete("/deleteSkill", (req, res) => {
+  db.query(
+    `DELETE FROM Skills WHERE category = "Trash"`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionJobType.js
+app.get("/getOptionJobType", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select job_type_ID, job_type_name, category from Job_types",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionJobType.js
+app.get("/generateJobTypeID", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select (MAX(job_type_ID) + 1) AS newJobType_ID, null AS newJobType_name from Job_types",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionJobType.js
+app.post("/postjobtypes", (req, res) => {
+  const job_type_ID = req.body.job_type_ID;
+  const job_type_name = req.body.job_type_name;
+  const category = req.body.category;
+
+  db.query(
+    "INSERT INTO Job_types (job_type_ID, job_type_name, category) value (?, ?, ?)",
+    [job_type_ID, job_type_name, category],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+//AdminOptionJobType.js
+app.post("/checkExistJobType", (req, res) => {
+  const job_type_ID = req.body.id;
+  db.query(
+    "SELECT ((SELECT COALESCE(count(job_type_ID),0) FROM Employers where job_type_ID = ?) + (SELECT COALESCE(count(job_type_ID),0) FROM Work_experiences where job_type_ID = ?))AS checkNum", 
+    [job_type_ID, job_type_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionJobType.js
+app.put("/updateJobType", (req, res) => {
+  const job_type_ID = req.body.job_type_ID;
+  const category = req.body.category;
+
+  db.query(
+    "UPDATE Job_types SET category = ? WHERE job_type_ID = ?",
+    [category, job_type_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value updated");
+      }
+    }
+  );
+});
+
+//AdminOptionJobType.js
+app.delete("/deleteJobType", (req, res) => {
+  db.query(
+    `DELETE FROM Job_types WHERE category = "Trash"`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionYear.js
+app.get("/getOptionYears", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select year_ID, year_name, category from Years",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionYear.js
+app.get("/generateYearID", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select (MAX(year_ID) + 1) AS newYear_ID, null AS newYear_name from Years",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionYear.js
+app.post("/postYears", (req, res) => {
+  const year_ID = req.body.year_ID;
+  const year_name = req.body.year_name;
+  const category = req.body.category;
+
+  db.query(
+    "INSERT INTO Years (year_ID, year_name, category) value (?, ?, ?)",
+    [year_ID, year_name, category],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+//AdminOptionYear.js
+app.post("/checkExistYear", (req, res) => {
+  const year_ID = req.body.id;
+  db.query(
+    "select count(year_ID) AS checkNum from students where year_ID = ?", 
+    [year_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminOptionYear.js
+app.put("/updateYear", (req, res) => {
+  const year_ID = req.body.year_ID;
+  const category = req.body.category;
+
+  db.query(
+    "UPDATE Years SET category = ? WHERE year_ID = ?",
+    [category, year_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value updated");
+      }
+    }
+  );
+});
+
+//AdminOptionYear.js
+app.delete("/deleteYear", (req, res) => {
+  db.query(
+    `DELETE FROM Years WHERE category = "Trash"`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
 });
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 // Student
 ///////////////////////////////////////////////////////////////////////////////
@@ -233,7 +567,6 @@ app.get("/getStudentLogin", (req, res) => {
     }
   );
 });
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -304,50 +637,53 @@ app.post("/EmployerCreate2", (req, res) => {
 //EmployerAddAccount.js
 app.get("/generateEmployer_ID", (req, res) => {
   console.log(req.query.text);
-  db.query("select (MAX(Employer_ID) + 1) AS employer_ID from Employers", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result);
-      res.send(result);
+  db.query(
+    "select (MAX(Employer_ID) + 1) AS employer_ID from Employers",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
     }
-  });
+  );
 });
 
 //EmployerSurvey.js
 app.get("/getSkills", (req, res) => {
   console.log(req.query.text);
-  db.query("select skill_ID, skill_name from Skills", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result);
-      res.send(result);
+  db.query(
+    "select skill_ID, skill_name, category from Skills",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
     }
-  });
+  );
 });
 
 //EmployerSurvey.js
 app.get("/getJobTypes", (req, res) => {
   console.log(req.query.text);
-  db.query("select job_type_ID, job_type_name from Job_types", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result);
-      res.send(result);
+  db.query(
+    "select job_type_ID, job_type_name from Job_types",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
     }
-  });
+  );
 });
 
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 app.get("/employerstuprofile", (req, res) => {
   console.log(req.query.text);
@@ -393,8 +729,6 @@ app.get("/employerstuprofile", (req, res) => {
 //     )
 // });
 
-
-
 app.get("/getStudentOne", (req, res) => {
   const student_ID = req.query.student_ID;
   // const first_name = req.query.first_name;
@@ -416,17 +750,36 @@ app.get("/getStudentOne", (req, res) => {
   );
 });
 
+// app.get("/getUsers", (req, res) => {
+//   console.log(req.query.text);
+//   db.query("select * from Users", (err, result) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       console.log(result);
+//       res.send(result);
+//     }
+//   });
+// });
 
+app.post("/Register1", (req, res) => {
+  const last_name = req.body.last_name;
+  const email_address = req.body.email_address;
+  const password = req.body.password;
 
-
-
-
-
-
-
-
-
-
+  db.query(
+    "insert into Employers (last_name, email_address, password) value (?,?,?)",
+    [last_name, email_address, password],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
 
 
 
@@ -434,8 +787,3 @@ app.listen(3001, () => {
   console.log("listen to port 3001");
   console.log("set up database " + db);
 });
-
-
-
-
-

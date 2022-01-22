@@ -49,7 +49,7 @@ const StudentMain = ({ Student_ID}) => {
       <div className="mt-4"></div>
       */}
 
-      <Table striped bordered hover>
+      {/* <Table striped bordered hover>
         <thead>
           <tr>
             <th>Student ID</th>
@@ -72,22 +72,22 @@ const StudentMain = ({ Student_ID}) => {
             );
           })}
         </tbody>
-      </Table>
+      </Table> */}
 
 
-      {/* <Container>
+      <Container>
         <div className="mt-4"></div>
         
         <Row>
           <Col xs={6}>
             <Card>
-              <Card.Header as="h3">Bosco</Card.Header>
+              <Card.Header as="h3">Chan Tai Man</Card.Header>
               <Card.Body>
-              {studentData.map((item) => {
+              {/* {studentData.map((item) => { */}
                 <Card.Text>
                   <h6>
                     <br />
-                    Student ID: {item.Student_ID}
+                    Student ID: 
                     <br />
                     Department of Computer Science, Hong Kong Baptist Univeristy
                     <Dropdown.Divider />
@@ -97,7 +97,7 @@ const StudentMain = ({ Student_ID}) => {
                     cGPA: XXXX
                   </h6>
                 </Card.Text>
-              })}
+              {/* })} */}
                 
               </Card.Body>
             </Card>
@@ -138,7 +138,7 @@ const StudentMain = ({ Student_ID}) => {
               <Dropdown.Divider />
               Final Grade: A
             </Card.Text>
-            <Button variant="primary">Go somewhere</Button>
+            {/* <Button variant="primary">Go somewhere</Button> */}
           </Card.Body>
         </Card>
       </Container>
@@ -159,7 +159,7 @@ const StudentMain = ({ Student_ID}) => {
               </thead>
               <tbody>
                 <tr>
-                  <td>Accenture</td>
+                  <td>ABCDE Company</td>
                   <td>3 months</td>
                   <td>IT Support</td>
                   <td>
@@ -171,7 +171,7 @@ const StudentMain = ({ Student_ID}) => {
             </Table>
           </Card.Body>
         </Card>
-      </Container> */}
+      </Container>
 
       {/* <Button variant="primary">Go somewhere</Button> */}
       {/* <Card.Title>Final Year Project</Card.Title> */}

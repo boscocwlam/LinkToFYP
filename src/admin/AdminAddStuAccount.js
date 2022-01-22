@@ -12,6 +12,7 @@ import Row from "react-bootstrap/Row";
 
 const AdminAddStuAccount = () => {
   const [studentData, setStudentData] = useState([]);
+  const [yearData, setYearData] = useState([]);
   useEffect(() => {
     // axios
     //   .get("http://localhost:3001/getStudent", {
@@ -29,6 +30,17 @@ const AdminAddStuAccount = () => {
         setStudentData(response.data);
         console.log(response.data);
       });
+
+      axios
+      .get("http://localhost:3001/getYears", {
+        params: { text: "local" },
+      })
+      .then((response) => {
+        setYearData(response.data);
+        console.log(response.data);
+      });
+
+
   }, []);
 
   let navigate = useNavigate();
@@ -54,7 +66,7 @@ const AdminAddStuAccount = () => {
     const last_name = event.target.last_name.value;
     const student_ID = event.target.student_ID.value;
     const cGPA = event.target.cGPA.value;
-    const year = event.target.year.value;
+    const year_ID = event.target.year_ID.value;
     const password = event.target.password.value;
 
     axios
@@ -62,7 +74,7 @@ const AdminAddStuAccount = () => {
         user_ID,  
         student_ID,
         cGPA,
-        year,
+        year_ID
       })
       .then((response) => {
         console.log(response.data);
@@ -134,15 +146,18 @@ const AdminAddStuAccount = () => {
                 <Form.Label>Student ID</Form.Label>
                 <Form.Control type="text" />
               </Form.Group>
-              <Form.Group as={Col}  className="mb-3" controlId="year">
+
+              <Form.Group as={Col}  className="mb-3" controlId="year_ID">
                 <Form.Label>Year</Form.Label>
                 <Form.Select aria-label="Default select example">
-                  <option value="2018-2019">2018-2019</option>
-                  <option value="2019-2020">2019-2020</option>
-                  <option value="2020-2021">2020-2021</option>
-                  <option value="2021-2022">2021-2022</option>
+                  {yearData.map((item) => {
+                    return (
+                    <option value={item.year_ID}>{item.year_name}</option>
+                  );
+                })}
                 </Form.Select>
               </Form.Group>
+
             </Row>
 
             <Row className="mb-3">
