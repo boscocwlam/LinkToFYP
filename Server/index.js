@@ -51,7 +51,7 @@ app.get("/getAdminLogin", (req, res) => {
 app.get("/getUpdatedStatusList", (req, res) => {
   console.log(req.query.text);
   db.query(
-    "select staR.Application_ID AS Application_ID, stuEmp.Employer_ID AS Employer_ID, stuEmp.Student_ID AS Student_ID, sta.Status_name AS Status_name, staR.Status_change_date AS Status_change_date, use1.First_name AS Stu_first_name, use1.Last_name AS Stu_last_name, use2.First_name AS Emp_first_name, use2.Last_name AS Emp_last_name from Students_Employers stuEmp, Students stu, Employers emp, statusrecords staR, status sta, Users use1, Users use2 where use1.User_ID=stu.User_ID AND use2.User_ID=emp.User_ID AND stu.Student_ID=stuEmp.Student_ID AND emp.Employer_ID=stuEmp.Employer_ID AND stuEmp.Application_ID=staR.Application_ID AND staR.status_ID = sta.status_ID AND NOT EXISTS ( select * from statusrecords star2, status sta2 where staR2.status_ID = sta2.status_ID AND staR2.status_ID > sta.status_ID AND staR.Application_ID = staR2.Application_ID) order by staR.Status_change_date DESC",
+    "select staR.Application_ID AS Application_ID, stuEmp.Employer_ID AS Employer_ID, stuEmp.Student_ID AS Student_ID, sta.Status_name AS Status_name, sta.Status_ID AS Status_ID, staR.Status_change_date AS Status_change_date, use1.First_name AS Stu_first_name, use1.Last_name AS Stu_last_name, use2.First_name AS Emp_first_name, use2.Last_name AS Emp_last_name from Students_Employers stuEmp, Students stu, Employers emp, statusrecords staR, status sta, Users use1, Users use2 where use1.User_ID=stu.User_ID AND use2.User_ID=emp.User_ID AND stu.Student_ID=stuEmp.Student_ID AND emp.Employer_ID=stuEmp.Employer_ID AND stuEmp.Application_ID=staR.Application_ID AND staR.status_ID = sta.status_ID AND NOT EXISTS ( select * from statusrecords star2, status sta2 where staR2.status_ID = sta2.status_ID AND staR2.status_ID > sta.status_ID AND staR.Application_ID = staR2.Application_ID) order by staR.Status_change_date DESC",
     (err, result) => {
       if (err) {
         console.log(err);
@@ -63,11 +63,31 @@ app.get("/getUpdatedStatusList", (req, res) => {
   );
 });
 
+// AdminMain.js
+app.get("/getStatus", (req, res) => {
+  const status_ID = req.query.status_ID;
+  db.query(
+    "select ",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+
+
+
 // AdminStuProfile.js, EmployerSearch.js
 app.get("/getStudent", (req, res) => {
   console.log(req.query.text);
   db.query(
-    "select student_ID, first_name, last_name, year from Students, Users where Students.User_ID = Users.User_ID",
+    "select student_ID, first_name, last_name, year_name from Students, Users, Years where Students.User_ID = Users.User_ID and Students.year_ID = Years.year_ID;",
     (err, result) => {
       if (err) {
         console.log(err);
@@ -685,6 +705,9 @@ app.get("/getJobTypes", (req, res) => {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Draft
+///////////////////////////////////////////////////////////////////////////////
+
 app.get("/employerstuprofile", (req, res) => {
   console.log(req.query.text);
   db.query("select student_ID, cGPA, year from students", (err, result) => {
@@ -697,37 +720,6 @@ app.get("/employerstuprofile", (req, res) => {
   });
 });
 
-// app.get("/getAppRecord", (req, res) => {
-//   console.log(req.query.text);
-//   db.query(
-//     "select employer_ID, first_name, last_name, cGPA, year from students",
-//     (err, result) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         console.log(result);
-//         res.send(result);
-//       }
-//     }
-//   );
-// });
-
-// app.post("/register", (req,res) => {
-//     const username = req.body.username;
-//     const password = req.body.password;
-//     db.query(
-//         "INSERT INTO authentication (username, password, role) VALUES (?,?, 'admin')",
-//         [username, password],
-//         (err, result) => {
-//             if (err) {
-//                 console.log(err);
-//               } else {
-//                 console.log(result);
-//                 res.send("value inserted");
-//               }
-//         }
-//     )
-// });
 
 app.get("/getStudentOne", (req, res) => {
   const student_ID = req.query.student_ID;
@@ -749,18 +741,6 @@ app.get("/getStudentOne", (req, res) => {
     }
   );
 });
-
-// app.get("/getUsers", (req, res) => {
-//   console.log(req.query.text);
-//   db.query("select * from Users", (err, result) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       console.log(result);
-//       res.send(result);
-//     }
-//   });
-// });
 
 app.post("/Register1", (req, res) => {
   const last_name = req.body.last_name;

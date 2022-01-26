@@ -19,6 +19,7 @@ const AdminStuProfile = () => {
       });
   }, []);
 
+  console.log(studentData);
   // let navigate = useNavigate();
   // function handleClick() {
   //   navigate("./admin/main");
@@ -45,7 +46,7 @@ const AdminStuProfile = () => {
                   return (
                     <tr key={item.student_ID}>
                       <td>{item.student_ID} - {item.first_name} {item.last_name}</td>
-                      <td>{item.year}</td>
+                      <td>{item.year_name}</td>
                     </tr>
                   );
                 })}

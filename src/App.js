@@ -39,6 +39,7 @@ import SearchStudent from "./page/SearchStudent";
 import StudentProfile from "./page/StudentProfile";
 import StudentCreate from "./page/StudentCreate";
 import Testing from "./page/Testing";
+import Testing2 from "./page/Testing2";
 
 // import StudentUseToken from './students/StudentUseToken';
 
@@ -115,6 +116,7 @@ function App() {
         <Route exact path="/studentCreate" element={<StudentCreate />} />
         <Route exact path="/searchStudent" element={<SearchStudent />} />
         <Route exact path="/testing" element={<Testing />} />
+        <Route exact path="/testing2" element={<Testing2 />} />
 
       </Routes>
     </Router>

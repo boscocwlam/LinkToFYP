@@ -1,6 +1,7 @@
-.task-header88 {
-  display: inline-block;
-  width: 100%;
+.wrapper188 {
+  display: grid;
+  /* grid-template-columns: 2.5fr 0.5fr 1fr; */
+  grid-template-columns: 1fr 2.5fr 0.5fr;
 }
 
 .flexbox88 {
@@ -35,6 +36,11 @@
   /* overflow: auto; */
 }
 
+.task-header88 {
+  display: inline-block;
+  width: 100%;
+}
+
 .addButton:hover {
   background-color: red;
   color: white;
@@ -44,12 +50,6 @@
   display: flex;
   flex-direction: row;
   height: 40px;
-}
-
-.wrapper188 {
-  display: grid;
-  /* grid-template-columns: 2.5fr 0.5fr 1fr; */
-  grid-template-columns: 1fr 2.5fr 0.5fr;
 }
 
 .center88 {

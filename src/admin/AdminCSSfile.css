@@ -23,6 +23,41 @@
     color: red;
 }
 
+.auth-inner22 {
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 15px;
+    box-shadow: 0px 14px 80px rgba(255, 255, 255);
+    border-radius: 15px;
+    /* border:3px solid darkred;
+    border-radius: 15px; */
+  }
 
+  /* table, tr, th, td {
+    border: 1px solid white;
+    border-collapse: collapse;
+  }
+  tr, th, td {
+    background-color: white;
+    border-color: black;
+    border: 5px solid white;
+    border-collapse: collapse;
+  } */
 
+  .containerMatching{
+    border:3px solid lightblue;
+    border-radius: 15px;
+  }
+  
+  .backcolorMatching{
+    background-color: lightblue;
+  }
 
+  .text88 {
+    text-align: left;
+    font-family: Georgia, serif;
+}
