@@ -6,6 +6,7 @@ import "./HomeCSSfile.css";
 import logo from "../LinkToFYP_logo.png";
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
+// Navigation Bar in RED
 
 const HomeNav = () => {
   return (
@@ -42,12 +43,12 @@ const HomeNav = () => {
                   <NavDropdown.Item href="/">Contact Us</NavDropdown.Item>
                 </NavDropdown>
                 <NavDropdown title="Login" className="word" >
-                  <NavDropdown.Item href="/employer/login">Employers</NavDropdown.Item>
-                  <NavDropdown.Item href="/student/login">Students</NavDropdown.Item>
-                  <NavDropdown.Item href="/admin/login">Staffs</NavDropdown.Item>
+                  <NavDropdown.Item href="/logreg/login/employer">Employers</NavDropdown.Item>
+                  <NavDropdown.Item href="/logreg/login/student">Students</NavDropdown.Item>
+                  <NavDropdown.Item href="/logreg/login/admin">Staffs</NavDropdown.Item>
                 </NavDropdown>
                 <NavDropdown title="Create Account" className="word" >
-                  <NavDropdown.Item href="/employer/addaccount">Employers</NavDropdown.Item>
+                  <NavDropdown.Item href="/logreg/addaccount/employer">Employers</NavDropdown.Item>
                 </NavDropdown>
                 {/* <Nav.Link href="/student/login">
                   <p1 className="word">Sign In</p1>

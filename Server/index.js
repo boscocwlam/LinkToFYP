@@ -2,14 +2,40 @@ const mysql = require("mysql");
 const express = require("express");
 const cors = require("cors");
 
-const app = express();
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const bcrypt = require("bcryptjs");
+const saltRounds = 10;
 
-app.use(cors());
+const app = express();
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(
+  session({
+    key: "userId",
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      expires: 60 * 60 * 24,
+    },
+  })
+);
 
 app.use("/studentlogin", (req, res) => {
   res.send({
-    token: "test123",
+    token: "test123456",
   });
 });
 
@@ -20,32 +46,237 @@ const db = mysql.createConnection({
   database: "LinkToFYP",
 });
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Admin
+// LogReg (Employer)
 ///////////////////////////////////////////////////////////////////////////////
 
-//AdminLogin.js
-app.get("/getAdminLogin", (req, res) => {
-  const username = req.query.username;
+// LogRegEmployerLogin.js
+app.get("/getEmployerLogin", (req, res) => {
+  const username = req.query.username; // email address
   const password = req.query.password;
   db.query(
-    "SELECT staff_ID, password from Staffs sta, Users user where sta.User_ID = user.User_ID AND Staff_ID = ? AND password = ?",
-    [username, password],
+    `SELECT user_ID, password FROM users WHERE role="Employer" AND email_address = ?`,
+    [username],
     (err, result) => {
       if (err) {
         res.send({ err: err });
       }
       if (result.length > 0) {
-        // res.send(result);
-        res.send({ message: "Login Successfully!" });
+        bcrypt.compare(password, result[0].password, (err, response) => {
+          if (response) {
+            res.send({
+              user: result[0].user_ID,
+              password: result[0].password,
+              role: "Employer",
+              message: "Login Successfully!",
+            });
+          } else {
+            res.send({ message: "Wrong username/password combination!" });
+          }
+        });
       } else {
-        res.send({ message: "Wrong username/password combination!" });
+        res.send({ message: "User does not exist!!!" });
       }
     }
   );
 });
+
+// LogRegEmployerProtectedRoute.js
+app.post("/getEmployerLoginSession", (req, res) => {
+  const isAuthenitcated = req.body.isAuthenitcated;
+  db.query(
+    `SELECT user_ID, password, role from Users where user_ID = ? and role = "Employer" `,
+    [isAuthenitcated],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+        console.log("value extracted");
+      }
+    }
+  );
+});
+
+//LogRegEmployerAddAccount.js
+app.post("/EmployerCreate", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const employer_ID = req.body.employer_ID;
+
+  db.query(
+    "insert into Employers (user_ID, employer_ID) value (?,?)",
+    [user_ID, employer_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+//LogRegEmployerAddAccount.js
+app.post("/EmployerCreate2", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const email_address = req.body.email_address;
+  const password = req.body.password;
+
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log(err);
+    }
+
+    db.query(
+      `INSERT INTO Users (user_ID, email_address, password, role) value (?,?,?, "Employer")`,
+      [user_ID, email_address, hash],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(result);
+          res.send("value inserted");
+        }
+      }
+    );
+  });
+});
+
+//LogRegEmployerAddAccount.js
+app.get("/generateEmployer_ID", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select (MAX(Employer_ID) + 1) AS employer_ID from Employers",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+// LogReg (Admin)
+///////////////////////////////////////////////////////////////////////////////
+
+//LogRegAdminLogin.js
+app.get("/getAdminLogin", (req, res) => {
+  const username = req.query.username;
+  const password = req.query.password;
+  db.query(
+    "SELECT user.user_ID as user_ID, password from Staffs sta, Users user where sta.User_ID = user.User_ID AND Staff_ID = ?",
+    [username],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
+      if (result.length > 0) {
+        bcrypt.compare(password, result[0].password, (err, response) => {
+          if (response) {
+            res.send({
+              user: result[0].user_ID,
+              password: result[0].password,
+              role: "Admin",
+              message: "Login Successfully!",
+            });
+          } else {
+            res.send({ message: "Wrong username/password combination!" });
+          }
+          // res.send({user: result[0].user_ID, password: result[0].password, role: "Admin", message: "Login Successfully!"});
+        });
+      } else {
+        res.send({ message: "User does not exist!!!" });
+      }
+    }
+  );
+});
+
+// LogRegAdminProtectedRoute.js
+app.post("/getAdminLoginSession", (req, res) => {
+  const isAuthenitcated = req.body.isAuthenitcated;
+  db.query(
+    `SELECT user_ID, password, role from Users where user_ID = ? and role = "Admin" `,
+    [isAuthenitcated],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+        console.log("value extracted");
+      }
+    }
+  );
+});
+
+
+// LogReg (Student)
+///////////////////////////////////////////////////////////////////////////////
+
+// StudentLogin.js
+app.get("/getStudentLogin", (req, res) => {
+  const username = req.query.username;
+  const password = req.query.password;
+  db.query(
+    "SELECT user.user_ID as user_ID, password from Students stu, Users user where stu.User_ID = user.User_ID AND Student_ID = ?",
+    [username],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
+      if (result.length > 0) {
+        bcrypt.compare(password, result[0].password, (err, response) => {
+          if (response) {
+            res.send({
+              user: result[0].user_ID,
+              password: result[0].password,
+              role: "Student",
+              message: "Login Successfully!",
+            });
+          } else {
+            res.send({ message: "Wrong username/password combination!" });
+          }
+          //res.send({user: result[0].user_ID, password: result[0].password, role: "Student", message: "Login Successfully!"});
+        });
+      } else {
+        res.send({ message: "User does not exist!!!" });
+      }
+    }
+  );
+});
+
+// LogRegStudentProtectedRoute.js
+app.post("/getStudentLoginSession", (req, res) => {
+  const isAuthenitcated = req.body.isAuthenitcated;
+  db.query(
+    `SELECT user_ID, password, role from Users where user_ID = ? and role = "Student" `,
+    [isAuthenitcated],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+        console.log("value extracted");
+      }
+    }
+  );
+});
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Admin
+///////////////////////////////////////////////////////////////////////////////
 
 // AdminMain.js
 app.get("/getUpdatedStatusList", (req, res) => {
@@ -66,22 +297,15 @@ app.get("/getUpdatedStatusList", (req, res) => {
 // AdminMain.js
 app.get("/getStatus", (req, res) => {
   const status_ID = req.query.status_ID;
-  db.query(
-    "select ",
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send(result);
-      }
+  db.query("select ", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send(result);
     }
-  );
+  });
 });
-
-
-
-
 
 // AdminStuProfile.js, EmployerSearch.js
 app.get("/getStudent", (req, res) => {
@@ -138,34 +362,40 @@ app.post("/StudentCreate2", (req, res) => {
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;
   const password = req.body.password;
-
-  db.query(
-    "insert into Users (user_ID, first_name, last_name, password) value (?,?,?,?)",
-    [user_ID, first_name, last_name, password],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send("value inserted");
-      }
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log(err);
     }
-  );
+    db.query(
+      `INSERT INTO Users (user_ID, first_name, last_name, password, role) value (?,?,?,?, "Student")`,
+      [user_ID, first_name, last_name, hash],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(result);
+          res.send("value inserted");
+        }
+      }
+    );
+  });
 });
 
 //AdminAddStuAccount.js
 app.get("/getYears", (req, res) => {
   console.log(req.query.text);
-  db.query(`SELECT year_ID, year_name FROM Years where category = "ReadyInUse" `, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result);
-      res.send(result);
+  db.query(
+    `SELECT year_ID, year_name FROM Years where category = "ReadyInUse" `,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
     }
-  });
+  );
 });
-
 
 //AdminAddAdmAccount.js
 app.get("/getDepartment", (req, res) => {
@@ -214,27 +444,33 @@ app.post("/StaffCreate2", (req, res) => {
   const phone_no = req.body.phone_no;
   const email_address = req.body.email_address;
 
-  db.query(
-    "insert into Users (user_ID, first_name, last_name, password, gender, city, phone_no, email_address) value (?,?,?,?,?,?,?,?)",
-    [
-      user_ID,
-      first_name,
-      last_name,
-      password,
-      gender,
-      city,
-      phone_no,
-      email_address,
-    ],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send("value inserted");
-      }
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log(err);
     }
-  );
+
+    db.query(
+      `INSERT INTO Users (user_ID, first_name, last_name, password, gender, city, phone_no, email_address, role) value (?,?,?,?,?,?,?,?, "Admin" )`,
+      [
+        user_ID,
+        first_name,
+        last_name,
+        hash,
+        gender,
+        city,
+        phone_no,
+        email_address,
+      ],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(result);
+          res.send("value inserted");
+        }
+      }
+    );
+  });
 });
 
 //AdminDashboard.js
@@ -252,7 +488,6 @@ app.get("/getPopularJobs", (req, res) => {
     }
   );
 });
-
 
 //AdminOptionSkill.js
 app.get("/getOptionSkills", (req, res) => {
@@ -310,7 +545,7 @@ app.post("/postskills", (req, res) => {
 app.post("/checkExistSkill", (req, res) => {
   const skill_ID = req.body.id;
   db.query(
-    "SELECT ((SELECT COALESCE(count(skill_ID),0) FROM Students_Skills where skill_ID = ?) + (SELECT COALESCE(count(skill_ID),0) FROM Employers_Scores where skill_ID = ?))AS checkNum", 
+    "SELECT ((SELECT COALESCE(count(skill_ID),0) FROM Students_Skills where skill_ID = ?) + (SELECT COALESCE(count(skill_ID),0) FROM Employers_Scores where skill_ID = ?))AS checkNum",
     [skill_ID, skill_ID],
     (err, result) => {
       if (err) {
@@ -344,16 +579,13 @@ app.put("/updateSkill", (req, res) => {
 
 //AdminOptionSkill.js
 app.delete("/deleteSkill", (req, res) => {
-  db.query(
-    `DELETE FROM Skills WHERE category = "Trash"`,
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(result);
-      }
+  db.query(`DELETE FROM Skills WHERE category = "Trash"`, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
     }
-  );
+  });
 });
 
 //AdminOptionJobType.js
@@ -412,7 +644,7 @@ app.post("/postjobtypes", (req, res) => {
 app.post("/checkExistJobType", (req, res) => {
   const job_type_ID = req.body.id;
   db.query(
-    "SELECT ((SELECT COALESCE(count(job_type_ID),0) FROM Employers where job_type_ID = ?) + (SELECT COALESCE(count(job_type_ID),0) FROM Work_experiences where job_type_ID = ?))AS checkNum", 
+    "SELECT ((SELECT COALESCE(count(job_type_ID),0) FROM Employers where job_type_ID = ?) + (SELECT COALESCE(count(job_type_ID),0) FROM Work_experiences where job_type_ID = ?))AS checkNum",
     [job_type_ID, job_type_ID],
     (err, result) => {
       if (err) {
@@ -446,32 +678,26 @@ app.put("/updateJobType", (req, res) => {
 
 //AdminOptionJobType.js
 app.delete("/deleteJobType", (req, res) => {
-  db.query(
-    `DELETE FROM Job_types WHERE category = "Trash"`,
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(result);
-      }
+  db.query(`DELETE FROM Job_types WHERE category = "Trash"`, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
     }
-  );
+  });
 });
 
 //AdminOptionYear.js
 app.get("/getOptionYears", (req, res) => {
   console.log(req.query.text);
-  db.query(
-    "select year_ID, year_name, category from Years",
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send(result);
-      }
+  db.query("select year_ID, year_name, category from Years", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send(result);
     }
-  );
+  });
 });
 
 //AdminOptionYear.js
@@ -514,7 +740,7 @@ app.post("/postYears", (req, res) => {
 app.post("/checkExistYear", (req, res) => {
   const year_ID = req.body.id;
   db.query(
-    "select count(year_ID) AS checkNum from students where year_ID = ?", 
+    "select count(year_ID) AS checkNum from students where year_ID = ?",
     [year_ID],
     (err, result) => {
       if (err) {
@@ -548,127 +774,37 @@ app.put("/updateYear", (req, res) => {
 
 //AdminOptionYear.js
 app.delete("/deleteYear", (req, res) => {
-  db.query(
-    `DELETE FROM Years WHERE category = "Trash"`,
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(result);
-      }
+  db.query(`DELETE FROM Years WHERE category = "Trash"`, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
     }
-  );
+  });
 });
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Student
 ///////////////////////////////////////////////////////////////////////////////
 
-// StudentLogin.js
-app.get("/getStudentLogin", (req, res) => {
-  const username = req.query.username;
-  const password = req.query.password;
-  db.query(
-    "SELECT student_ID, password from Students stu, Users user where stu.User_ID = user.User_ID AND Student_ID = ? AND password = ?",
-    [username, password],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      }
-      if (result.length > 0) {
-        // res.send(result);
-        res.send({ message: "Login Successfully!" });
-      } else {
-        res.send({ message: "Wrong username/password combination!" });
-      }
-    }
-  );
-});
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Employer
 ///////////////////////////////////////////////////////////////////////////////
-
-// EmployerLogin.js
-app.get("/getEmployerLogin", (req, res) => {
-  const username = req.query.username;
-  const password = req.query.password;
-  db.query(
-    "SELECT email_address, password FROM users WHERE user_ID = some (select user_ID from employers) AND email_address = ? AND password = ?",
-    [username, password],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      }
-      if (result.length > 0) {
-        // res.send(result);
-        res.send({ message: "Login Successfully!" });
-      } else {
-        res.send({ message: "Wrong username/password combination!" });
-      }
-    }
-  );
-});
-
-//EmployerAddAccount.js
-app.post("/EmployerCreate", (req, res) => {
-  const user_ID = req.body.user_ID;
-  const employer_ID = req.body.employer_ID;
-
-  db.query(
-    "insert into Employers (user_ID, employer_ID) value (?,?)",
-    [user_ID, employer_ID],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send("value inserted");
-      }
-    }
-  );
-});
-
-//EmployerAddAccount.js
-app.post("/EmployerCreate2", (req, res) => {
-  const user_ID = req.body.user_ID;
-  const email_address = req.body.email_address;
-  const password = req.body.password;
-
-  db.query(
-    "insert into Users (user_ID, email_address, password) value (?,?,?)",
-    [user_ID, email_address, password],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send("value inserted");
-      }
-    }
-  );
-});
-
-//EmployerAddAccount.js
-app.get("/generateEmployer_ID", (req, res) => {
-  console.log(req.query.text);
-  db.query(
-    "select (MAX(Employer_ID) + 1) AS employer_ID from Employers",
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send(result);
-      }
-    }
-  );
-});
 
 //EmployerSurvey.js
 app.get("/getSkills", (req, res) => {
@@ -702,8 +838,8 @@ app.get("/getJobTypes", (req, res) => {
   );
 });
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Draft
 ///////////////////////////////////////////////////////////////////////////////
@@ -719,7 +855,6 @@ app.get("/employerstuprofile", (req, res) => {
     }
   });
 });
-
 
 app.get("/getStudentOne", (req, res) => {
   const student_ID = req.query.student_ID;
@@ -760,8 +895,6 @@ app.post("/Register1", (req, res) => {
     }
   );
 });
-
-
 
 app.listen(3001, () => {
   console.log("listen to port 3001");

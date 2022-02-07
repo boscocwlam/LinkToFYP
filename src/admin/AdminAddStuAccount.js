@@ -144,7 +144,7 @@ const AdminAddStuAccount = () => {
             <Row className="mb-3">
               <Form.Group as={Col}  className="mb-3" controlId="student_ID">
                 <Form.Label>Student ID</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control type="text" required />
               </Form.Group>
 
               <Form.Group as={Col}  className="mb-3" controlId="year_ID">
@@ -163,17 +163,17 @@ const AdminAddStuAccount = () => {
             <Row className="mb-3">
               <Form.Group as={Col} className="mb-3" controlId="first_name">
                 <Form.Label>First Name</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control type="text" required/>
               </Form.Group>
               <Form.Group as={Col} className="mb-3" controlId="last_name">
                 <Form.Label>Last Name</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control type="text" required/>
               </Form.Group>
             </Row>
             <Row className="mb-3">
               <Form.Group as={Col} className="mb-3" controlId="cGPA">
                 <Form.Label>cGPA</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control type="text" required/>
               </Form.Group>
               <Col></Col>
             </Row>

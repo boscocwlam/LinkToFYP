@@ -18,16 +18,16 @@ const StudentMain = ({ Student_ID}) => {
   const [studentData, setStudentData] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/getStudentOne", {
-        params: {
-          textData: "local" 
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        // setStudentData(response.data);
-      });
+    // axios
+    //   .get("http://localhost:3001/getStudentOne", {
+    //     params: {
+    //       textData: "local" 
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     // setStudentData(response.data);
+    //   });
   }, []);
   
 

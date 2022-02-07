@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import "./EmployerCSSfile.css";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import HomeNav from "../home/HomeNav2";
+import "../logreg/LogRegCSSfile.css";
+import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
 
-export default function EmployerLogin({ setEmail_address }) {
+
+export default function LogRegEmployerLogin() {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
   const [loginStatus, setLoginStatus] = useState("");
@@ -18,14 +19,15 @@ export default function EmployerLogin({ setEmail_address }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios
+    axios
       .get("http://localhost:3001/getEmployerLogin", {
         params: { username, password },
       })
       .then((response) => {
         console.log(response.data);
         if (response.data.message == "Login Successfully!") {
-          setEmail_address(username);
+          localStorage.setItem("isEncrypted", response.data.password);
+          localStorage.setItem("isAuthenitcated", response.data.user);
           navigate("/employer/main");
         }else{
           setLoginStatus(response.data.message);
@@ -38,8 +40,40 @@ export default function EmployerLogin({ setEmail_address }) {
       <div>
         <HomeNav />
       </div>
+      <div>
+        <Container>
+        <div className="auth-wrapper">
+        <div className="auth-inner">
+        <form onSubmit={handleSubmit}>
+          <h4 className="text1 title1">Log In Your Business Account</h4>
+          <div className="mt-4"></div>
+            <div className="mt-2"></div>
+            <div className="form-group text1">
+                <label>Email Address</label>
+                <input type="email" className="form-control" placeholder="Email Address" onChange={(e) => setUserName(e.target.value)}/>
+            </div>
+            <div className="mt-2"></div>
+            <div className="form-group text1">
+                <label>Password</label>
+                <input type="password" className="form-control" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+            </div>
+            <div className="mt-4"></div>
+            <button className="btn btn-danger btn-block text1" >Log In</button>
+            <div className="mt-4"></div>
+            <h6 className="loginStatus">{loginStatus}</h6>
+        </form>
+        </div>
+      </div>
 
-      <div className="login-wrapper">
+        </Container>
+      </div>
+
+
+    </div>
+  );
+}
+
+      {/* <div className="login-wrapper">
         <Container>
           <div className="mt-4"></div>
           <h3>Log In To Your Business Account</h3>
@@ -73,10 +107,4 @@ export default function EmployerLogin({ setEmail_address }) {
           </Form>
         </Container>
       </div>
-    </div>
-  );
-}
-EmployerLogin.propTypes = {
-  setToken: PropTypes.func.isRequired,
-};
-// export default EmployerLogin;
+    */}

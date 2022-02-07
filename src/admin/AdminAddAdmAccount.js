@@ -14,13 +14,6 @@ const AdminAddAdmAccount = () => {
   const [staffData, setStaffData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
   useEffect(() => {
-    // axios
-    //   .get("http://localhost:3001/getStudent", {
-    //     params: { text: "local" },
-    //   })
-    //   .then((response) => {
-    //     setStudentData(response.data);
-    //   });
 
     axios
       .get("http://localhost:3001/generateUserIDandPW", {
@@ -143,7 +136,7 @@ const AdminAddAdmAccount = () => {
             <Row className="mb-3">
               <Form.Group as={Col} className="mb-3" controlId="staff_ID">
                 <Form.Label>Staff ID</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control type="text" required />
               </Form.Group>
               <Form.Group as={Col} className="mb-3" controlId="department_ID">
                 <Form.Label>Department</Form.Label>
@@ -161,11 +154,11 @@ const AdminAddAdmAccount = () => {
             <Row className="mb-3">
               <Form.Group as={Col} className="mb-3" controlId="first_name">
                 <Form.Label>First Name</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control type="text" required/>
               </Form.Group>
               <Form.Group as={Col} className="mb-3" controlId="last_name">
                 <Form.Label>Last Name</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control type="text" required />
               </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -179,17 +172,17 @@ const AdminAddAdmAccount = () => {
               </Form.Group>
               <Form.Group as={Col} className="mb-3" controlId="city">
                 <Form.Label>Country / City</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control type="text" required />
               </Form.Group>
             </Row>
             <Row className="mb-3">
               <Form.Group as={Col} className="mb-3" controlId="phone_no">
                 <Form.Label>Phone No.</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control type="text" required/>
               </Form.Group>
               <Form.Group as={Col} className="mb-3" controlId="email_address">
                 <Form.Label>Email Address</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control type="text" required/>
               </Form.Group>
             </Row>
             <Button variant="danger" type="submit">

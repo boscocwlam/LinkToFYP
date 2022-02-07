@@ -1,14 +1,16 @@
 import React from "react";
 import EmployerNav from "./EmployerNav";
-import Card from 'react-bootstrap/Card';
+import Card from "react-bootstrap/Card";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const EmployerMain = () => {
+
   return (
     <div>
       <EmployerNav />
-
       <Card>
         <Card.Header>
           <Nav variant="tabs" defaultActiveKey="#first">

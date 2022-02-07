@@ -8,6 +8,7 @@ import logo3 from "../Picture3.png";
 import logo4 from "../Photo4.png";
 
 const HomeMain = () => {
+  localStorage.clear();
   return (
     <div>
       <div>
