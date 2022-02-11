@@ -7,6 +7,7 @@ import axios from "axios";
 
 const LogRegAdminProtectedRoute = ({ children }) => {
   const [pass, setPass] = useState(false);
+  const isOrganized = localStorage.getItem("isOrganized");
   const isAuthenitcated = localStorage.getItem("isAuthenitcated");
   const isEncrypted = localStorage.getItem("isEncrypted");
 
@@ -14,10 +15,15 @@ const LogRegAdminProtectedRoute = ({ children }) => {
     axios
       .post("http://localhost:3001/getAdminLoginSession", {
         isAuthenitcated,
+        isOrganized
       })
       .then((response) => {
-        console.log(response.data[0]);
-        setPass(response.data[0].password);
+        // console.log(response.data[0]);
+        if(response.data[0]){
+          setPass(response.data[0].password);
+        }else{
+          setPass("/");
+        }
       });
       return () => setPass(false);
   }, []);

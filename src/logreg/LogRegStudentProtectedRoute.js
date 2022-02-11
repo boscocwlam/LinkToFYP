@@ -16,8 +16,12 @@ const LogRegStudentProtectedRoute = ({ children }) => {
         isAuthenitcated,
       })
       .then((response) => {
-        console.log(response.data[0]);
-        setPass(response.data[0].password);
+        // console.log(response.data[0]);
+        if(response.data[0]){
+          setPass(response.data[0].password);
+        }else{
+          setPass("/");
+        }
       });
       return () => setPass(false);
   }, []);

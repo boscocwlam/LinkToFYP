@@ -13,69 +13,236 @@ import logo2 from "../Picture2.png";
 import logo3 from "../Picture3.png";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "./StudentCSSfile.css";
 
-const StudentMain = ({ Student_ID}) => {
+const StudentMain = ({ Student_ID }) => {
   const [studentData, setStudentData] = useState([]);
+  const [fypData, setFYPData] = useState([]);
+  const [workData, setWorkData] = useState([]);
+  const user_ID = localStorage.getItem("isAuthenitcated");
 
   useEffect(() => {
-    // axios
-    //   .get("http://localhost:3001/getStudentOne", {
-    //     params: {
-    //       textData: "local" 
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     // setStudentData(response.data);
-    //   });
+    axios
+      .get("http://localhost:3001/getStudentPersonalInfo", {
+        params: {
+          user_ID,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setStudentData(response.data);
+      });
+
+    axios
+      .get("http://localhost:3001/getStudentFYP", {
+        params: {
+          user_ID,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setFYPData(response.data);
+      });
+
+    axios
+      .get("http://localhost:3001/getStudentWorkExperiences", {
+        params: {
+          user_ID,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setWorkData(response.data);
+      });
   }, []);
-  
 
   return (
     <div>
       <StudentNav />
-
-      {/* <Carousel variant="dark">
-        <Carousel.Item>
-          <img className="photo1" src={logo1} alt="First slide" />
-        </Carousel.Item>
-        <Carousel.Item>
-          <img className="photo1" src={logo2} alt="Second slide" />
-        </Carousel.Item>
-        <Carousel.Item>
-          <img className="photo1" src={logo3} alt="Third slide" />
-        </Carousel.Item>
-      </Carousel> 
-      <div className="mt-4"></div>
-      */}
-
-      {/* <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Student ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>cGPA</th>
-            <th>Year</th>
-          </tr>
-        </thead>
-        <tbody>
-        {studentData.map((item, index) => {
-            return (
-              <tr key={item.student_ID}>
-                <td>{item.student_ID}</td>
-                <td>{item.first_name}</td>
-                <td>{item.last_name}</td>
-                <td>{item.cGPA}</td>
-                <td>{item.year}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table> */}
-
+      <Container>
+        <Container>
+          <div className="mt-4"></div>
+          <h2 className="title90">Personal Profile</h2>
+          <div className="mt-4"></div>
+        </Container>
+      </Container>
 
       <Container>
+        <div className="boundary33">
+          <Container>
+            <Container>
+              <div className="mt-4"></div>
+              <h5>Personal Info.</h5>
+              <Dropdown.Divider />
+              <div className="mt-4"></div>
+              <Table>
+                {studentData.map((item) => {
+                  return (
+                    <tbody>
+                      <tr>
+                        <td className="letter3">NAME</td>
+                        <td className="letter4">
+                          {item.first_name} {item.last_name}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">STUDENT ID</td>
+                        <td className="letter4">{item.student_ID}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">GENDER</td>
+                        <td className="letter4">{item.gender}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">CITY</td>
+                        <td className="letter4">{item.city}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">PHONE NUMBER</td>
+                        <td className="letter4">{item.phone_no}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">EMAIL ADDRESS</td>
+                        <td className="letter4">{item.email_address}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">UNDER DEPARTMENT OF</td>
+                        <td className="letter4">
+                          Department of Computer Science, Hong Kong Baptist
+                          Univeristy
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">YEAR OF PERFORMING FYP</td>
+                        <td className="letter4">{item.year_name}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">CGPA</td>
+                        <td className="letter4">{item.cGPA}</td>
+                      </tr>
+                    </tbody>
+                  );
+                })}
+              </Table>
+
+              <div className="mt-4"></div>
+            </Container>
+          </Container>
+        </div>
+        <div className="mt-4"></div>
+        <div className="boundary33">
+          <Container>
+            <Container>
+              <div className="mt-4"></div>
+              <h5>Final Year Project</h5>
+              <Dropdown.Divider />
+              <div className="mt-4"></div>
+              <Table>
+                {fypData.map((item) => {
+                  return (
+                    <tbody>
+                      <tr>
+                        <td className="letter3">PROJECT NAME</td>
+                        <td className="letter4">{item.fyp_name}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">PROJECT BACKGROUND</td>
+                        <td className="letter4">{item.fyp_background}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">SKILLS</td>
+                        <td className="letter4">
+                          React, MySQL, UI/UX Design, Database Maintenance
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">LINK</td>
+                        <td className="letter4">{item.fyp_link}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">DOCUMENTS</td>
+                        <td className="letter4">{item.fyp_document}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">FINAL GRADE</td>
+                        <td className="letter4">{item.fyp_final_grade}</td>
+                      </tr>
+                    </tbody>
+                  );
+                })}
+              </Table>
+
+              <div className="mt-4"></div>
+            </Container>
+          </Container>
+        </div>
+        <div className="mt-4"></div>
+        <div className="boundary33">
+          <Container>
+            <Container>
+              <div className="mt-4"></div>
+              <h5>Work Experience</h5>
+              <Dropdown.Divider />
+              <div className="mt-4"></div>
+              <Table>
+                {workData.map((item) => {
+                  return (
+                    <tbody>
+                      <tr>
+                        <td className="letter3">COMPANY NAME</td>
+                        <td className="letter4">{item.company_name}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">JOB TITLE</td>
+                        <td className="letter4">{item.job_title}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">JOB TYPE</td>
+                        <td className="letter4">{item.job_type_name}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">DURATION</td>
+                        <td className="letter4">{item.duration}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">SKILLS</td>
+                        <td className="letter4">{item.skill_name}</td>
+                      </tr>
+                      <div className="mt-4"></div>
+                    </tbody>
+                  );
+                })}
+              </Table>
+              <div className="mt-4"></div>
+            </Container>
+          </Container>
+        </div>
+      </Container>
+    </div>
+  );
+};
+
+export default StudentMain;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      {/* <Container>
         <div className="mt-4"></div>
         
         <Row>
@@ -83,7 +250,7 @@ const StudentMain = ({ Student_ID}) => {
             <Card>
               <Card.Header as="h3">Chan Tai Man</Card.Header>
               <Card.Body>
-              {/* {studentData.map((item) => { */}
+
                 <Card.Text>
                   <h6>
                     <br />
@@ -97,7 +264,6 @@ const StudentMain = ({ Student_ID}) => {
                     cGPA: XXXX
                   </h6>
                 </Card.Text>
-              {/* })} */}
                 
               </Card.Body>
             </Card>
@@ -138,7 +304,7 @@ const StudentMain = ({ Student_ID}) => {
               <Dropdown.Divider />
               Final Grade: A
             </Card.Text>
-            {/* <Button variant="primary">Go somewhere</Button> */}
+
           </Card.Body>
         </Card>
       </Container>
@@ -171,12 +337,7 @@ const StudentMain = ({ Student_ID}) => {
             </Table>
           </Card.Body>
         </Card>
-      </Container>
+      </Container> */}
 
       {/* <Button variant="primary">Go somewhere</Button> */}
       {/* <Card.Title>Final Year Project</Card.Title> */}
-    </div>
-  );
-};
-
-export default StudentMain;

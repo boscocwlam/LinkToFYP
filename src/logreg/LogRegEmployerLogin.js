@@ -1,77 +1,66 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import axios from "axios";
+import AdminNav from "../home/HomeNav2";
 import { useNavigate } from "react-router-dom";
-import HomeNav from "../home/HomeNav2";
-import "../logreg/LogRegCSSfile.css";
+import "./LogRegCSSfile.css";
 import Container from "react-bootstrap/Container";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 
-
-export default function LogRegEmployerLogin() {
-  const [username, setUserName] = useState();
-  const [password, setPassword] = useState();
+const LogRegEmployerLogin = () => {
   const [loginStatus, setLoginStatus] = useState("");
   let navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const submitForm = (event) => {
+    event.preventDefault();
+    const email_address = event.target.email_address.value;
     axios
-      .get("http://localhost:3001/getEmployerLogin", {
-        params: { username, password },
-      })
-      .then((response) => {
-        console.log(response.data);
-        if (response.data.message == "Login Successfully!") {
-          localStorage.setItem("isEncrypted", response.data.password);
-          localStorage.setItem("isAuthenitcated", response.data.user);
-          navigate("/employer/main");
-        }else{
-          setLoginStatus(response.data.message);
-        }
-      });
+    .post("http://localhost:3001/checkEmployerEmailExist", {
+      email_address
+    })
+    .then((response) => {
+      console.log(response.data.emailCount);
+      if(response.data[0].emailCount >= 1){
+        const email_address = event.target.email_address.value;
+        localStorage.setItem("Email Address (Employer)", email_address);
+        navigate("/logreg/login/employer/next");
+      }else{
+        setLoginStatus("User Does Not Existed.")
+      }
+    });
+
   };
 
   return (
     <div>
       <div>
-        <HomeNav />
+        <AdminNav />
       </div>
       <div>
         <Container>
+        <form onSubmit={submitForm} >
+        <div className="mt-4"></div>
         <div className="auth-wrapper">
         <div className="auth-inner">
-        <form onSubmit={handleSubmit}>
+
           <h4 className="text1 title1">Log In Your Business Account</h4>
           <div className="mt-4"></div>
-            <div className="mt-2"></div>
             <div className="form-group text1">
                 <label>Email Address</label>
-                <input type="email" className="form-control" placeholder="Email Address" onChange={(e) => setUserName(e.target.value)}/>
-            </div>
-            <div className="mt-2"></div>
-            <div className="form-group text1">
-                <label>Password</label>
-                <input type="password" className="form-control" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+                <input type="email" className="form-control" placeholder="Email Address" name="email_address" required/>
             </div>
             <div className="mt-4"></div>
-            <button className="btn btn-danger btn-block text1" >Log In</button>
+            <button className="btn btn-danger btn-block text1" >Next</button>
             <div className="mt-4"></div>
             <h6 className="loginStatus">{loginStatus}</h6>
-        </form>
+            <a href="/logreg/forgetpw/employer">Forget Your Password?</a>
         </div>
       </div>
-
-        </Container>
-      </div>
-
-
+      </form>
+      </Container>
+    </div>
     </div>
   );
-}
+};
+
+export default LogRegEmployerLogin;
 
       {/* <div className="login-wrapper">
         <Container>

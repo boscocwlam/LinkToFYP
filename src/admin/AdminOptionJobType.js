@@ -13,7 +13,8 @@ export default class AdminOptionJobType extends Component {
   };
 
   componentDidMount() {
-    axios.get("http://localhost:3001/getOptionJobType").then((res) => {
+    const organization_ID = localStorage.getItem("isOrganized");
+    axios.post("http://localhost:3001/getOptionJobType", {organization_ID}).then((res) => {
       const tasks = res.data;
       this.setState({ tasks });
     });
@@ -33,11 +34,13 @@ export default class AdminOptionJobType extends Component {
     });
     const job_type_name = event.target.job_type_name.value;
     const category = "NotInUse";
+    const organization_ID = localStorage.getItem("isOrganized");
     axios
       .post("http://localhost:3001/postjobtypes", {
         job_type_ID,
         job_type_name,
         category,
+        organization_ID
       })
       .then((res) => {
         console.log(res);
@@ -81,7 +84,7 @@ export default class AdminOptionJobType extends Component {
             });
 
             axios
-              .put("http://localhost:3001/updateJobType", {
+              .post("http://localhost:3001/updateJobType", {
                 job_type_ID: id,
                 category: cat,
               })
@@ -89,7 +92,7 @@ export default class AdminOptionJobType extends Component {
                 console.log(res);
                 console.log(res.data);
               });
-            axios.delete("http://localhost:3001/deleteJobType").then((res) => {
+            axios.get("http://localhost:3001/deleteJobType").then((res) => {
               console.log(res.data);
             });
             window.location.reload(false);

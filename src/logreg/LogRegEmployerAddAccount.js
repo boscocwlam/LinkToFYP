@@ -11,70 +11,30 @@ import Container from "react-bootstrap/Container";
 // import Row from "react-bootstrap/Row";
 
 const LogRegEmployerAddAccount = () => {
-  const [employerData, setEmployerData] = useState([]);
-  const [employerData2, setEmployerData2] = useState([]);
   const [loginStatus, setLoginStatus] = useState("");
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/generateUserIDandPW", {
-        params: { text: "local" },
-      })
-      .then((response) => {
-        setEmployerData(response.data);
-        // console.log(response.data);
-      });
-
-    axios
-      .get("http://localhost:3001/generateEmployer_ID", {
-        params: { text: "local" },
-      })
-      .then((response) => {
-        setEmployerData2(response.data);
-        // console.log(response.data);
-      });
-  }, []);
-
+  const [loginStatus2, setLoginStatus2] = useState("");
   let navigate = useNavigate();
-  function handleClick() {
-    alert("Account Is Created. Please log in.");
-    navigate("/logreg/login/employer");
-  }
-
   const submitForm = (event) => {
     event.preventDefault();
     const email_address = event.target.email_address.value;
-    const user_ID = event.target.user_ID.value;
-    const employer_ID = event.target.employer_ID.value;
-    const password = event.target.password.value;
-
-
-    if (event.target.confirm_password.value == password) {
-    axios.defaults.withCredentials = true;
     axios
-      .post("http://localhost:3001/EmployerCreate", {
-        user_ID,
-        employer_ID,
-      })
-      .then((response) => {
-        console.log(response.data);
-        handleClick();
-      });
+    .post("http://localhost:3001/checkEmployerEmailExist", {
+      email_address
+    })
+    .then((response) => {
+      console.log(response.data.emailCount);
+      if(response.data[0].emailCount <= 0){
+        setLoginStatus("");
+        setLoginStatus2("");
+        const email_address = event.target.email_address.value;
+        localStorage.setItem("Email Address (Employer)", email_address);
+        navigate("/logreg/addaccount/employer/next");
+      }else{
+        localStorage.setItem("Email Address (Employer)", email_address);
+        navigate("/logreg/addaccount/employer/ask");
+      }
+    });
 
-    axios
-      .post("http://localhost:3001/EmployerCreate2", {
-        user_ID,
-        password,
-        email_address,
-      })
-      .then((response) => {
-        console.log(response.data);
-        handleClick();
-      });
-    }
-    else {
-      setLoginStatus("***Passwords do not match. Please enter again.");
-    }
   };
 
   return (
@@ -85,6 +45,7 @@ const LogRegEmployerAddAccount = () => {
       <div>
         <Container>
         <form onSubmit={submitForm} >
+        <div className="mt-4"></div>
         <div className="auth-wrapper">
         <div className="auth-inner">
 
@@ -92,36 +53,17 @@ const LogRegEmployerAddAccount = () => {
           <div className="mt-4"></div>
             <div className="form-group text1">
                 <label>Email Address</label>
-                <input type="email" className="form-control" placeholder="Email Address" name="email_address"/>
-            </div>
-            <div className="mt-2"></div>
-            <div className="form-group text1">
-                <label>Password</label>
-                <input type="password" className="form-control" placeholder="Password" name="password" />
-            </div>
-            <div className="mt-2"></div>
-            <div className="form-group text1">
-                <label>Confirm Password</label>
-                <input type="password" className="form-control" placeholder="Confirm Password" name="confirm_password" />
+                <input type="email" className="form-control" placeholder="Email Address" name="email_address" required/>
             </div>
             <div className="mt-4"></div>
-            <button className="btn btn-danger btn-block text1" >Sign Up</button>
+            <button className="btn btn-danger btn-block text1" >Next</button>
             <div className="mt-4"></div>
             <h6 className="loginStatus">{loginStatus}</h6>
-            {employerData.map((item) => {
-              return (
-                <div className="form-group text1 hide">
-                  <input type="hidden" className="form-control hide" value={item.user_ID} placeholder="User ID" name="user_ID" />
-              </div>
-              )
-            })}
-            {employerData2.map((item) => {
-              return (
-                <div className="form-group text1 hide">
-                <input type="hidden" className="form-control hide" value={item.employer_ID} placeholder="Employer ID" name="employer_ID" />
-              </div>
-              )
-            })}
+            <div className="mt-4"></div>
+            <h6 className="loginStatus">{loginStatus2}</h6>
+            <div className="mt-4"></div>
+            <h6>Note:</h6>
+            <h6>For users who have already had an account and would like to register for connecting a new organization's page, please type in your email address above.</h6>
         </div>
       </div>
       </form>
@@ -133,8 +75,8 @@ const LogRegEmployerAddAccount = () => {
 
 export default LogRegEmployerAddAccount;
 
-
-      {/* <div>
+{
+  /* <div>
         <Container>
           <div className="mt-4"></div>
           <h3>Sign up a Business Account</h3>
@@ -206,4 +148,5 @@ export default LogRegEmployerAddAccount;
             </Row>
           </Form>
         </Container>
-      </div> */}
+      </div> */
+}

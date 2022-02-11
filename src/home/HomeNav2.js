@@ -52,6 +52,7 @@ const HomeNav2 = () => {
                 </NavDropdown>
                 <NavDropdown title="Create Account" className="word" >
                   <NavDropdown.Item href="/logreg/addaccount/employer">Employers</NavDropdown.Item>
+                  <NavDropdown.Item href="/logreg/addaccount/organization">Educational Organizations</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
             </Navbar.Collapse>

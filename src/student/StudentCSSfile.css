@@ -38,3 +38,35 @@
 .loginStatus{
     color: red;
 }
+
+.boundary33{
+    border:2px solid rgb(50, 50, 50);
+    border-radius: 15px;
+}
+
+.divide2{
+    table-layout: fixed;
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 200px;
+}
+
+.table33{
+    grid-template-columns: 1fr 1fr;
+}
+
+.letter3 {
+    color: red;
+    font-family: "Gill Sans", sans-serif;
+    width: 31%;
+}
+
+.letter4{
+    font-size: 16px;
+    font-family: Tahoma, sans-serif;
+    width: 69%;
+}
+
+.title90{
+    font-family: Georgia, serif;
+}

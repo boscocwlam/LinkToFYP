@@ -51,16 +51,89 @@ const db = mysql.createConnection({
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// LogReg (Organization)
+///////////////////////////////////////////////////////////////////////////////
+
+//
+app.get("/getOrganizations", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "SELECT organization_ID, organization_name FROM Organizations",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//LogRegOrganizationAddAccount2.js,
+app.get("/generateOrganizationIDandPW", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select (MAX(organization_ID) + 1) AS organization_ID from Organizations",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//LogRegOrganizationAddAccount2.js
+app.post("/OrganizationCreate", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const organization_name = req.body.organization_name;
+
+  db.query(
+    "insert into Organizations (organization_ID, organization_name) value (?,?)",
+    [organization_ID, organization_name],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
 // LogReg (Employer)
 ///////////////////////////////////////////////////////////////////////////////
 
-// LogRegEmployerLogin.js
-app.get("/getEmployerLogin", (req, res) => {
-  const username = req.query.username; // email address
-  const password = req.query.password;
+// LogRegEmployerLogin2.js
+app.post("/checkEmployerEmailExistLogIn", (req, res) => {
+  const email_address = req.body.email_address;
+  console.log(req.query.text);
   db.query(
-    `SELECT user_ID, password FROM users WHERE role="Employer" AND email_address = ?`,
-    [username],
+    "SELECT distinct users.organization_ID, organization_name from users, organizations where role = 'Employer' and users.organization_ID = organizations.organization_ID and email_address = ? ORDER BY organization_ID",
+    [email_address],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+// LogRegEmployerLogin2.js
+app.post("/getEmployerLogin", (req, res) => {
+  const username = req.body.username; // email address
+  const password = req.body.password;
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `SELECT user_ID, organization_ID, password FROM users WHERE role="Employer" AND email_address = ? AND organization_ID = ?`,
+    [username, organization_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -71,6 +144,7 @@ app.get("/getEmployerLogin", (req, res) => {
             res.send({
               user: result[0].user_ID,
               password: result[0].password,
+              organization: result[0].organization_ID,
               role: "Employer",
               message: "Login Successfully!",
             });
@@ -87,10 +161,11 @@ app.get("/getEmployerLogin", (req, res) => {
 
 // LogRegEmployerProtectedRoute.js
 app.post("/getEmployerLoginSession", (req, res) => {
+  const isOrganized = req.body.isOrganized;
   const isAuthenitcated = req.body.isAuthenitcated;
   db.query(
-    `SELECT user_ID, password, role from Users where user_ID = ? and role = "Employer" `,
-    [isAuthenitcated],
+    `SELECT user_ID, password, role from Users where user_ID = ? and organization_ID = ? and role = "Employer" `,
+    [isAuthenitcated, isOrganized],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -124,6 +199,7 @@ app.post("/EmployerCreate", (req, res) => {
 //LogRegEmployerAddAccount.js
 app.post("/EmployerCreate2", (req, res) => {
   const user_ID = req.body.user_ID;
+  const organization_ID = req.body.organization_ID;
   const email_address = req.body.email_address;
   const password = req.body.password;
 
@@ -133,8 +209,8 @@ app.post("/EmployerCreate2", (req, res) => {
     }
 
     db.query(
-      `INSERT INTO Users (user_ID, email_address, password, role) value (?,?,?, "Employer")`,
-      [user_ID, email_address, hash],
+      `INSERT INTO Users (user_ID, organization_ID, email_address, password, role) value (?,?,?,?, "Employer")`,
+      [user_ID, organization_ID, email_address, hash],
       (err, result) => {
         if (err) {
           console.log(err);
@@ -163,16 +239,230 @@ app.get("/generateEmployer_ID", (req, res) => {
   );
 });
 
+//LogRegEmployerForgetPW.js, LogRegEmployerLogin.js
+app.post("/checkEmployerEmailExist", (req, res) => {
+  const email_address = req.body.email_address;
+  console.log(req.query.text);
+  db.query(
+    "SELECT COUNT(email_address) AS emailCount from users where role = 'Employer' and email_address = ?",
+    [email_address],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//LogRegEmployerAddAccount.js
+app.post("/resetEmployerPW", (req, res) => {
+  const email_address = req.body.email_address;
+  const password = req.body.password;
+
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log(err);
+    }
+
+    db.query(
+      `UPDATE Users SET password = ? WHERE email_address = ? AND role = "Employer"`,
+      [hash, email_address],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(result);
+          res.send("value inserted");
+        }
+      }
+    );
+  });
+});
+
+//LogRegStudentForgetPW.js
+app.post("/checkStudentEmailExist", (req, res) => {
+  const email_address = req.body.email_address;
+  console.log(req.query.text);
+  db.query(
+    "SELECT COUNT(email_address) AS emailCount from users where role = 'Student' and email_address = ?",
+    [email_address],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//LogRegStudentAddAccount.js
+app.post("/resetStudentPW", (req, res) => {
+  const email_address = req.body.email_address;
+  const password = req.body.password;
+
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log(err);
+    }
+
+    db.query(
+      `UPDATE Users SET password = ? WHERE email_address = ? AND role = "Student"`,
+      [hash, email_address],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(result);
+          res.send("value inserted");
+        }
+      }
+    );
+  });
+});
+
+// LogRegEmployerAddAccount3.js
+app.post("/getOrganizationNotRegistered", (req, res) => {
+  const email_address = req.body.email_address;
+  console.log(req.query.text);
+  db.query(
+    `SELECT organization_ID, organization_name FROM Organizations WHERE NOT organization_ID = (SELECT users.organization_ID FROM Organizations, Users WHERE Organizations.organization_ID = Users.organization_ID AND role = "Employer" AND email_address = ?)`,
+    [email_address],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+// LogRegEmployerAddAccount3.js
+app.post("/getEmployerConnection", (req, res) => {
+  const username = req.body.username; // email address
+  const password = req.body.password;
+  // const organization_ID = req.body.organization_ID;
+  db.query(
+    `SELECT first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, password, company_name FROM users, employers WHERE users.user_ID = employers.user_ID and role="Employer" AND email_address = ?`,
+    [username],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
+      if (result.length > 0) {
+        bcrypt.compare(password, result[0].password, (err, response) => {
+          if (response) {
+            res.send({ message: "Correct Password!", 
+            first_name: result[0].first_name,
+            last_name: result[0].last_name,
+            first_name_chi: result[0].first_name_chi,
+            last_name_chi: result[0].last_name_chi,
+            gender: result[0].gender,
+            city: result[0].city,
+            phone_no: result[0].phone_no,
+            password: result[0].passsword,
+            company_name: result[0].company_name
+          });
+          } else {
+            res.send({ message: "Wrong username/password combination!" });
+          }
+        });
+      } else {
+        res.send({ message: "User does not exist!!!" });
+      }
+    }
+  );
+});
+
+// LogRegEmployerAddAccount3.js
+// 搬data落新account
+app.post("/getEmployerConnection2", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const employer_ID = req.body.employer_ID;
+  const company_name = req.body.company_name;
+
+  db.query(
+    "INSERT INTO Employers (user_ID, employer_ID, company_name) VALUE (?,?,?)",
+    [user_ID, employer_ID, company_name],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+// LogRegEmployerAddAccount3.js
+// 搬data落新account
+app.post("/getEmployerConnection3", (req, res) => {
+  const first_name = req.body.first_name;
+  const last_name = req.body.last_name;
+  const first_name_chi = req.body.first_name_chi;
+  const last_name_chi = req.body.last_name_chi;
+  const gender = req.body.gender;
+  const city = req.body.city;
+  const phone_no = req.body.phone_no;
+  const user_ID = req.body.user_ID;
+  const password = req.body.password1;
+  const organization_ID = req.body.organization_ID
+
+  db.query(
+    `INSERT INTO Users (user_ID, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, password, organization_ID, role) VALUE (?,?,?,?,?,?,?,?,?,?,"Employer")`,
+    [user_ID, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, password, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+
+
+
+
 // LogReg (Admin)
 ///////////////////////////////////////////////////////////////////////////////
 
-//LogRegAdminLogin.js
-app.get("/getAdminLogin", (req, res) => {
-  const username = req.query.username;
-  const password = req.query.password;
+//LogRegAdminLogin2.js
+app.post("/checkAdminEmailExistLogIn", (req, res) => {
+  const email_address = req.body.email_address;
+  console.log(req.query.text);
   db.query(
-    "SELECT user.user_ID as user_ID, password from Staffs sta, Users user where sta.User_ID = user.User_ID AND Staff_ID = ?",
-    [username],
+    "SELECT distinct users.organization_ID, organization_name from users, organizations where role = 'Admin' and users.organization_ID = organizations.organization_ID and email_address = ? ORDER BY Organization_ID",
+    [email_address],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//LogRegAdminLogin2.js
+app.post("/getAdminLogin", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT user.user_ID as user_ID, organization_ID, password from Staffs sta, Users user where sta.User_ID = user.User_ID AND email_address = ? AND organization_ID = ?",
+    [username, organization_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -183,6 +473,7 @@ app.get("/getAdminLogin", (req, res) => {
             res.send({
               user: result[0].user_ID,
               password: result[0].password,
+              organization: result[0].organization_ID,
               role: "Admin",
               message: "Login Successfully!",
             });
@@ -201,9 +492,10 @@ app.get("/getAdminLogin", (req, res) => {
 // LogRegAdminProtectedRoute.js
 app.post("/getAdminLoginSession", (req, res) => {
   const isAuthenitcated = req.body.isAuthenitcated;
+  const isOrganized = req.body.isOrganized;
   db.query(
-    `SELECT user_ID, password, role from Users where user_ID = ? and role = "Admin" `,
-    [isAuthenitcated],
+    `SELECT user_ID, password, role from Users where user_ID = ? and organization_ID = ? and role = "Admin" `,
+    [isAuthenitcated, isOrganized],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -215,17 +507,79 @@ app.post("/getAdminLoginSession", (req, res) => {
   );
 });
 
+//LogRegAdminForgetPW.js, LogRegAdminLogin.js
+app.post("/checkAdminEmailExist", (req, res) => {
+  const email_address = req.body.email_address;
+  console.log(req.query.text);
+  db.query(
+    "SELECT COUNT(email_address) AS emailCount from users where role = 'Admin' and email_address = ?",
+    [email_address],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//LogRegAdminAddAccount.js
+app.post("/resetAdminPW", (req, res) => {
+  const email_address = req.body.email_address;
+  const password = req.body.password;
+
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log(err);
+    }
+
+    db.query(
+      `UPDATE Users SET password = ? WHERE email_address = ? AND role = "Admin"`,
+      [hash, email_address],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(result);
+          res.send("value inserted");
+        }
+      }
+    );
+  });
+});
 
 // LogReg (Student)
 ///////////////////////////////////////////////////////////////////////////////
 
-// StudentLogin.js
-app.get("/getStudentLogin", (req, res) => {
-  const username = req.query.username;
-  const password = req.query.password;
+//LogRegStudentLogin2.js
+app.post("/checkStudentEmailExistLogIn", (req, res) => {
+  const email_address = req.body.email_address;
+  console.log(req.query.text);
   db.query(
-    "SELECT user.user_ID as user_ID, password from Students stu, Users user where stu.User_ID = user.User_ID AND Student_ID = ?",
-    [username],
+    "SELECT distinct users.organization_ID, organization_name from users, organizations where role = 'Student' and users.organization_ID = organizations.organization_ID and email_address = ? ORDER BY organization_ID",
+    [email_address],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+// StudentLogin.js
+app.post("/getStudentLogin", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  const organization_ID = req.body.organization_ID;
+
+  db.query(
+    "SELECT user.user_ID as user_ID, organization_ID, password from Students stu, Users user where stu.User_ID = user.User_ID AND email_address = ? AND organization_ID = ? ",
+    [username, organization_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -236,6 +590,7 @@ app.get("/getStudentLogin", (req, res) => {
             res.send({
               user: result[0].user_ID,
               password: result[0].password,
+              organization: result[0].organization_ID,
               role: "Student",
               message: "Login Successfully!",
             });
@@ -267,10 +622,6 @@ app.post("/getStudentLoginSession", (req, res) => {
     }
   );
 });
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -361,24 +712,36 @@ app.post("/StudentCreate2", (req, res) => {
   const user_ID = req.body.user_ID;
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;
-  const password = req.body.password;
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) {
-      console.log(err);
-    }
-    db.query(
-      `INSERT INTO Users (user_ID, first_name, last_name, password, role) value (?,?,?,?, "Student")`,
-      [user_ID, first_name, last_name, hash],
-      (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(result);
-          res.send("value inserted");
-        }
+  const first_name_chi = req.body.first_name_chi;
+  const last_name_chi = req.body.last_name_chi;
+  const organization_ID = req.body.organization_ID;
+  const gender = req.body.gender;
+  const city = req.body.city;
+  const phone_no = req.body.phone_no;
+  const email_address = req.body.email_address;
+  db.query(
+    `INSERT INTO Users (user_ID, organization_ID, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, email_address, role) value (?,?,?,?,?,?,?,?,?,?, "Student")`,
+    [
+      user_ID,
+      organization_ID,
+      first_name,
+      last_name,
+      first_name_chi,
+      last_name_chi,
+      gender,
+      city,
+      phone_no,
+      email_address,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
       }
-    );
-  });
+    }
+  );
 });
 
 //AdminAddStuAccount.js
@@ -398,30 +761,13 @@ app.get("/getYears", (req, res) => {
 });
 
 //AdminAddAdmAccount.js
-app.get("/getDepartment", (req, res) => {
-  console.log(req.query.text);
-  db.query(
-    "select department_ID, department_name from departments",
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send(result);
-      }
-    }
-  );
-});
-
-//AdminAddAdmAccount.js
 app.post("/StaffCreate", (req, res) => {
   const user_ID = req.body.user_ID;
   const staff_ID = req.body.staff_ID;
-  const department_ID = req.body.department_ID;
 
   db.query(
-    "insert into Staffs (user_ID, staff_ID, department_ID) value (?,?,?)",
-    [user_ID, staff_ID, department_ID],
+    "insert into Staffs (user_ID, staff_ID) value (?,?)",
+    [user_ID, staff_ID],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -436,41 +782,133 @@ app.post("/StaffCreate", (req, res) => {
 //AdminAddAdmAccount.js
 app.post("/StaffCreate2", (req, res) => {
   const user_ID = req.body.user_ID;
+  const organization_ID = req.body.organization_ID;
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;
-  const password = req.body.password;
+  const first_name_chi = req.body.first_name_chi;
+  const last_name_chi = req.body.last_name_chi;
   const gender = req.body.gender;
   const city = req.body.city;
   const phone_no = req.body.phone_no;
   const email_address = req.body.email_address;
+  const password = req.body.password;
 
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) {
-      console.log(err);
-    }
-
-    db.query(
-      `INSERT INTO Users (user_ID, first_name, last_name, password, gender, city, phone_no, email_address, role) value (?,?,?,?,?,?,?,?, "Admin" )`,
-      [
-        user_ID,
-        first_name,
-        last_name,
-        hash,
-        gender,
-        city,
-        phone_no,
-        email_address,
-      ],
-      (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(result);
-          res.send("value inserted");
-        }
+  db.query(
+    `INSERT INTO Users (user_ID, organization_ID, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, email_address, role) value (?,?,?,?,?,?,?,?,?,?, "Admin" )`,
+    [
+      user_ID,
+      organization_ID,
+      first_name,
+      last_name,
+      first_name_chi,
+      last_name_chi,
+      gender,
+      city,
+      phone_no,
+      email_address,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
       }
-    );
-  });
+    }
+  );
+});
+
+
+//AdminAddAdmAccount.js
+app.post("/checkStudentExists", (req, res) => {
+  const student_ID = req.body.student_ID;
+
+  db.query(
+    "SELECT * from Students WHERE student_ID = ?",
+    [student_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminAddAdmAccount.js
+app.post("/checkStudentExists2", (req, res) => {
+  const email_address = req.body.email_address;
+  const organization_ID = req.body.organization_ID;
+
+  db.query(
+    "SELECT email_address, password from Students, Users WHERE Students.user_ID = Users.user_ID AND email_address = ? AND organization_ID = ? ",
+    [email_address, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminAddAdmAccount.js
+app.post("/checkAdminExists", (req, res) => {
+  const staff_ID = req.body.staff_ID;
+  db.query(
+    "SELECT * from Staffs WHERE staff_ID = ?",
+    [staff_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminAddAdmAccount.js
+app.post("/checkAdminExists2", (req, res) => {
+  const email_address = req.body.email_address;
+  const organization_ID = req.body.organization_ID;
+
+  db.query(
+    "SELECT email_address, password from Staffs, Users WHERE Staffs.user_ID = Users.user_ID AND email_address = ? AND organization_ID = ? ",
+    [email_address, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminAddAdmAccount.js, //AdminAddStuAccount.js
+app.post("/emailPWremainssame", (req, res) => {
+  const email_address = req.body.email1;
+  const password = req.body.pw1;
+
+  db.query(
+    `UPDATE Users SET password = ? WHERE email_address = ?`,
+    [password, email_address],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(email_address + " " + password);
+      }
+    }
+  );
 });
 
 //AdminDashboard.js
@@ -490,10 +928,12 @@ app.get("/getPopularJobs", (req, res) => {
 });
 
 //AdminOptionSkill.js
-app.get("/getOptionSkills", (req, res) => {
+app.post("/getOptionSkills", (req, res) => {
+  const organization_ID = req.body.organization_ID;
   console.log(req.query.text);
   db.query(
-    "select skill_ID, skill_name, category from Skills",
+    "select skill_ID, skill_name, category from Skills where organization_ID = ? ",
+    [organization_ID],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -526,10 +966,11 @@ app.post("/postskills", (req, res) => {
   const skill_ID = req.body.skill_ID;
   const skill_name = req.body.skill_name;
   const category = req.body.category;
+  const organization_ID = req.body.organization_ID;
 
   db.query(
-    "INSERT INTO Skills (skill_ID, skill_name, category) value (?, ?, ?)",
-    [skill_ID, skill_name, category],
+    "INSERT INTO Skills (skill_ID, skill_name, category, organization_ID) value (?, ?, ?, ?)",
+    [skill_ID, skill_name, category, organization_ID],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -559,7 +1000,7 @@ app.post("/checkExistSkill", (req, res) => {
 });
 
 //AdminOptionSkill.js
-app.put("/updateSkill", (req, res) => {
+app.post("/updateSkill", (req, res) => {
   const skill_ID = req.body.skill_ID;
   const category = req.body.category;
 
@@ -578,7 +1019,7 @@ app.put("/updateSkill", (req, res) => {
 });
 
 //AdminOptionSkill.js
-app.delete("/deleteSkill", (req, res) => {
+app.get("/deleteSkill", (req, res) => {
   db.query(`DELETE FROM Skills WHERE category = "Trash"`, (err, result) => {
     if (err) {
       console.log(err);
@@ -589,10 +1030,12 @@ app.delete("/deleteSkill", (req, res) => {
 });
 
 //AdminOptionJobType.js
-app.get("/getOptionJobType", (req, res) => {
+app.post("/getOptionJobType", (req, res) => {
+  const organization_ID = req.body.organization_ID;
   console.log(req.query.text);
   db.query(
-    "select job_type_ID, job_type_name, category from Job_types",
+    "select job_type_ID, job_type_name, category from Job_types where organization_ID = ?",
+    [organization_ID],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -625,10 +1068,11 @@ app.post("/postjobtypes", (req, res) => {
   const job_type_ID = req.body.job_type_ID;
   const job_type_name = req.body.job_type_name;
   const category = req.body.category;
+  const organization_ID = req.body.organization_ID;
 
   db.query(
-    "INSERT INTO Job_types (job_type_ID, job_type_name, category) value (?, ?, ?)",
-    [job_type_ID, job_type_name, category],
+    "INSERT INTO Job_types (job_type_ID, job_type_name, category, organization_ID) value (?, ?, ?, ?)",
+    [job_type_ID, job_type_name, category, organization_ID],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -658,7 +1102,7 @@ app.post("/checkExistJobType", (req, res) => {
 });
 
 //AdminOptionJobType.js
-app.put("/updateJobType", (req, res) => {
+app.post("/updateJobType", (req, res) => {
   const job_type_ID = req.body.job_type_ID;
   const category = req.body.category;
 
@@ -677,7 +1121,7 @@ app.put("/updateJobType", (req, res) => {
 });
 
 //AdminOptionJobType.js
-app.delete("/deleteJobType", (req, res) => {
+app.get("/deleteJobType", (req, res) => {
   db.query(`DELETE FROM Job_types WHERE category = "Trash"`, (err, result) => {
     if (err) {
       console.log(err);
@@ -688,16 +1132,21 @@ app.delete("/deleteJobType", (req, res) => {
 });
 
 //AdminOptionYear.js
-app.get("/getOptionYears", (req, res) => {
+app.post("/getOptionYears", (req, res) => {
+  const organization_ID = req.body.organization_ID;
   console.log(req.query.text);
-  db.query("select year_ID, year_name, category from Years", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result);
-      res.send(result);
+  db.query(
+    "select year_ID, year_name, category from Years where organization_ID = ?",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
     }
-  });
+  );
 });
 
 //AdminOptionYear.js
@@ -721,10 +1170,11 @@ app.post("/postYears", (req, res) => {
   const year_ID = req.body.year_ID;
   const year_name = req.body.year_name;
   const category = req.body.category;
+  const organization_ID = req.body.organization_ID;
 
   db.query(
-    "INSERT INTO Years (year_ID, year_name, category) value (?, ?, ?)",
-    [year_ID, year_name, category],
+    "INSERT INTO Years (year_ID, year_name, category, organization_ID) value (?, ?, ?, ?)",
+    [year_ID, year_name, category, organization_ID],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -754,7 +1204,7 @@ app.post("/checkExistYear", (req, res) => {
 });
 
 //AdminOptionYear.js
-app.put("/updateYear", (req, res) => {
+app.post("/updateYear", (req, res) => {
   const year_ID = req.body.year_ID;
   const category = req.body.category;
 
@@ -773,7 +1223,7 @@ app.put("/updateYear", (req, res) => {
 });
 
 //AdminOptionYear.js
-app.delete("/deleteYear", (req, res) => {
+app.get("/deleteYear", (req, res) => {
   db.query(`DELETE FROM Years WHERE category = "Trash"`, (err, result) => {
     if (err) {
       console.log(err);
@@ -789,16 +1239,56 @@ app.delete("/deleteYear", (req, res) => {
 // Student
 ///////////////////////////////////////////////////////////////////////////////
 
+// StudentMain.js
+app.get("/getStudentPersonalInfo", (req, res) => {
+  const user_ID = req.query.user_ID;
 
+  db.query(
+    "SELECT student_ID, first_name, last_name, gender, city, phone_no, email_address, cGPA, year_name from Users, Students stu, Years WHERE Users.user_ID = stu.user_ID and stu.year_ID = Years.year_ID and Users.User_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
 
+// StudentMain.js
+app.get("/getStudentFYP", (req, res) => {
+  const user_ID = req.query.user_ID;
 
+  db.query(
+    "SELECT fyp_name, fyp_background, fyp_link, fyp_document, fyp_final_grade from Students WHERE user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
 
+// StudentMain.js
+app.get("/getStudentWorkExperiences", (req, res) => {
+  const user_ID = req.query.user_ID;
 
-
-
-
-
-
+  db.query(
+    "SELECT company_name, job_title, job_type_name, duration, skill_name FROM Users, Students stu, Work_experiences wor, Skills ski, Job_types job WHERE Users.user_ID = stu.user_ID AND stu.student_ID = wor.student_ID AND wor.skill_ID = ski.skill_ID AND wor.job_type_ID = job.job_type_ID AND Users.User_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -854,27 +1344,6 @@ app.get("/employerstuprofile", (req, res) => {
       res.send(result);
     }
   });
-});
-
-app.get("/getStudentOne", (req, res) => {
-  const student_ID = req.query.student_ID;
-  // const first_name = req.query.first_name;
-  // const last_name = req.query.last_name;
-  // const preferred_name = req.query.preferred_name;
-  // const cGPA = req.query.cGPA;
-  // const year = req.query.year;
-
-  db.query(
-    "SELECT student_ID, first_name, last_name, preferred_name, cGPA, year FROM Students WHERE Student_ID = ?",
-    [student_ID],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      } else {
-        res.send(result);
-      }
-    }
-  );
 });
 
 app.post("/Register1", (req, res) => {

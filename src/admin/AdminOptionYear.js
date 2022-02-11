@@ -14,7 +14,8 @@ export default class AdminOptionYear extends Component {
   };
 
   componentDidMount() {
-    axios.get("http://localhost:3001/getOptionYears").then((res) => {
+    const organization_ID = localStorage.getItem("isOrganized");
+    axios.post("http://localhost:3001/getOptionYears", {organization_ID}).then((res) => {
       const tasks = res.data;
       this.setState({ tasks });
     });
@@ -34,11 +35,13 @@ export default class AdminOptionYear extends Component {
     });
     const year_name = event.target.year_name.value;
     const category = "NotInUse";
+    const organization_ID = localStorage.getItem("isOrganized");
     axios
       .post("http://localhost:3001/postYears", {
         year_ID,
         year_name,
         category,
+        organization_ID
       })
       .then((res) => {
         console.log(res);
@@ -82,7 +85,7 @@ export default class AdminOptionYear extends Component {
             });
 
             axios
-              .put("http://localhost:3001/updateYear", {
+              .post("http://localhost:3001/updateYear", {
                 year_ID: id,
                 category: cat,
               })
@@ -90,7 +93,7 @@ export default class AdminOptionYear extends Component {
                 console.log(res);
                 console.log(res.data);
               });
-            axios.delete("http://localhost:3001/deleteYear").then((res) => {
+            axios.get("http://localhost:3001/deleteYear").then((res) => {
               console.log(res.data);
             });
             window.location.reload(false);

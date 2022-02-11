@@ -14,7 +14,8 @@ export default class AdminOptionSkill extends Component {
   };
 
   componentDidMount() {
-    axios.get("http://localhost:3001/getOptionSkills").then((res) => {
+    const organization_ID = localStorage.getItem("isOrganized");
+    axios.post("http://localhost:3001/getOptionSkills", {organization_ID}).then((res) => {
       const tasks = res.data;
       this.setState({ tasks });
     });
@@ -34,11 +35,13 @@ export default class AdminOptionSkill extends Component {
     });
     const skill_name = event.target.skill_name.value;
     const category = "NotInUse";
+    const organization_ID = localStorage.getItem("isOrganized");
     axios
       .post("http://localhost:3001/postSkills", {
         skill_ID,
         skill_name,
         category,
+        organization_ID
       })
       .then((res) => {
         console.log(res);
@@ -64,7 +67,7 @@ export default class AdminOptionSkill extends Component {
         const checkNum = res.data;
         this.setState({ checkNum });
         this.state.checkNum.map((item) => {
-          console.log(id + " " + item.checkNum);
+          // console.log(id + " " + item.checkNum);
           if ((item.checkNum != 0) & (cat == "Trash")) {
             alert(
               "Option Cannot Be Removed: The Option Exists In Some Records. "
@@ -80,9 +83,8 @@ export default class AdminOptionSkill extends Component {
               ...this.state,
               tasks,
             });
-
             axios
-              .put("http://localhost:3001/updateSkill", {
+              .post("http://localhost:3001/updateSkill", {
                 skill_ID: id,
                 category: cat,
               })
@@ -90,7 +92,7 @@ export default class AdminOptionSkill extends Component {
                 console.log(res);
                 console.log(res.data);
               });
-            axios.delete("http://localhost:3001/deleteSkill").then((res) => {
+            axios.get("http://localhost:3001/deleteSkill").then((res) => {
               console.log(res.data);
             });
             window.location.reload(false);

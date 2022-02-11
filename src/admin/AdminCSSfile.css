@@ -61,3 +61,36 @@
     text-align: left;
     font-family: Georgia, serif;
 }
+.row{
+  display: flex;
+}
+
+.column{
+  flex: 50%;
+}
+
+.center33{
+  justify-content: center;
+}
+
+#wrap {
+  background: white;
+  display: flex;
+  justify-content: center;
+  padding: 5%; 
+  width: 100%;  
+}
+
+#left, #right {
+  background: white;
+  padding: 2%;   
+  justify-content:left;
+}
+
+.sameline{
+  display: inline;
+  /* text-align: left; */
+  font-family: Georgia, serif;
+}
+
+

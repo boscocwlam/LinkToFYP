@@ -14,7 +14,9 @@ import StudentMain from "./student/StudentMain";
 // Admin
 import AdminMain from "./admin/AdminMain";
 import AdminAddStuAccount from "./admin/AdminAddStuAccount";
+import AdminAddStuAccount2 from "./admin/AdminAddStuAccount2";
 import AdminAddAdmAccount from "./admin/AdminAddAdmAccount";
+import AdminAddAdmAccount2 from "./admin/AdminAddAdmAccount2";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminStuProfile from "./admin/AdminStuProfile";
 import AdminOption from "./admin/AdminOption";
@@ -40,10 +42,24 @@ import Testing3 from "./page/Testing3";
 import LogRegEmployerProtectedRoute from "./logreg/LogRegEmployerProtectedRoute";
 import LogRegAdminProtectedRoute from "./logreg/LogRegAdminProtectedRoute";
 import LogRegStudentProtectedRoute from "./logreg/LogRegStudentProtectedRoute";
-import LogRegEmployerAddAccount from "./logreg/LogRegEmployerAddAccount";
+
 import LogRegEmployerLogin from "./logreg/LogRegEmployerLogin";
+import LogRegEmployerLogin2 from "./logreg/LogRegEmployerLogin2";
 import LogRegAdminLogin from "./logreg/LogRegAdminLogin";
+import LogRegAdminLogin2 from "./logreg/LogRegAdminLogin2";
 import LogRegStudentLogin from "./logreg/LogRegStudentLogin";
+import LogRegStudentLogin2 from "./logreg/LogRegStudentLogin2";
+
+import LogRegEmployerForgetPW from "./logreg/LogRegEmployerForgetPW";
+import LogRegStudentForgetPW from "./logreg/LogRegStudentForgetPW";
+import LogRegAdminForgetPW from "./logreg/LogRegAdminForgetPW";
+
+import LogRegEmployerAddAccount from "./logreg/LogRegEmployerAddAccount";
+import LogRegEmployerAddAccount2 from "./logreg/LogRegEmployerAddAccount2";
+import LogRegEmployerAddAccount3 from "./logreg/LogRegEmployerAddAccount3";
+import LogRegOrganizationAddAccount from "./logreg/LogRegOrganizationAddAccount";
+import LogRegOrganizationAddAccount2 from "./logreg/LogRegOrganizationAddAccount2";
+
 
 
 
@@ -62,9 +78,19 @@ function App() {
         
         {/* logreg */}
         <Route exact path="/logreg/addaccount/employer" element={<LogRegEmployerAddAccount />} />
-        <Route exact path="/logreg/login/employer" element={<LogRegEmployerLogin />} />
+        <Route exact path="/logreg/addaccount/employer/next" element={<LogRegEmployerAddAccount2 />} />
+        <Route exact path="/logreg/addaccount/employer/ask" element={<LogRegEmployerAddAccount3 />} />
+        <Route exact path="/logreg/addaccount/organization" element={<LogRegOrganizationAddAccount />} />
+        <Route exact path="/logreg/addaccount/organization/admin" element={<LogRegOrganizationAddAccount2 />} />
         <Route exact path="/logreg/login/admin" element={<LogRegAdminLogin />} />
+        <Route exact path="/logreg/login/admin/next" element={<LogRegAdminLogin2 />} />
+        <Route exact path="/logreg/login/employer" element={<LogRegEmployerLogin />} />
+        <Route exact path="/logreg/login/employer/next" element={<LogRegEmployerLogin2 />} />
         <Route exact path="/logreg/login/student" element={<LogRegStudentLogin />} />
+        <Route exact path="/logreg/login/student/next" element={<LogRegStudentLogin2 />} />
+        <Route exact path="/logreg/forgetpw/employer" element={<LogRegEmployerForgetPW />} />
+        <Route exact path="/logreg/forgetpw/student" element={<LogRegStudentForgetPW />} />
+        <Route exact path="/logreg/forgetpw/admin" element={<LogRegAdminForgetPW />} />
 
 
         {/* student */}
@@ -76,7 +102,9 @@ function App() {
         <Route exact path="/admin/dashboard" element={<LogRegAdminProtectedRoute><AdminDashboard /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/option" element={<LogRegAdminProtectedRoute><AdminOption /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/addstuaccount" element={<LogRegAdminProtectedRoute><AdminAddStuAccount /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/addstuaccount/complete" element={<LogRegAdminProtectedRoute><AdminAddStuAccount2 /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/addadmaccount" element={<LogRegAdminProtectedRoute><AdminAddAdmAccount /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/addadmaccount/complete" element={<LogRegAdminProtectedRoute><AdminAddAdmAccount2 /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/stuprofile" element={<LogRegAdminProtectedRoute><AdminStuProfile /></LogRegAdminProtectedRoute>} />
 
 
@@ -94,6 +122,7 @@ function App() {
         <Route exact path="/searchStudent" element={<SearchStudent />} />
         <Route exact path="/testing" element={<Testing />} />
         <Route exact path="/testing2" element={<Testing2 />} />
+        <Route exact path="/testing3" element={<Testing3 />} />
 
       </Routes>
     </Router>
