@@ -21,7 +21,7 @@ export default function LogRegAdminLogin2() {
       })
       .then((response) => {
         setOrganizationData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       });
   }, []);
 
@@ -30,7 +30,6 @@ export default function LogRegAdminLogin2() {
     const organization_ID = e.target.organization_ID.value;
     const username = e.target.email_address.value;
     const password = e.target.password.value;
-    console.log(organization_ID + " " + username + " " + password);
 
     axios
       .post("http://localhost:3001/getAdminLogin", {

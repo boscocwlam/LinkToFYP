@@ -1,5 +1,5 @@
 import React from "react";
-import StudentNav from "./StudentNav";
+import AdminNav from "./AdminNav";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -8,14 +8,15 @@ import Carousel from "react-bootstrap/Carousel";
 import Table from "react-bootstrap/Table";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./StudentCSSfile.css";
-import { useNavigate } from "react-router-dom";
+import "./AdminCSSfile.css";
+import { useNavigate, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-const StudentMain = () => {
+const AdminStuProfileDetail = () => {
   const [studentData, setStudentData] = useState([]);
   const [fypData, setFYPData] = useState([]);
   const [workData, setWorkData] = useState([]);
-  const user_ID = localStorage.getItem("isAuthenitcated");
+  const user_ID = useParams().id;
   const organization_ID = localStorage.getItem("isOrganized");
 
   useEffect(() => {
@@ -48,9 +49,7 @@ const StudentMain = () => {
               response2.data.map((item2) => {
                 if (item.fyp_skill_name1 == item2.skill_ID) {
                   item.fyp_skill_name1 = item2.skill_name;
-                  if (
-                    item.fyp_score1 == null
-                  ) {
+                  if (item.fyp_score1 == null) {
                     item.fyp_score1 = "";
                   } else if (item.fyp_score1) {
                     item.fyp_score1 = "(" + item.fyp_score1 + ") ";
@@ -58,9 +57,7 @@ const StudentMain = () => {
                 }
                 if (item.fyp_skill_name2 == item2.skill_ID) {
                   item.fyp_skill_name2 = item2.skill_name;
-                  if (
-                    item.fyp_score2 == null
-                  ) {
+                  if (item.fyp_score2 == null) {
                     item.fyp_score2 = "";
                   } else if (item.fyp_score2) {
                     item.fyp_score2 = "(" + item.fyp_score2 + ") ";
@@ -68,9 +65,7 @@ const StudentMain = () => {
                 }
                 if (item.fyp_skill_name3 == item2.skill_ID) {
                   item.fyp_skill_name3 = item2.skill_name;
-                  if (
-                    item.fyp_score3 == null
-                  ) {
+                  if (item.fyp_score3 == null) {
                     item.fyp_score3 = "";
                   } else if (item.fyp_score3) {
                     item.fyp_score3 = "(" + item.fyp_score3 + ") ";
@@ -78,9 +73,7 @@ const StudentMain = () => {
                 }
                 if (item.fyp_skill_name4 == item2.skill_ID) {
                   item.fyp_skill_name4 = item2.skill_name;
-                  if (
-                    item.fyp_score4 == null
-                  ) {
+                  if (item.fyp_score4 == null) {
                     item.fyp_score4 = "";
                   } else if (item.fyp_score4) {
                     item.fyp_score4 = "(" + item.fyp_score4 + ") ";
@@ -88,9 +81,7 @@ const StudentMain = () => {
                 }
                 if (item.fyp_skill_name5 == item2.skill_ID) {
                   item.fyp_skill_name5 = item2.skill_name;
-                  if (
-                    item.fyp_score5 == null
-                  ) {
+                  if (item.fyp_score5 == null) {
                     item.fyp_score5 = "";
                   } else if (item.fyp_score5) {
                     item.fyp_score5 = "(" + item.fyp_score5 + ") ";
@@ -133,9 +124,7 @@ const StudentMain = () => {
               response2.data.map((item2) => {
                 if (item.skill_name1 == item2.skill_ID) {
                   item.skill_name1 = item2.skill_name;
-                  if (
-                    item.score1 == null
-                  ) {
+                  if (item.score1 == null) {
                     item.score1 = "";
                   } else if (item.score1) {
                     item.score1 = "(" + item.score1 + ") ";
@@ -143,9 +132,7 @@ const StudentMain = () => {
                 }
                 if (item.skill_name2 == item2.skill_ID) {
                   item.skill_name2 = item2.skill_name;
-                  if (
-                    item.score2 == null
-                  ) {
+                  if (item.score2 == null) {
                     item.score2 = "";
                   } else if (item.score2) {
                     item.score2 = "(" + item.score2 + ") ";
@@ -153,9 +140,7 @@ const StudentMain = () => {
                 }
                 if (item.skill_name3 == item2.skill_ID) {
                   item.skill_name3 = item2.skill_name;
-                  if (
-                    item.score3 == null
-                  ) {
+                  if (item.score3 == null) {
                     item.score3 = "";
                   } else if (item.score3) {
                     item.score3 = "(" + item.score3 + ") ";
@@ -163,9 +148,7 @@ const StudentMain = () => {
                 }
                 if (item.skill_name4 == item2.skill_ID) {
                   item.skill_name4 = item2.skill_name;
-                  if (
-                    item.score4 == null
-                  ) {
+                  if (item.score4 == null) {
                     item.score4 = "";
                   } else if (item.score4) {
                     item.score4 = "(" + item.score4 + ") ";
@@ -173,9 +156,7 @@ const StudentMain = () => {
                 }
                 if (item.skill_name5 == item2.skill_ID) {
                   item.skill_name5 = item2.skill_name;
-                  if (
-                    item.score5 == null
-                  ) {
+                  if (item.score5 == null) {
                     item.score5 = "";
                   } else if (item.score5) {
                     item.score5 = "(" + item.score5 + ") ";
@@ -192,12 +173,17 @@ const StudentMain = () => {
   let navigate = useNavigate();
   const submitForm = (event) => {
     event.preventDefault();
-    navigate("/student/profile/self/update/work/" + event.target.work_ID.value);
+    navigate(
+      "/admin/profile/student/detail/update/work/" +
+        user_ID +
+        "/" +
+        event.target.work_ID.value
+    );
   };
 
   return (
     <div>
-      <StudentNav />
+      <AdminNav />
       <Container>
         <Container>
           <div className="mt-4"></div>
@@ -270,12 +256,12 @@ const StudentMain = () => {
                   );
                 })}
               </Table>
-              <a
-                href="/student/profile/self/update/personal"
-                class="btn btn-danger btn-block text1 center33"
+              <Link
+                className="btn btn-danger btn-block text1 center33"
+                to={"/admin/profile/student/detail/update/personal/" + user_ID}
               >
                 Update Personal Information
-              </a>
+              </Link>
 
               <div className="mt-4"></div>
             </Container>
@@ -334,12 +320,12 @@ const StudentMain = () => {
                   );
                 })}
               </Table>
-              <a
-                href="/student/profile/self/update/fyp"
-                class="btn btn-danger btn-block text1 center33"
+              <Link
+                className="btn btn-danger btn-block text1 center33"
+                to={"/admin/profile/student/detail/update/fyp/" + user_ID}
               >
                 Update Final Year Project
-              </a>
+              </Link>
               <div className="mt-4"></div>
             </Container>
           </Container>
@@ -349,7 +335,7 @@ const StudentMain = () => {
           <Container>
             <Container>
               <div className="mt-4"></div>
-              <h5>Work Experience</h5>
+              <h5>Work Experiences</h5>
               <Dropdown.Divider />
               <div className="mt-4"></div>
               <Table>
@@ -375,11 +361,16 @@ const StudentMain = () => {
                       <tr>
                         <td className="letter3">SKILLS</td>
                         <td className="letter4">
-                          {item.skill_name1}{item.score1}
-                          {item.skill_name2}{item.score2}
-                          {item.skill_name3}{item.score3}
-                          {item.skill_name4}{item.score4}
-                          {item.skill_name5}{item.score5}
+                          {item.skill_name1}
+                          {item.score1}
+                          {item.skill_name2}
+                          {item.score2}
+                          {item.skill_name3}
+                          {item.score3}
+                          {item.skill_name4}
+                          {item.score4}
+                          {item.skill_name5}
+                          {item.score5}
                         </td>
                       </tr>
                       <div className="mt-3"></div>
@@ -421,147 +412,21 @@ const StudentMain = () => {
             </Container>
           </Container>
         </div>
+        <div className="mt-4"></div>
 
+        <div className="boundary88">
+          <Dropdown.Divider />
+          <Link
+            className="btn btn-primary btn-block text1 center33"
+            to={"/admin/profile/student"}
+          >
+            Return To Previous Page
+          </Link>
+          <div className="mt-4"></div>
+        </div>
       </Container>
     </div>
   );
 };
 
-export default StudentMain;
-
-// <tr>
-// <td className="letter3">SKILL 1</td>
-// <td className="letter4">
-//   {skillName1}{score1}
-// </td>
-// </tr>
-// <tr>
-// <td className="letter3">SKILL 2</td>
-// <td className="letter4">
-//   {skillName2}{score2}
-// </td>
-// </tr>
-// <tr>
-// <td className="letter3">SKILL 3</td>
-// <td className="letter4">
-//   {skillName3}{score3}
-// </td>
-// </tr>
-// <tr>
-// <td className="letter3">SKILL 4</td>
-// <td className="letter4">
-//   {skillName4}{score4}
-// </td>
-// </tr>
-// <tr>
-// <td className="letter3">SKILL 5</td>
-// <td className="letter4">
-//   {skillName5}{score5}
-// </td>
-// </tr>
-
-{
-  /* <Container>
-        <div className="mt-4"></div>
-        
-        <Row>
-          <Col xs={6}>
-            <Card>
-              <Card.Header as="h3">Chan Tai Man</Card.Header>
-              <Card.Body>
-
-                <Card.Text>
-                  <h6>
-                    <br />
-                    Student ID: 
-                    <br />
-                    Department of Computer Science, Hong Kong Baptist Univeristy
-                    <Dropdown.Divider />
-                    <br />
-                    FYP Year: 2021-2022
-                    <br />
-                    cGPA: XXXX
-                  </h6>
-                </Card.Text>
-                
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col xs={6}></Col>
-        </Row>
-        <div className="mt-4"></div>
-      </Container>
-
-      <Container>
-        <div className="mt-4"></div>
-        <Card>
-          <Card.Header as="h5">Final Year Project</Card.Header>
-          <Card.Body>
-            
-            <Card.Text>
-              Project Name:
-              <br />
-              FYP Yearbook: An App to showcase FYPs to employers and alumni
-              <br />
-              <br />
-              <Dropdown.Divider />
-              Project Background:
-              <br />
-              To design a user-friendly App for showcasing FYPs, to allow
-              employers to search for final year students who have certain
-              skills, to analyze the most wanted skills and the most popular
-              jobs, to report the employment status of the final year students
-              <br />
-              <br />
-              Skills: React, MySQL, UI/UX Design, Database Maintenance
-              <br />
-              Link: https://github.com/boscocwlam/LinkToFYP
-              <br />
-              Documents:
-              <br />
-              <br />
-              <Dropdown.Divider />
-              Final Grade: A
-            </Card.Text>
-
-          </Card.Body>
-        </Card>
-      </Container>
-
-      <Container>
-        <div className="mt-4"></div>
-        <Card>
-          <Card.Header as="h5">Work Experience</Card.Header>
-          <Card.Body>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Company</th>
-                  <th>Duration</th>
-                  <th>Job Type</th>
-                  <th>Skills</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>ABCDE Company</td>
-                  <td>3 months</td>
-                  <td>IT Support</td>
-                  <td>
-                    Communication Skill, Coordination Skills, IIS Server, Batch
-                    Scripting
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </Card.Body>
-        </Card>
-      </Container> */
-}
-
-{
-  /* <Button variant="primary">Go somewhere</Button> */
-}
-{
-  /* <Card.Title>Final Year Project</Card.Title> */
-}
+export default AdminStuProfileDetail;

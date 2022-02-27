@@ -14,7 +14,6 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 // import NavbarOffcanvas from "react-bootstrap/NavbarOffcanvas";
 // import Offcanvas from "react-bootstrap/Offcanvas";
 
-
 const AdminNav = () => {
   return (
     <div>
@@ -40,30 +39,52 @@ const AdminNav = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link href="/admin/main">
-                  <p1 className="word">HomePage</p1>
-                </Nav.Link>
-                <Nav.Link href="/admin/dashboard">
-                  <p1 className="word">Dashboard</p1>
-                </Nav.Link>
-                <Nav.Link href="/admin/addadmaccount">
-                  <p1 className="word">Add Staffs</p1>
-                </Nav.Link>
-                <Nav.Link href="/admin/addstuaccount">
-                  <p1 className="word">Add Students</p1>
-                </Nav.Link>
-                <Nav.Link href="/admin/option">
-                  <p1 className="word">Option Lists</p1>
-                </Nav.Link>
-                <Nav.Link href="/admin/stuprofile">
-                  <p1 className="word">Students' Profiles</p1>
-                </Nav.Link>
+                <NavDropdown title="Settings" className="word">
+                  <NavDropdown.Item href="/admin/main">
+                    Personal Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/option">
+                    Configurations
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/main">
+                    Set Up Guide
+                  </NavDropdown.Item>
+                </NavDropdown>
 
+                <NavDropdown title="Account Registration" className="word">
+                  <NavDropdown.Item href="/admin/addadmaccount">
+                    Add Staff Account
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/addstuaccount">
+                    Add Student Account
+                  </NavDropdown.Item>
+                </NavDropdown>
+
+                <NavDropdown title="Account Management" className="word">
+                  <NavDropdown.Item href="/admin/profile/admin">
+                    View Staff Accounts
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/profile/student">
+                    View Student Accounts
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/profile/employer">
+                    View Employer Accounts
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/application">
+                    View Matching Applications
+                  </NavDropdown.Item>
+                </NavDropdown>
+
+                <NavDropdown title="Analytic Tools" className="word">
+                  <NavDropdown.Item href="/admin/dashboard">
+                    Dashboard
+                  </NavDropdown.Item>
+                </NavDropdown>
               </Nav>
               <NavDropdown.Divider />
               <Nav>
                 <Nav.Link href="/">
-                  <p1 className="word">Logout</p1>
+                  <p1 className="word12">Logout</p1>
                 </Nav.Link>
               </Nav>
             </Navbar.Collapse>

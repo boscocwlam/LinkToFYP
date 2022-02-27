@@ -41,7 +41,7 @@ export default function LogRegStudentLogin2() {
           localStorage.setItem("isOrganized", response.data.organization);
           localStorage.setItem("isEncrypted", response.data.password);
           localStorage.setItem("isAuthenitcated", response.data.user);
-          localStorage.removeItem("Email Address (Admin)");
+          localStorage.removeItem("Email Address (Student)");
           navigate("/student/main");
         }else{
           setLoginStatus(response.data.message);

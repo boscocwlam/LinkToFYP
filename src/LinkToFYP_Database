@@ -1,0 +1,689 @@
+// LinkToFYP: Documentation of SQL quries for setting up the database, tables & records
+
+//create tables
+////////////////////////////////////////////////////////////////////
+
+create table Organizations (
+Organization_ID int, 
+Organization_name varchar(255),
+PRIMARY KEY (Organization_ID),
+FOREIGN KEY (Organization_ID) REFERENCES Organizations (Organization_ID)
+);
+
+create table Skills (
+Skill_ID int,
+Organization_ID int, 
+Skill_name varchar(255) NOT NULL,
+Category varchar(255) NOT NULL,
+PRIMARY KEY (Skill_ID),
+FOREIGN KEY (Organization_ID) REFERENCES Organizations (Organization_ID)
+);
+
+create table Job_types (
+Job_type_ID int,
+Organization_ID int, 
+Job_type_name varchar(255) NOT NULL,
+Category varchar(255) NOT NULL,
+PRIMARY KEY (Job_type_ID),
+FOREIGN KEY (Organization_ID) REFERENCES Organizations (Organization_ID)
+);
+
+create table Years (
+Year_ID int,
+Organization_ID int, 
+Year_name varchar(255) NOT NULL,
+Category varchar(255) NOT NULL,
+PRIMARY KEY (Year_ID),
+FOREIGN KEY (Organization_ID) REFERENCES Organizations (Organization_ID)
+);
+
+create table Users (
+User_ID int,
+Organization_ID int,
+First_name varchar(255), 
+Last_name varchar(255),
+First_name_chi varchar(255),
+Last_name_chi varchar(255),
+Gender varchar(255), 
+City varchar(255),
+Phone_no varchar(255),
+Email_address varchar(255), 
+Password varchar(255),
+Role varchar(255), 
+PRIMARY KEY (User_ID),
+FOREIGN KEY (Organization_ID) REFERENCES Organizations (Organization_ID)
+);
+
+create table Staffs (
+Staff_ID int,
+User_ID int NOT NULL,
+PRIMARY KEY (Staff_ID, User_ID),
+FOREIGN KEY (User_ID) REFERENCES Users (User_ID)
+);
+
+create table Students (
+Student_ID int,
+User_ID int,
+Year_ID int,
+cGPA numeric(3,2),
+FYP_name varchar(255),
+FYP_final_grade varchar(255),
+FYP_background varchar(8000),
+FYP_document varbinary(8000),
+FYP_link varchar(255),
+FYP_photo varbinary(8000),
+FYP_skill_ID1 varchar(255),
+FYP_score1 int,
+FYP_skill_ID2 varchar(255),
+FYP_score2 int,
+FYP_skill_ID3 varchar(255),
+FYP_score3 int,
+FYP_skill_ID4 varchar(255),
+FYP_score4 int,
+FYP_skill_ID5 varchar(255),
+FYP_score5 int,
+PRIMARY KEY (Student_ID, User_ID),
+FOREIGN KEY (User_ID) REFERENCES Users (User_ID),
+FOREIGN KEY (Year_ID) REFERENCES Years (Year_ID),
+FOREIGN KEY (FYP_skill_ID1) REFERENCES Skills (skill_ID),
+FOREIGN KEY (FYP_skill_ID2) REFERENCES Skills (skill_ID),
+FOREIGN KEY (FYP_skill_ID3) REFERENCES Skills (skill_ID),
+FOREIGN KEY (FYP_skill_ID4) REFERENCES Skills (skill_ID),
+FOREIGN KEY (FYP_skill_ID5) REFERENCES Skills (skill_ID)
+);
+
+create table Employers (
+Employer_ID int, 
+User_ID int NOT NULL,
+Company_name varchar(255),
+PRIMARY KEY (Employer_ID, User_ID),
+FOREIGN KEY (User_ID) REFERENCES Users (User_ID)
+);
+
+create table Work_experiences (
+Work_ID int,
+Student_ID int NOT NULL,
+Job_type_ID int, 
+Company_name varchar(255),
+Duration varchar(255),
+Job_title varchar(255),
+Skill_ID1 varchar(255),
+Score1 int,
+Skill_ID2 varchar(255),
+Score2 int,
+Skill_ID3 varchar(255),
+Score3 int,
+Skill_ID4 varchar(255),
+Score4 int,
+Skill_ID5 varchar(255),
+Score5 int,
+PRIMARY KEY (Work_ID),
+FOREIGN KEY (Student_ID) REFERENCES Students (Student_ID),
+FOREIGN KEY (Job_type_ID) REFERENCES Job_types (Job_type_ID),
+FOREIGN KEY (Skill_ID1) REFERENCES Skills (Skill_ID),
+FOREIGN KEY (Skill_ID2) REFERENCES Skills (Skill_ID),
+FOREIGN KEY (Skill_ID3) REFERENCES Skills (Skill_ID),
+FOREIGN KEY (Skill_ID4) REFERENCES Skills (Skill_ID),
+FOREIGN KEY (Skill_ID5) REFERENCES Skills (Skill_ID)
+);
+
+create table Jobs (
+Offer_ID int NOT NULL,
+Employer_ID int NOT NULL,
+Job_type_ID int NOT NULL,
+Job_title varchar(255) NOT NULL,
+Job_description varchar(8000),
+Skill_ID1 varchar(255),
+Score1 int,
+Skill_ID2 varchar(255),
+Score2 int,
+Skill_ID3 varchar(255),
+Score3 int,
+Skill_ID4 varchar(255),
+Score4 int,
+Skill_ID5 varchar(255),
+Score5 int,
+PRIMARY KEY(Offer_ID),
+FOREIGN KEY (Employer_ID) REFERENCES Employers (Employer_ID),
+FOREIGN KEY (Job_type_ID) REFERENCES Job_types (Job_type_ID),
+FOREIGN KEY (Skill_ID1) REFERENCES Skills (Skill_ID),
+FOREIGN KEY (Skill_ID2) REFERENCES Skills (Skill_ID),
+FOREIGN KEY (Skill_ID3) REFERENCES Skills (Skill_ID),
+FOREIGN KEY (Skill_ID4) REFERENCES Skills (Skill_ID),
+FOREIGN KEY (Skill_ID5) REFERENCES Skills (Skill_ID)
+);
+
+create table Students_Employers (
+Application_ID int,
+Student_ID int NOT NULL,
+Employer_ID int NOT NULL,
+Order_ID int NOT NULL,
+PRIMARY KEY (Application_ID),
+FOREIGN KEY (Student_ID) REFERENCES Students (Student_ID),
+FOREIGN KEY (Employer_ID) REFERENCES Employers (Employer_ID),
+FOREIGN KEY (Order_ID) REFERENCES Jobs (Order_ID)
+);
+
+create table Status (
+Status_ID int,
+Status_name varchar(255) NOT NULL,
+PRIMARY KEY (Status_ID)
+);
+
+create table StatusRecords (
+Record_ID int,
+Application_ID int NOT NULL,
+Status_ID int NOT NULL,
+Status_change_date datetime NOT NULL,
+PRIMARY KEY (Record_ID),
+FOREIGN KEY (Application_ID) REFERENCES Students_Employers (Application_ID),
+FOREIGN KEY (Status_ID) REFERENCES Status (Status_ID)
+);
+
+
+
+// Insert SQL records (test cases) 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Default Data
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1099999998, 1000, "Default", "Default", "Default", "Default", "Male", "Default", "Default", "default.com", "Default0", "Admin");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1099999999, 1000, "Default1", "Default1", "Default1", "Default1", "Male", "Default1", "Default1", "default1.com", "Default1", "Student");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000000, 1000, "Default2", "Default2", "Default2", "Default2", "Male", "Default2", "Default2", "default2.com", "Default2", "Employer");
+
+INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1000, "University_default");
+
+INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100000, 1099999998);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, FYP_name, FYP_final_grade, FYP_background, FYP_link) VALUES (1800000, 1099999999, 701, 1.00, "FYP_name_default", "A", "FYP_background_default", "FYP_link_default");
+
+INSERT INTO Employers (Employer_ID, User_ID, Company_name) VALUES (25200000, 1100000000, 'Company_default');
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Insert Organizations records
+
+INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1001, "Department of Computer Science, Hong Kong Baptist Univeristy");
+
+INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1002, "Department of Medicine, The Chinese Univeristy of Hong Kong");
+
+INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1003, "Department of Chinese Studies, The Education University of Hong Kong");
+
+INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1004, "Department of Engineering, Hong Kong Institute of Vocational Education");
+
+
+
+// Insert Skills records
+
+INSERT INTO Skills (Skill_ID, Organization_ID, Skill_name, Category) VALUES (20001, 1001, "JavaScript", "ReadyInUse");
+
+INSERT INTO Skills (Skill_ID, Organization_ID, Skill_name, Category) VALUES (20002, 1001, "SQL", "NotInUse");
+
+INSERT INTO Skills (Skill_ID, Organization_ID ,Skill_name, Category) VALUES (20003, 1001, "Java", "ReadyInUse");
+
+INSERT INTO Skills (Skill_ID, Organization_ID ,Skill_name, Category) VALUES (20004, 1001, "React", "ReadyInUse");
+
+INSERT INTO Skills (Skill_ID, Organization_ID, Skill_name, Category) VALUES (20005, 1002, "SailJS", "ReadyInUse");
+
+
+
+// Insert Job Types records
+
+INSERT INTO Job_types (Job_type_ID, Organization_ID, Job_type_name, Category) VALUES (30001, 1001, "Web Development", "NotInUse");
+
+INSERT INTO Job_types (Job_type_ID, Organization_ID, Job_type_name, Category) VALUES (30002, 1001, "Full Stack Developer", "NotInUse");
+
+INSERT INTO Job_types (Job_type_ID, Organization_ID, Job_type_name, Category) VALUES (30003, 1001, "IT Support", "ReadyInUse");
+
+INSERT INTO Job_types (Job_type_ID, Organization_ID, Job_type_name, Category) VALUES (30004, 1001, "Sales Engineer", "ReadyInUse");
+
+INSERT INTO Job_types (Job_type_ID, Organization_ID, Job_type_name, Category) VALUES (30005, 1002, "IT Consultant", "ReadyInUse");
+
+
+// Insert Years records
+
+INSERT INTO Years (Year_ID, Organization_ID, Year_name, Category) VALUES (701, 1001, "2018-2019", "ReadyInUse");
+
+INSERT INTO Years (Year_ID, Organization_ID, Year_name, Category) VALUES (702, 1001, "2019-2020", "ReadyInUse");
+
+INSERT INTO Years (Year_ID, Organization_ID, Year_name, Category) VALUES (703, 1001, "2020-2021", "ReadyInUse");
+
+INSERT INTO Years (Year_ID, Organization_ID, Year_name, Category) VALUES (704, 1002, "2021-2022", "ReadyInUse");
+
+INSERT INTO Years (Year_ID, Organization_ID, Year_name, Category) VALUES (705, 1001, "2022-2023", "NotInUse");
+
+
+
+
+// Insert Users records
+
+// Staffs (Users)
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000001, 1001, "Hong Wai", "Fung", "雄偉", "馮", "Male", "Hong Kong", "+852 50000021", "hongwai@gmail.com", "Pw25200001", "Admin");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000002, 1001, "Wai Yan", "Yeung", "慧欣", "楊", "Female", "Hong Kong", "+852 50000022", "waiyan@gmail.com", "Pw25200002", "Admin");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000003, 1001, "Wing Chun", "Lam", "永駿", "林", "Male", "Hong Kong", "+852 50000023", "wingchun@gmail.com", "Pw25200003", "Admin");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000004, 1002, "Tung Yan", "Wong", "東茵", "黃", "Female", "Hong Kong", "+852 50000024", "tungyan@gmail.com", "Pw25200004", "Admin");
+
+//Students (Users)
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000005, 1001, "Tai Man", "Chan", "大文", "陳", "Male", "Hong Kong", "+852 50000001", "taiman@gmail.com", "Pw1800001", "Student");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000006, 1001,  "Siu Man", "Wong", "小文", "黃", "Male", "Hong Kong", "+852 50000002", "siuman@gmail.com", "Pw1800002", "Student");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000007, 1001,  "Chun Yi", "Lee", "俊賢", "李", "Female", "Hong Kong", "+852 50000003", "chunyi@gmail.com", "Pw1800003", "Student");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000008, 1002, "Wing Yan", "Wong", "穎欣", "王", "Female", "Hong Kong", "+852 50000004", "wingyan@gmail.com", "Pw1800004", "Student");
+
+// Employers  (Users)
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000009, 1001, "Hong Yan", "Chan", "浩欣", "陳", "Female", "Hong Kong", "+852 50000011", "hongyan@gmail.com", "Pw25200001", "Employer");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000010, 1001, "Wai Kiu", "Wong", "偉橋", "王", "Male", "Hong Kong", "+852 50000012", "waikiu@gmail.com", "Pw25200002", "Employer");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000011, 1001, "Yan Sung", "Lai", "因信", "黎", "Male", "Hong Kong", "+852 50000013", "yansung@gmail.com", "Pw25200003", "Employer");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000012, 1002, "Wing Chiu", "Pang", "穎超", "彭", "Male", "Hong Kong", "+852 50000014", "wingchiu@gmail.com", "Pw25200004", "Employer");
+
+
+
+// Insert Staffs records
+
+INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100001, 1100000001);
+
+INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100002, 1100000002);
+
+INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100003, 1100000003);
+
+INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100004, 1100000004);
+
+
+
+// Insert Students records without "FYP_photo" & "FYP_document"
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3) VALUES (1800001, 1100000005, 701, 1.20, "FYP_name_1", "A-", "FYP_background_1", "FYP_link_1", 20001, 9, 20003, 10, 20004, 4);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2) VALUES (1800002, 1100000006, 702, 2.54, "FYP_name_2", "A", "FYP_background_2", "FYP_link_2", 20001, 5, 20004, 7);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2) VALUES (1800003, 1100000007, 702, 3.34, "FYP_name_3", "B+", "FYP_background_3", "FYP_link_3", 20003, 8, 20004, 10);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1) VALUES (1800004, 1100000008, 704, 2.95, "FYP_name_4", "B-", "FYP_background_4", "FYP_link_4", 20005, 9);
+
+
+
+// Insert Employers records
+
+INSERT INTO Employers (Employer_ID, User_ID, Company_name) VALUES (25200001, 1100000009, 'Company A');
+
+INSERT INTO Employers (Employer_ID, User_ID, Company_name) VALUES (25200002, 1100000010, 'Company B');
+
+INSERT INTO Employers (Employer_ID, User_ID, Company_name) VALUES (25200003, 1100000011, 'Company C');
+
+INSERT INTO Employers (Employer_ID, User_ID, Company_name) VALUES (25200004, 1100000012, 'Company D');
+
+
+// Insert Status records
+
+INSERT INTO Status (Status_ID, Status_name) VALUES (18, 'Job Found');
+
+INSERT INTO Status (Status_ID, Status_name) VALUES (19, 'Withdraw');
+
+INSERT INTO Status (Status_ID, Status_name) VALUES (20, 'Available');
+
+INSERT INTO Status (Status_ID, Status_name) VALUES (21, 'Applied');
+
+INSERT INTO Status (Status_ID, Status_name) VALUES (22, 'Processing');
+
+INSERT INTO Status (Status_ID, Status_name) VALUES (23, 'Matched');
+
+
+// Insert Work_experiences records
+
+Insert INTO Work_experiences (Work_ID, Student_ID, Job_type_ID, Company_name, Job_title, Duration, Skill_ID1, Score1, Skill_ID2, Score2) VALUES (800001, 1800001, 30002, "Google", "Software Engineering Intern", "8 weeks", 20001, 8, 20003, 6);
+
+Insert INTO Work_experiences (Work_ID, Student_ID, Job_type_ID, Company_name, Job_title, Duration, Skill_ID1, Score1, Skill_ID2, Score2) VALUES (800002, 1800001, 30004, "Microsoft", "Sales Engineering Intern", "1 month", 20001, 3, 20004, 10);
+
+Insert INTO Work_experiences (Work_ID, Student_ID, Job_type_ID, Company_name, Job_title, Duration, Skill_ID1, Score1) VALUES (800003, 1800002, 30003, "Microsoft", "IT Support Intern", "2 months", 20003, 10);
+
+Insert INTO Work_experiences (Work_ID, Student_ID, Job_type_ID, Company_name, Job_title, Duration, Skill_ID1, Score1) VALUES (800004, 1800003, 30001, "HKT", "Web Development Intern", "6 months", 20005, 4);
+
+
+
+// Insert Students_Employers records
+
+INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Order_ID) VALUES (50100001, 25200001, 1800002, 100001);
+
+INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Order_ID) VALUES (50100002, 25200002, 1800003, 100003);
+
+INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Order_ID) VALUES (50100003, 25200001, 1800001, 100002);
+
+INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Order_ID) VALUES (50100004, 25200003, 1800002, 100004);
+
+
+
+// Insert StatusRecords records
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100100, 50100001, 21, '2019-10-31 17:10:06');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100101, 50100002, 21, '2019-10-15 18:19:18');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100102, 50100001, 22, '2019-11-03 20:20:20');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100103, 50100001, 23, '2019-11-07 08:09:09');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100104, 50100003, 21, '2020-02-07 03:15:15');
+
+
+// Insert Jobs records
+
+INSERT INTO Jobs (Offer_ID, Employer_ID, Job_type_ID, Job_title, Job_description, Skill_ID1, Score1, Skill_ID2, Score2, Skill_ID3, Score3) VALUES (100001, 25200001, 30001, "Web Development Programmer (Urgent)", 
+"Web Developer Responsibilities: - Website and software application designing, building, or maintaining.",
+20001, 2, 20004, 5, 20003, 9);
+
+INSERT INTO Jobs (Offer_ID, Employer_ID, Job_type_ID, Job_title, Job_description, Skill_ID1, Score1) VALUES (100002, 25200001, 30004, "Technology Sales (Start from December)",
+"- Establishing the technical needs of the customer and suggesting appropriate products.",
+20004, 10); 
+
+INSERT INTO Jobs (Offer_ID, Employer_ID, Job_type_ID, Job_title, Job_description, Skill_ID1, Score1, Skill_ID2, Score2) VALUES (100003, 25200002, 30004, "Technical Sales (MNC Company)",
+"- A bachelor’s degree in IT, business, or a related field. - A minimum of 2 years of sales or marketing experience.",
+20003, 4, 20001, 10);
+
+INSERT INTO Jobs (Offer_ID, Employer_ID, Job_type_ID, Job_title, Job_description, Skill_ID1, Score1) VALUES (100004, 25200003, 30002, "Full Stack / Backend Developer (Financial Services)",
+"- Identify requirements for financial software: You’ll work with other departments to identify end-user specifications for financial software programs.",
+20005, 9);
+
+
+
+// Complicated SQL Queries Draft
+////////////////////////////////////////////////////////////////////
+
+
+// AdminMain.js
+// Extract Application Records with the MOST UPDATED status 
+// (descending Application_ID & date)
+
+
+select 
+staR.Application_ID AS Application_ID,
+stuEmp.Employer_ID AS Employer_ID,
+stuEmp.Student_ID AS Student_ID,
+sta.Status_name AS Status_name,
+sta.Status_ID AS Status_ID,
+staR.Status_change_date AS Status_change_date,
+use1.First_name AS Stu_first_name,
+use1.Last_name AS Stu_last_name,
+use2.First_name AS Emp_first_name,
+use2.Last_name AS Emp_last_name
+from 
+Students_Employers stuEmp,
+Students stu,
+Employers emp, 
+statusrecords staR, 
+status sta,
+Users use1,
+Users use2
+where 
+use1.User_ID=stu.User_ID AND
+use2.User_ID=emp.User_ID AND
+stu.Student_ID=stuEmp.Student_ID AND 
+emp.Employer_ID=stuEmp.Employer_ID AND
+stuEmp.Application_ID=staR.Application_ID AND
+staR.status_ID = sta.status_ID
+AND NOT EXISTS (
+select * from 
+statusrecords star2, 
+status sta2 
+where 
+staR2.status_ID = sta2.status_ID AND 
+staR2.status_ID > sta.status_ID AND 
+staR.Application_ID = staR2.Application_ID
+)
+order by
+staR.Status_change_date DESC;
+
+
+
+
+//Extract Application Records of all history (ALL STATUS CHANGE)
+//(all status stated of an application with the record of time change)
+// (descending Application_ID & date)
+
+select
+staR.Application_ID AS Application_ID,
+stuEmp.Employer_ID AS Employer_ID,
+emp.First_name AS Emp_first_name,
+emp.Last_name AS Emp_last_name, 
+stuEmp.Student_ID AS Student_ID,
+stu.First_name AS Stu_first_name,
+stu.Last_name AS Stu_last_name,
+sta.Status_name AS Status_name,
+staR.Status_change_date AS Status_change_date 
+from
+Students_Employers stuEmp INNER JOIN
+Students stu INNER JOIN 
+Employers emp INNER JOIN 
+StatusRecords staR INNER JOIN
+Status sta
+ON
+stu.Student_ID=stuEmp.Student_ID AND 
+emp.Employer_ID=stuEmp.Employer_ID AND
+stuEmp.Application_ID=staR.Application_ID AND
+staR.Status_ID=sta.Status_ID
+order by
+staR.Status_change_date DESC;
+
+
+
+
+// Extract StudentMain Records
+
+select 
+stu.Student_ID, 
+stu.First_name, 
+stu.Last_name, 
+stu.Preferred_name, 
+stu.cGPA, 
+stu.Year, 
+fyp.Project_ID, 
+fyp.Skill_ID AS FYP_skill_ID, 
+fyp.Project_name, 
+fyp.Project_final_grade, 
+fyp.Project_background, 
+fyp.Document, 
+fyp.Link, 
+fyp.Photo, 
+wor.Work_ID, 
+wor.Job_type_ID, 
+wor.Skill_ID AS Work_skill_ID, 
+wor.Company_name, 
+wor.Duration, 
+wor.Job_title,
+dep.Department_name 
+from Students stu, Final_year_projects fyp, Work_experiences wor, Departments dep 
+where stu.Student_ID = wor.Student_ID AND stu.Student_ID = fyp.Student_ID 
+AND dep.Department_ID = stu.Department_ID AND stu.Student_ID = 1800000;
+
+
+
+
+
+
+
+
+
+// Personal References
+////////////////////////////////////////////////////////////////////
+
+
+// Data Making on building Identities (Development Stage)
+
+User_ID        : 10 digits: "11XXXXXXXX"
+Student_ID     : 7  digits; "18XXXXX"
+Employer_ID    : 7  digits; "252XXXX"
+Staff_ID       : 7  digits; "21XXXXX"
+Application_ID : 8  digits; "501XXXXX"
+Record_ID      : 9  digits: "4XXXXXXXX"
+Status_ID      : 2  digits; "2X"
+Skill_ID       : 5  digits; "2XXXX"
+Job_type_ID    : 5  digits; "3XXXX"
+Year_ID        : 3  digits: "700"
+Work_ID        : 6  digits; "8XXXXX"
+Organization_ID: 4  digits; "1XXX"
+Offer_ID       : 6  digits: "1XXXXX"
+
+
+// Tables without foregin keys
+
+
+create table Organizations (
+Organization_ID int, 
+Organization_name varchar(255),
+PRIMARY KEY (Organization_ID)
+);
+
+create table Skills (
+Skill_ID int,
+Organization_ID int, 
+Skill_name varchar(255) NOT NULL,
+Category varchar(255) NOT NULL,
+PRIMARY KEY (Skill_ID)
+);
+
+create table Job_types (
+Job_type_ID int,
+Organization_ID int, 
+Job_type_name varchar(255) NOT NULL,
+Category varchar(255) NOT NULL,
+PRIMARY KEY (Job_type_ID)
+);
+
+create table Years (
+Year_ID int,
+Organization_ID int, 
+Year_name varchar(255) NOT NULL,
+Category varchar(255) NOT NULL,
+PRIMARY KEY (Year_ID)
+);
+
+create table Users (
+User_ID int,
+Organization_ID int,
+First_name varchar(255), 
+Last_name varchar(255),
+First_name_chi varchar(255),
+Last_name_chi varchar(255),
+Gender varchar(255), 
+City varchar(255),
+Phone_no varchar(255),
+Email_address varchar(255), 
+Password varchar(255),
+Role varchar(255), 
+PRIMARY KEY (User_ID)
+);
+
+create table Staffs (
+Staff_ID int,
+User_ID int NOT NULL,
+PRIMARY KEY (Staff_ID, User_ID)
+);
+
+create table Students (
+Student_ID int,
+User_ID int,
+Year_ID int,
+cGPA numeric(3,2),
+FYP_name varchar(255),
+FYP_final_grade varchar(255),
+FYP_background varchar(8000),
+FYP_document varbinary(8000),
+FYP_link varchar(255),
+FYP_photo varbinary(8000),
+FYP_skill_ID1 varchar(255),
+FYP_score1 int,
+FYP_skill_ID2 varchar(255),
+FYP_score2 int,
+FYP_skill_ID3 varchar(255),
+FYP_score3 int,
+FYP_skill_ID4 varchar(255),
+FYP_score4 int,
+FYP_skill_ID5 varchar(255),
+FYP_score5 int,
+PRIMARY KEY (Student_ID, User_ID)
+);
+
+create table Employers (
+Employer_ID int, 
+User_ID int NOT NULL,
+Company_name varchar(255),
+PRIMARY KEY (Employer_ID, User_ID)
+);
+
+create table Work_experiences (
+Work_ID int,
+Student_ID int NOT NULL,
+Job_type_ID int, 
+Company_name varchar(255),
+Duration varchar(255),
+Job_title varchar(255),
+Skill_ID1 varchar(255),
+Score1 int,
+Skill_ID2 varchar(255),
+Score2 int,
+Skill_ID3 varchar(255),
+Score3 int,
+Skill_ID4 varchar(255),
+Score4 int,
+Skill_ID5 varchar(255),
+Score5 int,
+PRIMARY KEY (Work_ID)
+);
+
+create table Jobs (
+Offer_ID int NOT NULL,
+Employer_ID int NOT NULL,
+Job_type_ID int NOT NULL,
+Job_title varchar(255) NOT NULL,
+Job_description varchar(8000),
+Skill_ID1 varchar(255),
+Score1 int,
+Skill_ID2 varchar(255),
+Score2 int,
+Skill_ID3 varchar(255),
+Score3 int,
+Skill_ID4 varchar(255),
+Score4 int,
+Skill_ID5 varchar(255),
+Score5 int,
+PRIMARY KEY(Offer_ID)
+);
+
+create table Students_Employers (
+Application_ID int,
+Student_ID int NOT NULL,
+Employer_ID int NOT NULL,
+Order_ID int NOT NULL,
+PRIMARY KEY (Application_ID)
+);
+
+create table Status (
+Status_ID int,
+Status_name varchar(255) NOT NULL,
+PRIMARY KEY (Status_ID)
+);
+
+create table StatusRecords (
+Record_ID int,
+Application_ID int NOT NULL,
+Status_ID int NOT NULL,
+Status_change_date datetime NOT NULL,
+PRIMARY KEY (Record_ID)
+);

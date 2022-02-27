@@ -7,10 +7,12 @@ import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Dropdown from "react-bootstrap/Dropdown";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { useParams } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-const AdminMain = () => {
+const AdminAdmProfileDetail = () => {
   const [staffData, setStaffData] = useState([]);
-  const user_ID = localStorage.getItem("isAuthenitcated");
+  const user_ID = useParams().id;
   const organization_ID = localStorage.getItem("isOrganized");
 
   useEffect(() => {
@@ -59,7 +61,8 @@ const AdminMain = () => {
                       <tr>
                         <td className="letter3">CHINESE NAME</td>
                         <td className="letter4">
-                        {item.last_name_chi}{item.first_name_chi} 
+                          {item.last_name_chi}
+                          {item.first_name_chi}
                         </td>
                       </tr>
                       <tr>
@@ -91,20 +94,23 @@ const AdminMain = () => {
                   );
                 })}
               </Table>
-              <a
-                href="/admin/profile/self/update/personal"
-                class="btn btn-danger btn-block text1 center33"
-              >
-                Update Personal Information
-              </a>
-
-              <div className="mt-4"></div>
             </Container>
           </Container>
+        </div>
+        <div className="mt-4"></div>
+        <div className="boundary88">
+          <Dropdown.Divider />
+          <Link
+            className="btn btn-primary btn-block text1 center33"
+            to={"/admin/profile/admin"}
+          >
+            Return To Previous Page
+          </Link>
+          <div className="mt-4"></div>
         </div>
       </Container>
     </div>
   );
 };
 
-export default AdminMain;
+export default AdminAdmProfileDetail;

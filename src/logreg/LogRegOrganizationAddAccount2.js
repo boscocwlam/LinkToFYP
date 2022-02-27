@@ -231,11 +231,11 @@ const LogRegOrganizationAddAccount2 = () => {
                   </div>
                   <div class="column">
                     <div className="form-group text1">
-                      <label>City</label>
+                      <label>Country / City</label>
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="City"
+                        placeholder="Country / City"
                         name="city"
                       />
                     </div>

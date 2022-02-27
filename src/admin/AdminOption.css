@@ -78,6 +78,12 @@
   font-family: Tahoma, sans-serif;
 }
 
+.page7{
+  display: flex;
+  justify-content:left;
+  align-items:left;
+}
+
 /*  /////////////////////////////////////////////////////////////////////// */
 
 .containerSkill{

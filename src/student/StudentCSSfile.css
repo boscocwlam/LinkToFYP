@@ -40,8 +40,9 @@
 }
 
 .boundary33{
-    border:2px solid rgb(50, 50, 50);
+    border:2px solid rgb(50,50,50);
     border-radius: 15px;
+    width: 80%;
 }
 
 .divide2{
@@ -69,4 +70,10 @@
 
 .title90{
     font-family: Georgia, serif;
+}
+
+.grid90{
+    display: flex;
+    flex-direction: column;
+    bottom: 0;
 }

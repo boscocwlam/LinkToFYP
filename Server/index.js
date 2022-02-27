@@ -51,6 +51,26 @@ const db = mysql.createConnection({
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Common
+///////////////////////////////////////////////////////////////////////////////
+
+// EmployerProfileUpdatePersonal.js, AdminProfileUpdatePersonal.js, StudentProfileUpdatePersonal.js,
+app.post("/getEmail", (req, res) => {
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "SELECT email_address FROM Users WHERE user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({ email_address: result[0].email_address });
+      }
+    }
+  );
+});
+
 // LogReg (Organization)
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -358,17 +378,18 @@ app.post("/getEmployerConnection", (req, res) => {
       if (result.length > 0) {
         bcrypt.compare(password, result[0].password, (err, response) => {
           if (response) {
-            res.send({ message: "Correct Password!", 
-            first_name: result[0].first_name,
-            last_name: result[0].last_name,
-            first_name_chi: result[0].first_name_chi,
-            last_name_chi: result[0].last_name_chi,
-            gender: result[0].gender,
-            city: result[0].city,
-            phone_no: result[0].phone_no,
-            password: result[0].passsword,
-            company_name: result[0].company_name
-          });
+            res.send({
+              message: "Correct Password!",
+              first_name: result[0].first_name,
+              last_name: result[0].last_name,
+              first_name_chi: result[0].first_name_chi,
+              last_name_chi: result[0].last_name_chi,
+              gender: result[0].gender,
+              city: result[0].city,
+              phone_no: result[0].phone_no,
+              password: result[0].passsword,
+              company_name: result[0].company_name,
+            });
           } else {
             res.send({ message: "Wrong username/password combination!" });
           }
@@ -413,11 +434,22 @@ app.post("/getEmployerConnection3", (req, res) => {
   const phone_no = req.body.phone_no;
   const user_ID = req.body.user_ID;
   const password = req.body.password1;
-  const organization_ID = req.body.organization_ID
+  const organization_ID = req.body.organization_ID;
 
   db.query(
     `INSERT INTO Users (user_ID, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, password, organization_ID, role) VALUE (?,?,?,?,?,?,?,?,?,?,"Employer")`,
-    [user_ID, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, password, organization_ID],
+    [
+      user_ID,
+      first_name,
+      last_name,
+      first_name_chi,
+      last_name_chi,
+      gender,
+      city,
+      phone_no,
+      password,
+      organization_ID,
+    ],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -428,11 +460,6 @@ app.post("/getEmployerConnection3", (req, res) => {
     }
   );
 });
-
-
-
-
-
 
 // LogReg (Admin)
 ///////////////////////////////////////////////////////////////////////////////
@@ -510,7 +537,7 @@ app.post("/getAdminLoginSession", (req, res) => {
 //LogRegAdminForgetPW.js, LogRegAdminLogin.js
 app.post("/checkAdminEmailExist", (req, res) => {
   const email_address = req.body.email_address;
-  console.log(req.query.text);
+
   db.query(
     "SELECT COUNT(email_address) AS emailCount from users where role = 'Admin' and email_address = ?",
     [email_address],
@@ -630,6 +657,67 @@ app.post("/getStudentLoginSession", (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////
 
 // AdminMain.js
+app.get("/getAdminPersonalInfo", (req, res) => {
+  const user_ID = req.query.user_ID;
+  const organization_ID = req.query.organization_ID;
+
+  db.query(
+    `SELECT staff_ID, organization_name, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, email_address from Users, Staffs sta, Organizations WHERE Organizations.organization_ID = Users.organization_ID AND Users.user_ID = sta.user_ID AND Users.User_ID = ? AND Users.organization_ID = ?`,
+    [user_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// AdminProfileUpdatePersonal.js
+app.post("/getAdminPersonalInfo", (req, res) => {
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "SELECT gender, city, email_address, phone_no FROM Users WHERE Users.user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({
+          gender: result[0].gender,
+          city: result[0].city,
+          email_address: result[0].email_address,
+          phone_no: result[0].phone_no,
+        });
+      }
+    }
+  );
+});
+
+// AdminProfileUpdatePersonal.js
+app.post("/updateAdminPersonalInfo", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const gender = req.body.gender;
+  const city = req.body.city;
+  const email_address = req.body.email_address;
+  const phone_no = req.body.phone_no;
+
+  db.query(
+    "UPDATE Users SET gender = ?, city = ?, email_address = ?, phone_no = ? WHERE user_ID = ?",
+    [gender, city, email_address, phone_no, user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// AdminApplication.js
 app.get("/getUpdatedStatusList", (req, res) => {
   console.log(req.query.text);
   db.query(
@@ -645,7 +733,7 @@ app.get("/getUpdatedStatusList", (req, res) => {
   );
 });
 
-// AdminMain.js
+// AdminApplication.js
 app.get("/getStatus", (req, res) => {
   const status_ID = req.query.status_ID;
   db.query("select ", (err, result) => {
@@ -656,22 +744,6 @@ app.get("/getStatus", (req, res) => {
       res.send(result);
     }
   });
-});
-
-// AdminStuProfile.js, EmployerSearch.js
-app.get("/getStudent", (req, res) => {
-  console.log(req.query.text);
-  db.query(
-    "select student_ID, first_name, last_name, year_name from Students, Users, Years where Students.User_ID = Users.User_ID and Students.year_ID = Years.year_ID;",
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send(result);
-      }
-    }
-  );
 });
 
 //AdminAddStuAccount.js, AdminAddAdmAccount.js,
@@ -745,10 +817,12 @@ app.post("/StudentCreate2", (req, res) => {
 });
 
 //AdminAddStuAccount.js
-app.get("/getYears", (req, res) => {
+app.post("/getYears", (req, res) => {
+  const organization_ID = req.body.organization_ID;
   console.log(req.query.text);
   db.query(
-    `SELECT year_ID, year_name FROM Years where category = "ReadyInUse" `,
+    `SELECT year_ID, year_name FROM Years where category = "ReadyInUse" AND organization_ID = ? `,
+    [organization_ID],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -817,7 +891,6 @@ app.post("/StaffCreate2", (req, res) => {
     }
   );
 });
-
 
 //AdminAddAdmAccount.js
 app.post("/checkStudentExists", (req, res) => {
@@ -1233,6 +1306,291 @@ app.get("/deleteYear", (req, res) => {
   });
 });
 
+// AdminStuProfile.js, EmployerSearch.js
+app.post("/getStudent", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+
+  db.query(
+    "select users.user_ID as user_ID, student_ID, first_name, last_name, first_name_chi, last_name_chi, Years.year_ID AS year_ID, year_name, fyp_name from Students, Users, Years where Students.User_ID = Users.User_ID and Students.year_ID = Years.year_ID AND users.organization_ID = ? ORDER BY student_ID ASC",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+// AdminProfileUpdateDetailUpdatePersonal.js
+app.post("/getFromAdminStudentPersonalInfo", (req, res) => {
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "SELECT student_ID, first_name, last_name, first_name_chi, last_name_chi, gender, city, email_address, phone_no, Years.year_ID as year_ID, year_name, cGPA FROM Users, Students, Years WHERE Users.user_ID = Students.user_ID AND Students.year_ID = Years.year_ID AND Users.user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({
+          student_ID: result[0].student_ID,
+          first_name: result[0].first_name,
+          last_name: result[0].last_name,
+          first_name_chi: result[0].first_name_chi,
+          last_name_chi: result[0].last_name_chi,
+          gender: result[0].gender,
+          city: result[0].city,
+          email_address: result[0].email_address,
+          phone_no: result[0].phone_no,
+          year_ID: result[0].year_ID,
+          year_name: result[0].year_name,
+          cGPA: result[0].cGPA,
+        });
+      }
+    }
+  );
+});
+
+// AdminProfileUpdateDetailUpdatePersonal.js
+app.post("/checkStudentIDduplicate", (req, res) => {
+  const student_ID = req.body.student_ID;
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "SELECT COUNT(student_ID) as stuCount FROM Students WHERE student_ID = ? AND NOT(user_ID = ?)",
+    [student_ID, user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({ stuCount: result[0].stuCount });
+      }
+    }
+  );
+});
+
+// AdminProfileUpdateDetailUpdatePersonal.js
+app.post("/updateFromAdminStudentPersonalInfo1", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const first_name = req.body.first_name;
+  const last_name = req.body.last_name;
+  const first_name_chi = req.body.first_name_chi;
+  const last_name_chi = req.body.last_name_chi;
+  const gender = req.body.gender;
+  const city = req.body.city;
+  const email_address = req.body.email_address;
+  const phone_no = req.body.phone_no;
+
+  db.query(
+    "UPDATE Users SET first_name = ?, last_name = ?, first_name_chi = ?, last_name_chi = ?, gender = ?, city = ?, email_address = ?, phone_no = ? WHERE user_ID = ?",
+    [
+      first_name,
+      last_name,
+      first_name_chi,
+      last_name_chi,
+      gender,
+      city,
+      email_address,
+      phone_no,
+      user_ID,
+    ],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// AdminProfileUpdateDetailUpdatePersonal.js
+app.post("/updateFromAdminStudentPersonalInfo2", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const student_ID = req.body.student_ID;
+  const year_ID = req.body.year_ID;
+  const cGPA = req.body.cGPA;
+
+  db.query(
+    "UPDATE Students SET student_ID = ?, year_ID = ?, cGPA = ? WHERE user_ID = ?",
+    [student_ID, year_ID, cGPA, user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// AdminAdmProfile.js
+app.post("/getStaffs", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+
+  db.query(
+    "SELECT Users.user_ID AS user_ID, staff_ID, first_name, last_name, first_name_chi, last_name_chi, email_address FROM Users, Staffs WHERE Users.user_ID = Staffs.user_ID AND Users.organization_ID = ? ORDER BY staff_ID ASC ",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// AdminEmpProfileDetailUpdatePersonal.js
+app.post("/getFromAdminEmployerPersonalInfo", (req, res) => {
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "SELECT employer_ID, first_name, last_name, first_name_chi, last_name_chi, gender, city, email_address, phone_no FROM Users, Employers WHERE Users.user_ID = Employers.user_ID AND Users.user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({
+          employer_ID: result[0].employer_ID,
+          first_name: result[0].first_name,
+          last_name: result[0].last_name,
+          first_name_chi: result[0].first_name_chi,
+          last_name_chi: result[0].last_name_chi,
+          gender: result[0].gender,
+          city: result[0].city,
+          email_address: result[0].email_address,
+          phone_no: result[0].phone_no,
+        });
+      }
+    }
+  );
+});
+
+// AdminEmpProfileDetailUpdatePersonal.js
+app.post("/checkEmployerIDduplicate", (req, res) => {
+  const employer_ID = req.body.employer_ID;
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "SELECT COUNT(employer_ID) as empCount FROM Employers WHERE employer_ID = ? AND NOT(user_ID = ?)",
+    [employer_ID, user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({ empCount: result[0].empCount });
+      }
+    }
+  );
+});
+
+// AdminEmpProfileDetailUpdatePersonal.js
+app.post("/updateFromAdminEmployerPersonalInfo1", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const first_name = req.body.first_name;
+  const last_name = req.body.last_name;
+  const first_name_chi = req.body.first_name_chi;
+  const last_name_chi = req.body.last_name_chi;
+  const gender = req.body.gender;
+  const city = req.body.city;
+  const email_address = req.body.email_address;
+  const phone_no = req.body.phone_no;
+
+  db.query(
+    "UPDATE Users SET first_name = ?, last_name = ?, first_name_chi = ?, last_name_chi = ?, gender = ?, city = ?, email_address = ?, phone_no = ? WHERE user_ID = ?",
+    [
+      first_name,
+      last_name,
+      first_name_chi,
+      last_name_chi,
+      gender,
+      city,
+      email_address,
+      phone_no,
+      user_ID,
+    ],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// AdminEmpProfileDetailUpdatePersonal.js
+app.post("/updateFromAdminEmployerPersonalInfo2", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const employer_ID = req.body.employer_ID;
+
+  db.query(
+    "UPDATE Employers SET employer_ID = ? WHERE user_ID = ?",
+    [employer_ID, user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// AdminStuProfileDetailUpdateFYP.js
+app.post("/updatePersonalFYP1", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const fyp_name = req.body.fyp_name;
+  const fyp_background = req.body.fyp_background;
+  const fyp_document = req.body.fyp_document;
+  const fyp_link = req.body.fyp_link;
+  const fyp_final_grade = req.body.fyp_final_grade;
+  const fyp_skill_ID1 = req.body.fyp_skill_ID1;
+  const fyp_skill_ID2 = req.body.fyp_skill_ID2;
+  const fyp_skill_ID3 = req.body.fyp_skill_ID3;
+  const fyp_skill_ID4 = req.body.fyp_skill_ID4;
+  const fyp_skill_ID5 = req.body.fyp_skill_ID5;
+  const fyp_score1 = req.body.fyp_score1;
+  const fyp_score2 = req.body.fyp_score2;
+  const fyp_score3 = req.body.fyp_score3;
+  const fyp_score4 = req.body.fyp_score4;
+  const fyp_score5 = req.body.fyp_score5;
+
+  db.query(
+    "UPDATE Students SET fyp_name = ?, fyp_final_grade = ?, fyp_background= ?, fyp_document = ?, fyp_link = ?, fyp_skill_ID1 = ?, fyp_skill_ID2 = ?, fyp_skill_ID3 = ?, fyp_skill_ID4 = ?, fyp_skill_ID5 = ?, fyp_score1 = ?, fyp_score2 = ?,  fyp_score3 = ?,  fyp_score4 = ?, fyp_score5 = ?  WHERE user_ID = ?",
+    [
+      fyp_name,
+      fyp_final_grade,
+      fyp_background,
+      fyp_document,
+      fyp_link,
+      fyp_skill_ID1,
+      fyp_skill_ID2,
+      fyp_skill_ID3,
+      fyp_skill_ID4,
+      fyp_skill_ID5,
+      fyp_score1,
+      fyp_score2,
+      fyp_score3,
+      fyp_score4,
+      fyp_score5,
+      user_ID,
+    ],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1240,12 +1598,13 @@ app.get("/deleteYear", (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////
 
 // StudentMain.js
-app.get("/getStudentPersonalInfo", (req, res) => {
+app.get("/getStudentPersonalInfo1", (req, res) => {
   const user_ID = req.query.user_ID;
+  const organization_ID = req.query.organization_ID;
 
   db.query(
-    "SELECT student_ID, first_name, last_name, gender, city, phone_no, email_address, cGPA, year_name from Users, Students stu, Years WHERE Users.user_ID = stu.user_ID and stu.year_ID = Years.year_ID and Users.User_ID = ?",
-    [user_ID],
+    `SELECT student_ID, organization_name, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, email_address, cGPA , year_name from Users, Students stu, Years, Organizations WHERE Organizations.organization_ID = Users.organization_ID AND Users.user_ID = stu.user_ID AND stu.year_ID = Years.year_ID AND Users.User_ID = ? AND Users.organization_ID = ?`,
+    [user_ID, organization_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -1261,7 +1620,7 @@ app.get("/getStudentFYP", (req, res) => {
   const user_ID = req.query.user_ID;
 
   db.query(
-    "SELECT fyp_name, fyp_background, fyp_link, fyp_document, fyp_final_grade from Students WHERE user_ID = ?",
+    "SELECT fyp_name, fyp_background, fyp_link, fyp_final_grade from Students WHERE user_ID = ?",
     [user_ID],
     (err, result) => {
       if (err) {
@@ -1274,16 +1633,224 @@ app.get("/getStudentFYP", (req, res) => {
 });
 
 // StudentMain.js
-app.get("/getStudentWorkExperiences", (req, res) => {
-  const user_ID = req.query.user_ID;
+app.post("/getStudentWorkExperiences", (req, res) => {
+  const user_ID = req.body.user_ID;
 
   db.query(
-    "SELECT company_name, job_title, job_type_name, duration, skill_name FROM Users, Students stu, Work_experiences wor, Skills ski, Job_types job WHERE Users.user_ID = stu.user_ID AND stu.student_ID = wor.student_ID AND wor.skill_ID = ski.skill_ID AND wor.job_type_ID = job.job_type_ID AND Users.User_ID = ?",
+    "SELECT work_ID, company_name, job_title, job_type_ID, job_type_ID AS job_type_name, duration, skill_ID1, score1, skill_ID1 AS skill_name1, skill_ID2, score2, skill_ID2 AS skill_name2, skill_ID3, score3, skill_ID3 AS skill_name3, skill_ID4, score4, skill_ID4 AS skill_name4, skill_ID5, score5, skill_ID5 AS skill_name5  FROM Students stu, Work_experiences wor WHERE stu.student_ID = wor.student_ID AND stu.user_ID = ?",
     [user_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
       } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// StudentProfileUpdatePersonal.js
+app.post("/getStudentPersonalInfo", (req, res) => {
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "SELECT gender, city, email_address, phone_no FROM Users WHERE user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({
+          gender: result[0].gender,
+          city: result[0].city,
+          email_address: result[0].email_address,
+          phone_no: result[0].phone_no,
+        });
+      }
+    }
+  );
+});
+
+// StudentProfileUpdatePersonal.js
+app.post("/updateStudentPersonalInfo", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const gender = req.body.gender;
+  const city = req.body.city;
+  const email_address = req.body.email_address;
+  const phone_no = req.body.phone_no;
+
+  db.query(
+    "UPDATE Users SET gender = ?, city = ?, email_address = ?, phone_no = ? WHERE user_ID = ?",
+    [gender, city, email_address, phone_no, user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// StudentProfileUpdateFYP.js
+app.post("/updatePersonalFYP", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const fyp_name = req.body.fyp_name;
+  const fyp_background = req.body.fyp_background;
+  const fyp_document = req.body.fyp_document;
+  const fyp_link = req.body.fyp_link;
+  const fyp_skill_ID1 = req.body.fyp_skill_ID1;
+  const fyp_skill_ID2 = req.body.fyp_skill_ID2;
+  const fyp_skill_ID3 = req.body.fyp_skill_ID3;
+  const fyp_skill_ID4 = req.body.fyp_skill_ID4;
+  const fyp_skill_ID5 = req.body.fyp_skill_ID5;
+  const fyp_score1 = req.body.fyp_score1;
+  const fyp_score2 = req.body.fyp_score2;
+  const fyp_score3 = req.body.fyp_score3;
+  const fyp_score4 = req.body.fyp_score4;
+  const fyp_score5 = req.body.fyp_score5;
+
+  db.query(
+    "UPDATE Students SET fyp_name = ?, fyp_background= ?, fyp_document = ?, fyp_link = ?, fyp_skill_ID1 = ?, fyp_skill_ID2 = ?, fyp_skill_ID3 = ?, fyp_skill_ID4 = ?, fyp_skill_ID5 = ?, fyp_score1 = ?, fyp_score2 = ?,  fyp_score3 = ?,  fyp_score4 = ?, fyp_score5 = ?  WHERE user_ID = ?",
+    [
+      fyp_name,
+      fyp_background,
+      fyp_document,
+      fyp_link,
+      fyp_skill_ID1,
+      fyp_skill_ID2,
+      fyp_skill_ID3,
+      fyp_skill_ID4,
+      fyp_skill_ID5,
+      fyp_score1,
+      fyp_score2,
+      fyp_score3,
+      fyp_score4,
+      fyp_score5,
+      user_ID,
+    ],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentProfileUpdateFYP.js
+app.post("/getSkills", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `select skill_ID, skill_name from Skills WHERE organization_ID = ? AND category = "ReadyInUse" `,
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentProfileUpdateFYP.js
+app.post("/getStudentFYP1", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const user_ID = req.body.user_ID;
+  db.query(
+    "SELECT DISTINCT fyp_name, fyp_final_grade, fyp_background, fyp_document, fyp_link, fyp_photo, fyp_skill_ID1, fyp_score1, fyp_skill_ID1 AS fyp_skill_name1, fyp_skill_ID2, fyp_score2, fyp_skill_ID2 AS fyp_skill_name2, fyp_skill_ID3, fyp_score3, fyp_skill_ID3 AS fyp_skill_name3,  fyp_skill_ID4, fyp_score4, fyp_skill_ID4 AS fyp_skill_name4, fyp_skill_ID5, fyp_score5, fyp_skill_ID5 AS fyp_skill_name5 FROM Students, Skills WHERE Skills.organization_ID = ? AND Students.user_ID = ?",
+    [organization_ID, user_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        // res.send({fyp_name: result[0].fyp_name, fyp_background: result[0].fyp_background, fyp_document: result[0].fyp_document, fyp_link: result[0].fyp_link, fyp_photo: result[0].fyp_photo, fyp_skill_ID1: result[0].fyp_skill_ID1, fyp_score1: result[0].fyp_score1, fyp_skill_ID2: result[0].fyp_skill_ID2, fyp_score2: result[0].fyp_score2, fyp_skill_ID3: result[0].fyp_skill_ID3, fyp_score3: result[0].fyp_score3, fyp_skill_ID4: result[0].fyp_skill_ID4, fyp_score4: result[0].fyp_score4, fyp_skill_ID5: result[0].fyp_skill_ID5, fyp_score5: result[0].fyp_score5 });
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentProfileUpdateWork.js
+app.post("/getJobTypes", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT job_type_ID, job_type_name FROM Job_types WHERE organization_ID = ?",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentProfileUpdateWork.js
+app.post("/getStudentWorkExperiences1", (req, res) => {
+  const work_ID = req.body.work_ID;
+
+  db.query(
+    "SELECT student_ID, work_ID, company_name, job_title, job_type_ID, duration, skill_ID1, score1, skill_ID2, score2, skill_ID3, score3, skill_ID4, score4, skill_ID5, score5 FROM Work_experiences WHERE work_ID = ?",
+    [work_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentProfileUpdateWork.js
+app.post("/updateWorkExperience", (req, res) => {
+  const work_ID = req.body.work_ID;
+  const company_name = req.body.company_name;
+  const job_type_ID = req.body.job_type_ID;
+  const job_title = req.body.job_title;
+  const duration = req.body.duration;
+  const skill_ID1 = req.body.skill_ID1;
+  const skill_ID2 = req.body.skill_ID2;
+  const skill_ID3 = req.body.skill_ID3;
+  const skill_ID4 = req.body.skill_ID4;
+  const skill_ID5 = req.body.skill_ID5;
+  const score1 = req.body.score1;
+  const score2 = req.body.score2;
+  const score3 = req.body.score3;
+  const score4 = req.body.score4;
+  const score5 = req.body.score5;
+
+  db.query(
+    "UPDATE Work_experiences SET company_name = ?, job_type_ID = ?, job_title = ?, duration = ?, skill_ID1 = ?, skill_ID2 = ?, skill_ID3 = ?, skill_ID4 = ?, skill_ID5 = ?, score1 = ?, score2 = ?, score3 = ?, score4 = ?, score5 = ? WHERE work_ID = ? ",
+    [
+      company_name,
+      job_type_ID,
+      job_title,
+      duration,
+      skill_ID1,
+      skill_ID2,
+      skill_ID3,
+      skill_ID4,
+      skill_ID5,
+      score1,
+      score2,
+      score3,
+      score4,
+      score5,
+      work_ID,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
         res.send(result);
       }
     }
@@ -1296,11 +1863,92 @@ app.get("/getStudentWorkExperiences", (req, res) => {
 // Employer
 ///////////////////////////////////////////////////////////////////////////////
 
-//EmployerSurvey.js
-app.get("/getSkills", (req, res) => {
-  console.log(req.query.text);
+// EmployerMain.js
+app.get("/getEmployerPersonalInfo", (req, res) => {
+  const user_ID = req.query.user_ID;
+  const organization_ID = req.query.organization_ID;
+
   db.query(
-    "select skill_ID, skill_name, category from Skills",
+    `SELECT employer_ID, organization_name, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, email_address from Users, Employers emp, Organizations WHERE Organizations.organization_ID = Users.organization_ID AND Users.user_ID = emp.user_ID AND Users.User_ID = ? AND Users.organization_ID = ?`,
+    [user_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// EmployerProfileUpdatePersonal.js
+app.post("/getEmployerPersonalInfo1", (req, res) => {
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "SELECT gender, city, email_address, phone_no, first_name, last_name, first_name_chi, last_name_chi FROM Users, Employers WHERE Employers.user_ID = Users.user_ID AND Users.user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({
+          gender: result[0].gender,
+          city: result[0].city,
+          email_address: result[0].email_address,
+          phone_no: result[0].phone_no,
+          first_name: result[0].first_name,
+          last_name: result[0].last_name,
+          first_name_chi: result[0].first_name_chi,
+          last_name_chi: result[0].last_name_chi,
+        });
+      }
+    }
+  );
+});
+
+// EmployerProfileUpdatePersonal.js
+app.post("/updateEmployerPersonalInfo", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const gender = req.body.gender;
+  const city = req.body.city;
+  const email_address = req.body.email_address;
+  const phone_no = req.body.phone_no;
+  const first_name = req.body.first_name;
+  const last_name = req.body.last_name;
+  const first_name_chi = req.body.first_name_chi;
+  const last_name_chi = req.body.last_name_chi;
+
+  db.query(
+    "UPDATE Users SET gender = ?, city = ?, email_address = ?, phone_no = ?, first_name = ?, last_name = ?, first_name_chi = ?, last_name_chi = ? WHERE user_ID = ?",
+    [
+      gender,
+      city,
+      email_address,
+      phone_no,
+      first_name,
+      last_name,
+      first_name_chi,
+      last_name_chi,
+      user_ID,
+    ],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// AdminStuProfile.js, EmployerSearch.js
+app.post("/getEmployers", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+
+  db.query(
+    "SELECT employer_ID, Users.user_ID AS user_ID, first_name, last_name, first_name_chi, last_name_chi, email_address FROM Employers, Users WHERE Employers.user_ID = Users.user_ID AND organization_ID = ? ",
+    [organization_ID],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -1312,11 +1960,64 @@ app.get("/getSkills", (req, res) => {
   );
 });
 
-//EmployerSurvey.js
-app.get("/getJobTypes", (req, res) => {
-  console.log(req.query.text);
+// EmployerJob.js
+app.post("/getJobs", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const user_ID = req.body.user_ID;
+
   db.query(
-    "select job_type_ID, job_type_name from Job_types",
+    "SELECT offer_ID, job_title, job_type_name, job_description, skill_ID1, skill_ID2, skill_ID3, skill_ID4, skill_ID5, score1, score2, score3, score4, score5, skill_ID1 AS skill_name1, skill_ID2 AS skill_name2, skill_ID3 AS skill_name3, skill_ID4 AS skill_name4, skill_ID5 AS skill_name5 FROM Jobs, Employers, Job_types WHERE Job_types.job_type_ID = Jobs.job_type_ID AND Employers.employer_ID = Jobs.employer_ID AND user_ID = ? AND organization_ID = ?",
+    [user_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+// EmployerJobUpdate.js
+app.post("/getJobType1", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const user_ID = req.body.user_ID;
+  const offer_ID = req.body.offer_ID;
+
+  db.query(
+    "SELECT offer_ID, job_title, Jobs.job_type_ID AS job_type_ID, job_type_name, job_description, skill_ID1, skill_ID2, skill_ID3, skill_ID4, skill_ID5, score1, score2, score3, score4, score5, skill_ID1 AS skill_name1, skill_ID2 AS skill_name2, skill_ID3 AS skill_name3, skill_ID4 AS skill_name4, skill_ID5 AS skill_name5 FROM Jobs, Employers, Job_types WHERE Job_types.job_type_ID = Jobs.job_type_ID AND Employers.employer_ID = Jobs.employer_ID AND user_ID = ? AND organization_ID = ? AND offer_ID = ?",
+    [user_ID, organization_ID, offer_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+// EmployerJobUpdate.js
+app.post("/updateJobPosted", (req, res) => {
+  const offer_ID = req.body.offer_ID;
+  const job_description = req.body.job_description;
+  const job_type_ID = req.body.job_type_ID;
+  const job_title = req.body.job_title;
+  const skill_ID1 = req.body.skill_ID1;
+  const skill_ID2 = req.body.skill_ID2;
+  const skill_ID3 = req.body.skill_ID3;
+  const skill_ID4 = req.body.skill_ID4;
+  const skill_ID5 = req.body.skill_ID5;
+  const score1 = req.body.score1;
+  const score2 = req.body.score2;
+  const score3 = req.body.score3;
+  const score4 = req.body.score4;
+  const score5 = req.body.score5;
+  db.query(
+    "UPDATE Jobs SET job_description = ?, job_type_ID = ?, job_title = ?, skill_ID1 = ?, skill_ID2 = ?, skill_ID3 = ?, skill_ID4 = ?, skill_ID5 = ?, score1 = ?, score2 = ?, score3 = ?, score4 = ?, score5 = ? WHERE offer_ID = ? ",
+    [job_description, job_type_ID, job_title, skill_ID1, skill_ID2, skill_ID3, skill_ID4, skill_ID5, score1, score2, score3, score4, score5, offer_ID],
     (err, result) => {
       if (err) {
         console.log(err);

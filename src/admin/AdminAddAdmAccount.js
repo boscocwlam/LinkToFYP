@@ -236,7 +236,7 @@ const AdminAddAdmAccount = () => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="City"
+                    placeholder="Country / City"
                     name="city"
                   />
                 </div>

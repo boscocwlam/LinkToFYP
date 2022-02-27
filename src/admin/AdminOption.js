@@ -12,23 +12,22 @@ import AdminOptionYear from "./AdminOptionYear";
 // https://zh-hant.reactjs.org/docs/components-and-props.html
 // https://ithelp.ithome.com.tw/articles/10188245
 
-
 const AdminOption = () => {
   return (
-    <div className="App">
+    <div className="">
       <AdminNav />
       <Container>
         <Container>
-        <div className="mt-4"></div>
-          <h2 className="text188">Options</h2>
+          <div className="mt-4"></div>
+          <h2 className="title90 page7">Configurations</h2>
         </Container>
-      
-      <div className="mt-4"></div>
-      <AdminOptionSkill />
-      <div className="mt-4"></div>
-      <AdminOptionJobType />
-      <div className="mt-4"></div>
-      <AdminOptionYear />
+
+        <div className="mt-4"></div>
+        <AdminOptionSkill />
+        <div className="mt-4"></div>
+        <AdminOptionJobType />
+        <div className="mt-4"></div>
+        <AdminOptionYear />
       </Container>
     </div>
   );

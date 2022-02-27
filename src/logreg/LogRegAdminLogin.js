@@ -16,7 +16,7 @@ const LogRegAdminLogin = () => {
         email_address,
       })
       .then((response) => {
-        console.log(response.data.emailCount);
+        // console.log(response.data[0].emailCount);
         if (response.data[0].emailCount >= 1) {
           const email_address = event.target.email_address.value;
           localStorage.setItem("Email Address (Admin)", email_address);

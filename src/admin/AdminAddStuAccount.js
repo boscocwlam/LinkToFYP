@@ -21,9 +21,10 @@ const AdminAddStuAccount = () => {
         console.log(response.data);
       });
 
+    const organization_ID = localStorage.getItem("isOrganized");
     axios
-      .get("http://localhost:3001/getYears", {
-        params: { text: "local" },
+      .post("http://localhost:3001/getYears", {
+        organization_ID,
       })
       .then((response) => {
         setYearData(response.data);
@@ -47,7 +48,7 @@ const AdminAddStuAccount = () => {
     const cGPA = event.target.cGPA.value;
     const year_ID = event.target.year_ID.value;
     const organization_ID = localStorage.getItem("isOrganized");
-    const gender = event.target.student_ID.value;
+    const gender = event.target.gender.value;
     const city = event.target.city.value;
     const phone_no = event.target.phone_no.value;
     const email_address = event.target.email_address.value;
@@ -66,10 +67,10 @@ const AdminAddStuAccount = () => {
           axios
             .post("http://localhost:3001/checkStudentExists2", {
               email_address,
-              organization_ID
+              organization_ID,
             })
             .then((response2) => {
-              if ( response2.data.length >= 1 ) {
+              if (response2.data.length >= 1) {
                 setRegisterStatus(
                   "User Exists. Duplication of the fields `Email Address`"
                 );
@@ -263,7 +264,7 @@ const AdminAddStuAccount = () => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="City"
+                    placeholder="Country / City"
                     name="city"
                   />
                 </div>
@@ -304,12 +305,17 @@ const AdminAddStuAccount = () => {
                 </div>
               );
             })}
-
           </form>
         </Container>
       </div>
+    </div>
+  );
+};
 
-      {/* <div>
+export default AdminAddStuAccount;
+
+{
+  /* <div>
         <Container>
           <div className="mt-4"></div>
           <h3>Add Students' Account</h3>
@@ -395,9 +401,5 @@ const AdminAddStuAccount = () => {
             </Button>
           </Form>
         </Container>
-      </div> */}
-    </div>
-  );
-};
-
-export default AdminAddStuAccount;
+      </div> */
+}

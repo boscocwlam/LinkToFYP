@@ -48,6 +48,7 @@ const LogRegEmployerAddAccount2 = () => {
 
   let navigate = useNavigate();
   function handleClick() {
+    localStorage.removeItem("Email Address (Employer)");
     alert("Account Is Created. Please log in.");
     navigate("/logreg/login/employer");
   }
@@ -60,13 +61,6 @@ const LogRegEmployerAddAccount2 = () => {
     const employer_ID = event.target.employer_ID.value;
     const password = event.target.password.value;
 
-    var specialChar = false;
-
-    console.log(password)
-
-
-
-
     if (event.target.confirm_password.value == password) {
       setLoginStatus("");
       axios
@@ -76,7 +70,6 @@ const LogRegEmployerAddAccount2 = () => {
         })
         .then((response) => {
           console.log(response.data);
-          handleClick();
         });
 
       axios

@@ -93,7 +93,8 @@ export default function LogRegEmployerLogin2() {
                 organization_ID
             })
             .then((response) => {});
-            alert("Successful Connection. Please Log In.")
+            alert("Successful Connection. Please Log In.");
+            localStorage.removeItem("Email Address (Employer)");
           navigate("/logreg/login/employer");
         } else {
           setLoginStatus(response.data.message);
