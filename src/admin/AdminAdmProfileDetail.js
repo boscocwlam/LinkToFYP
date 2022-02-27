@@ -35,7 +35,7 @@ const AdminAdmProfileDetail = () => {
       <Container>
         <Container>
           <div className="mt-4"></div>
-          <h2 className="title90">Personal Profile</h2>
+          <h2 className="title90">Staff Profile</h2>
           <div className="mt-4"></div>
         </Container>
       </Container>

@@ -6,6 +6,7 @@ import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 const AdminEmpProfileDetail = () => {
@@ -27,13 +28,36 @@ const AdminEmpProfileDetail = () => {
       });
   }, []);
 
+  let navigate = useNavigate();
+  const submitForm = (event) => {
+    event.preventDefault();
+    if (window.confirm("Delete The Employer Profile?") == true) {
+      axios
+      .post("http://localhost:3001/deleteEmployerProfile", {
+        user_ID,
+      })
+      .then((response) => {
+
+      });
+      axios
+        .post("http://localhost:3001/deleteEmployerProfile2", {
+          user_ID,
+        })
+        .then((response) => {
+          console.log(response.data);
+          alert("Record Deleted.");
+          navigate("/admin/profile/employer");
+        });
+    }
+  };
+
   return (
     <div>
       <AdminNav />
       <Container>
         <Container>
           <div className="mt-4"></div>
-          <h2 className="title90">Personal Profile</h2>
+          <h2 className="title90">Employer Profile</h2>
           <div className="mt-4"></div>
         </Container>
       </Container>
@@ -46,59 +70,65 @@ const AdminEmpProfileDetail = () => {
               <h5>Personal Information</h5>
               <Dropdown.Divider />
               <div className="mt-4"></div>
-              <Table>
-                {employerData.map((item) => {
-                  return (
-                    <tbody>
-                      <tr>
-                        <td className="letter3">ENGLISH NAME</td>
-                        <td className="letter4">
-                          {item.first_name} {item.last_name}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="letter3">CHINESE NAME</td>
-                        <td className="letter4">
-                          {item.last_name_chi}
-                          {item.first_name_chi}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="letter3">EMPLOYER ID</td>
-                        <td className="letter4">{item.employer_ID}</td>
-                      </tr>
-                      <tr>
-                        <td className="letter3">GENDER</td>
-                        <td className="letter4">{item.gender}</td>
-                      </tr>
-                      <tr>
-                        <td className="letter3">COUNTRY / CITY</td>
-                        <td className="letter4">{item.city}</td>
-                      </tr>
-                      <tr>
-                        <td className="letter3">PHONE NUMBER</td>
-                        <td className="letter4">{item.phone_no}</td>
-                      </tr>
-                      <tr>
-                        <td className="letter3">EMAIL ADDRESS</td>
-                        <td className="letter4">{item.email_address}</td>
-                      </tr>
-                      <tr>
-                        <td className="letter3">ORGANIZATION / DEPARTMENT</td>
-                        <td className="letter4">{item.organization_name}</td>
-                      </tr>
-                      <div className="mt-3"></div>
-                    </tbody>
-                  );
-                })}
-              </Table>
+              <form onSubmit={submitForm}>
+                <Table>
+                  {employerData.map((item) => {
+                    return (
+                      <tbody>
+                        <tr>
+                          <td className="letter3">ENGLISH NAME</td>
+                          <td className="letter4">
+                            {item.first_name} {item.last_name}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="letter3">CHINESE NAME</td>
+                          <td className="letter4">
+                            {item.last_name_chi}
+                            {item.first_name_chi}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="letter3">EMPLOYER ID</td>
+                          <td className="letter4">{item.employer_ID}</td>
+                        </tr>
+                        <tr>
+                          <td className="letter3">GENDER</td>
+                          <td className="letter4">{item.gender}</td>
+                        </tr>
+                        <tr>
+                          <td className="letter3">COUNTRY / CITY</td>
+                          <td className="letter4">{item.city}</td>
+                        </tr>
+                        <tr>
+                          <td className="letter3">PHONE NUMBER</td>
+                          <td className="letter4">{item.phone_no}</td>
+                        </tr>
+                        <tr>
+                          <td className="letter3">EMAIL ADDRESS</td>
+                          <td className="letter4">{item.email_address}</td>
+                        </tr>
+                        <tr>
+                          <td className="letter3">ORGANIZATION / DEPARTMENT</td>
+                          <td className="letter4">{item.organization_name}</td>
+                        </tr>
+                        <div className="mt-3"></div>
+                      </tbody>
+                    );
+                  })}
+                </Table>
+
               <Link
                 className="btn btn-danger btn-block text1 center33"
                 to={"/admin/profile/employer/detail/update/personal/" + user_ID}
               >
                 Update Personal Information
               </Link>
-
+              &nbsp;&nbsp;&nbsp;
+              <button className="btn btn-warning input-group-addon text88">
+                Delete Profile
+              </button>
+              </form>
               <div className="mt-4"></div>
             </Container>
           </Container>
@@ -112,6 +142,7 @@ const AdminEmpProfileDetail = () => {
           >
             Return To Previous Page
           </Link>
+
           <div className="mt-4"></div>
         </div>
       </Container>

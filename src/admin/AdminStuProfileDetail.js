@@ -18,6 +18,7 @@ const AdminStuProfileDetail = () => {
   const [workData, setWorkData] = useState([]);
   const user_ID = useParams().id;
   const organization_ID = localStorage.getItem("isOrganized");
+  const [submitButton, setSubmitButton] = useState([]);
 
   useEffect(() => {
     axios
@@ -173,12 +174,47 @@ const AdminStuProfileDetail = () => {
   let navigate = useNavigate();
   const submitForm = (event) => {
     event.preventDefault();
-    navigate(
-      "/admin/profile/student/detail/update/work/" +
-        user_ID +
-        "/" +
-        event.target.work_ID.value
-    );
+    if (submitButton == "update") {
+      navigate(
+        "/admin/profile/student/detail/update/work/" +
+          user_ID +
+          "/" +
+          event.target.work_ID.value
+      );
+    } else if (submitButton == "delete") {
+      if (window.confirm("Delete Work Experience?") == true) {
+        const work_ID = event.target.work_ID.value;
+        axios
+          .post("http://localhost:3001/deleteWorkExperience", {
+            work_ID,
+          })
+          .then((response) => {
+            // console.log(response.data);
+            alert("Record Deleted.");
+            window.location.reload(false);
+          });
+      }
+    }
+  };
+
+  const submitForm2 = (event) => {
+    event.preventDefault();
+    if (window.confirm("Delete Profile?") == true) {
+      axios
+        .post("http://localhost:3001/deleteStudentProfile", {
+          user_ID,
+        })
+        .then((response) => {});
+      axios
+        .post("http://localhost:3001/deleteStudentProfile2", {
+          user_ID,
+        })
+        .then((response) => {
+          // console.log(response.data);
+          alert("Record Deleted.");
+          navigate("/admin/profile/student");
+        });
+    }
   };
 
   return (
@@ -187,7 +223,7 @@ const AdminStuProfileDetail = () => {
       <Container>
         <Container>
           <div className="mt-4"></div>
-          <h2 className="title90">Personal Profile</h2>
+          <h2 className="title90">Student Profile</h2>
           <div className="mt-4"></div>
         </Container>
       </Container>
@@ -402,8 +438,18 @@ const AdminStuProfileDetail = () => {
                     </div>
                   </div>
                   <div className="mt-3"></div>
-                  <button className="btn btn-danger input-group-addon text88">
+                  <button
+                    className="btn btn-danger input-group-addon text88"
+                    onClick={(e) => setSubmitButton("update")}
+                  >
                     Update Work Experience
+                  </button>
+                  &nbsp;&nbsp;&nbsp;
+                  <button
+                    className="btn btn-warning input-group-addon text88"
+                    onClick={(e) => setSubmitButton("delete")}
+                  >
+                    Delete Work Experience
                   </button>
                 </div>
               </form>
@@ -414,8 +460,17 @@ const AdminStuProfileDetail = () => {
         </div>
         <div className="mt-4"></div>
 
+        <form onSubmit={submitForm2}>
+          {/* <Dropdown.Divider /> */}
+          <button className="btn btn-warning input-group-addon text88">
+            Delete Student Profile
+          </button>
+          &nbsp;&nbsp;&nbsp;
+          <div className="mt-4"></div>
+        </form>
+
         <div className="boundary88">
-          <Dropdown.Divider />
+        <Dropdown.Divider />
           <Link
             className="btn btn-primary btn-block text1 center33"
             to={"/admin/profile/student"}

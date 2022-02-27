@@ -1591,6 +1591,50 @@ app.post("/updatePersonalFYP1", (req, res) => {
   );
 });
 
+//AdminStuProfileDetail.js
+app.post("/deleteStudentProfile", (req, res) => {
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "DELETE FROM Students WHERE user_ID = ? ",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminStuProfileDetail.js
+app.post("/deleteStudentProfile2", (req, res) => {
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "DELETE FROM Users WHERE user_ID = ? ",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+
+
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1857,6 +1901,68 @@ app.post("/updateWorkExperience", (req, res) => {
   );
 });
 
+//StudentMain.js
+app.post("/deleteWorkExperience", (req, res) => {
+  const work_ID = req.body.work_ID;
+
+  db.query(
+    "DELETE FROM work_experiences WHERE work_ID = ? ",
+    [work_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentMain.js
+app.post("/deleteEmployerProfile", (req, res) => {
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "DELETE FROM Employers WHERE user_ID = ? ",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentMain.js
+app.post("/deleteEmployerProfile2", (req, res) => {
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "DELETE FROM Users WHERE user_ID = ? ",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+
+
+
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2028,6 +2134,29 @@ app.post("/updateJobPosted", (req, res) => {
     }
   );
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

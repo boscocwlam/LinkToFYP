@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./StudentCSSfile.css";
 import { useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 const StudentMain = () => {
   const [studentData, setStudentData] = useState([]);
@@ -17,6 +18,7 @@ const StudentMain = () => {
   const [workData, setWorkData] = useState([]);
   const user_ID = localStorage.getItem("isAuthenitcated");
   const organization_ID = localStorage.getItem("isOrganized");
+  const [submitButton, setSubmitButton] = useState([]);
 
   useEffect(() => {
     axios
@@ -48,9 +50,7 @@ const StudentMain = () => {
               response2.data.map((item2) => {
                 if (item.fyp_skill_name1 == item2.skill_ID) {
                   item.fyp_skill_name1 = item2.skill_name;
-                  if (
-                    item.fyp_score1 == null
-                  ) {
+                  if (item.fyp_score1 == null) {
                     item.fyp_score1 = "";
                   } else if (item.fyp_score1) {
                     item.fyp_score1 = "(" + item.fyp_score1 + ") ";
@@ -58,9 +58,7 @@ const StudentMain = () => {
                 }
                 if (item.fyp_skill_name2 == item2.skill_ID) {
                   item.fyp_skill_name2 = item2.skill_name;
-                  if (
-                    item.fyp_score2 == null
-                  ) {
+                  if (item.fyp_score2 == null) {
                     item.fyp_score2 = "";
                   } else if (item.fyp_score2) {
                     item.fyp_score2 = "(" + item.fyp_score2 + ") ";
@@ -68,9 +66,7 @@ const StudentMain = () => {
                 }
                 if (item.fyp_skill_name3 == item2.skill_ID) {
                   item.fyp_skill_name3 = item2.skill_name;
-                  if (
-                    item.fyp_score3 == null
-                  ) {
+                  if (item.fyp_score3 == null) {
                     item.fyp_score3 = "";
                   } else if (item.fyp_score3) {
                     item.fyp_score3 = "(" + item.fyp_score3 + ") ";
@@ -78,9 +74,7 @@ const StudentMain = () => {
                 }
                 if (item.fyp_skill_name4 == item2.skill_ID) {
                   item.fyp_skill_name4 = item2.skill_name;
-                  if (
-                    item.fyp_score4 == null
-                  ) {
+                  if (item.fyp_score4 == null) {
                     item.fyp_score4 = "";
                   } else if (item.fyp_score4) {
                     item.fyp_score4 = "(" + item.fyp_score4 + ") ";
@@ -88,9 +82,7 @@ const StudentMain = () => {
                 }
                 if (item.fyp_skill_name5 == item2.skill_ID) {
                   item.fyp_skill_name5 = item2.skill_name;
-                  if (
-                    item.fyp_score5 == null
-                  ) {
+                  if (item.fyp_score5 == null) {
                     item.fyp_score5 = "";
                   } else if (item.fyp_score5) {
                     item.fyp_score5 = "(" + item.fyp_score5 + ") ";
@@ -133,9 +125,7 @@ const StudentMain = () => {
               response2.data.map((item2) => {
                 if (item.skill_name1 == item2.skill_ID) {
                   item.skill_name1 = item2.skill_name;
-                  if (
-                    item.score1 == null
-                  ) {
+                  if (item.score1 == null) {
                     item.score1 = "";
                   } else if (item.score1) {
                     item.score1 = "(" + item.score1 + ") ";
@@ -143,9 +133,7 @@ const StudentMain = () => {
                 }
                 if (item.skill_name2 == item2.skill_ID) {
                   item.skill_name2 = item2.skill_name;
-                  if (
-                    item.score2 == null
-                  ) {
+                  if (item.score2 == null) {
                     item.score2 = "";
                   } else if (item.score2) {
                     item.score2 = "(" + item.score2 + ") ";
@@ -153,9 +141,7 @@ const StudentMain = () => {
                 }
                 if (item.skill_name3 == item2.skill_ID) {
                   item.skill_name3 = item2.skill_name;
-                  if (
-                    item.score3 == null
-                  ) {
+                  if (item.score3 == null) {
                     item.score3 = "";
                   } else if (item.score3) {
                     item.score3 = "(" + item.score3 + ") ";
@@ -163,9 +149,7 @@ const StudentMain = () => {
                 }
                 if (item.skill_name4 == item2.skill_ID) {
                   item.skill_name4 = item2.skill_name;
-                  if (
-                    item.score4 == null
-                  ) {
+                  if (item.score4 == null) {
                     item.score4 = "";
                   } else if (item.score4) {
                     item.score4 = "(" + item.score4 + ") ";
@@ -173,9 +157,7 @@ const StudentMain = () => {
                 }
                 if (item.skill_name5 == item2.skill_ID) {
                   item.skill_name5 = item2.skill_name;
-                  if (
-                    item.score5 == null
-                  ) {
+                  if (item.score5 == null) {
                     item.score5 = "";
                   } else if (item.score5) {
                     item.score5 = "(" + item.score5 + ") ";
@@ -189,10 +171,29 @@ const StudentMain = () => {
       });
   }, []);
 
+
+ 
+
   let navigate = useNavigate();
   const submitForm = (event) => {
     event.preventDefault();
-    navigate("/student/profile/self/update/work/" + event.target.work_ID.value);
+    if (submitButton == "update") {
+      navigate("/student/profile/self/update/work/" + event.target.work_ID.value);
+    } else if (submitButton == "delete") {
+      if (window.confirm("Confrim To Delete The Work Experience?") == true) {
+      const work_ID = event.target.work_ID.value;
+      axios
+        .post("http://localhost:3001/deleteWorkExperience", {
+          work_ID
+        })
+        .then((response) => {
+          // console.log(response.data);
+          alert("Record Deleted.");
+          window.location.reload(false);
+
+        });
+      }
+    }
   };
 
   return (
@@ -375,11 +376,16 @@ const StudentMain = () => {
                       <tr>
                         <td className="letter3">SKILLS</td>
                         <td className="letter4">
-                          {item.skill_name1}{item.score1}
-                          {item.skill_name2}{item.score2}
-                          {item.skill_name3}{item.score3}
-                          {item.skill_name4}{item.score4}
-                          {item.skill_name5}{item.score5}
+                          {item.skill_name1}
+                          {item.score1}
+                          {item.skill_name2}
+                          {item.score2}
+                          {item.skill_name3}
+                          {item.score3}
+                          {item.skill_name4}
+                          {item.score4}
+                          {item.skill_name5}
+                          {item.score5}
                         </td>
                       </tr>
                       <div className="mt-3"></div>
@@ -391,7 +397,9 @@ const StudentMain = () => {
               <form onSubmit={submitForm}>
                 <div>
                   <div className="mt-2"></div>
-                  <h6 className="letter4">Choose Work Experience To Update:</h6>
+                  <h6 className="letter4">
+                    Information For Work Experience (Choose From The Dropbox):
+                  </h6>
                   <div className="form-group text1">
                     <div class="select">
                       <select
@@ -411,8 +419,18 @@ const StudentMain = () => {
                     </div>
                   </div>
                   <div className="mt-3"></div>
-                  <button className="btn btn-danger input-group-addon text88">
+                  <button
+                    className="btn btn-danger input-group-addon text88"
+                    onClick={(e) => setSubmitButton("update")}
+                  >
                     Update Work Experience
+                  </button>
+                  &nbsp;&nbsp;&nbsp;
+                  <button
+                    className="btn btn-warning input-group-addon text88"
+                    onClick={(e) => setSubmitButton("delete")}
+                  >
+                    Delete Work Experience
                   </button>
                 </div>
               </form>
@@ -421,7 +439,6 @@ const StudentMain = () => {
             </Container>
           </Container>
         </div>
-
       </Container>
     </div>
   );
