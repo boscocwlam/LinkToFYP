@@ -66,6 +66,7 @@ Student_ID int,
 User_ID int,
 Year_ID int,
 cGPA numeric(3,2),
+hasJob varchar(255),
 FYP_name varchar(255),
 FYP_final_grade varchar(255),
 FYP_background varchar(8000),
@@ -157,7 +158,7 @@ create table Students_Employers (
 Application_ID int,
 Student_ID int NOT NULL,
 Employer_ID int NOT NULL,
-Order_ID int NOT NULL,
+Offer_ID int NOT NULL,
 PRIMARY KEY (Application_ID),
 FOREIGN KEY (Student_ID) REFERENCES Students (Student_ID),
 FOREIGN KEY (Employer_ID) REFERENCES Employers (Employer_ID),
@@ -167,6 +168,9 @@ FOREIGN KEY (Order_ID) REFERENCES Jobs (Order_ID)
 create table Status (
 Status_ID int,
 Status_name varchar(255) NOT NULL,
+Status_description varchar(255) NOT NULL,
+Status_order int NOT NULL,
+Organization_ID int NOT NULL,
 PRIMARY KEY (Status_ID)
 );
 
@@ -188,27 +192,62 @@ FOREIGN KEY (Status_ID) REFERENCES Status (Status_ID)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// Default Data
+// Default Data (Setting Up For First ID)
 
-INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1099999998, 1000, "Default", "Default", "Default", "Default", "Male", "Default", "Default", "default.com", "Default0", "Admin");
+// Organization_ID: 4  digits; "1XXX"            // Organizations
+// Skill_ID       : 5  digits; "2XXXX"           // Skills
+// Job_type_ID    : 5  digits; "3XXXX"           // Job_types
+// Year_ID        : 3  digits: "700"             // Years
+// User_ID        : 10 digits: "11XXXXXXXX"      // Users
+// Staff_ID       : 7  digits; "21XXXXX"         // Staffs
+// Student_ID     : 7  digits; "18XXXXX"         // Students
+// Employer_ID    : 7  digits; "252XXXX"         // Employers
+// Status_ID      : 2  digits; "2X"              // Status
+// Work_ID        : 6  digits; "8XXXXX"          // Work_experiences
+// Application_ID : 8  digits; "501XXXXX"        // Students_employers
+// Record_ID      : 9  digits: "4XXXXXXXX"       // StatusRecords
+// Offer_ID       : 6  digits: "1XXXXX"          // Jobs
 
-INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1099999999, 1000, "Default1", "Default1", "Default1", "Default1", "Male", "Default1", "Default1", "default1.com", "Default1", "Student");
+INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1000, "LinkToFYP Administration Section");
 
-INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000000, 1000, "Default2", "Default2", "Default2", "Default2", "Male", "Default2", "Default2", "default2.com", "Default2", "Employer");
+INSERT INTO Skills (Skill_ID, Organization_ID, Skill_name, Category) VALUES (20000, 1000, "Communication", "ReadyInUse");
 
-INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1000, "University_default");
+INSERT INTO Job_types (Job_type_ID, Organization_ID, Job_type_name, Category) VALUES (30000, 1000, "Marketing", "ReadyInUse");
+
+INSERT INTO Years (Year_ID, Organization_ID, Year_name, Category) VALUES (700, 1000, "2022-2023", "ReadyInUse");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1099999998, 1000, "Default", "Default", "Default", "Default", "Male", "Default", "Default", "default@gmail.com", "Default0", "Admin");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1099999999, 1000, "Default1", "Default1", "Default1", "Default1", "Male", "Default1", "Default1", "default@gmail.com", "Default1", "Student");
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000000, 1000, "Default2", "Default2", "Default2", "Default2", "Male", "Default2", "Default2", "default@gmail.com", "Default2", "Employer");
 
 INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100000, 1099999998);
-
+ 
 INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, FYP_name, FYP_final_grade, FYP_background, FYP_link) VALUES (1800000, 1099999999, 701, 1.00, "FYP_name_default", "A", "FYP_background_default", "FYP_link_default");
-
+ 
 INSERT INTO Employers (Employer_ID, User_ID, Company_name) VALUES (25200000, 1100000000, 'Company_default');
+
+INSERT INTO Status (Status_ID, Status_name) VALUES (17, 'Default_Status'); 
+
+Insert INTO Work_experiences (Work_ID, Student_ID, Job_type_ID, Company_name, Job_title, Duration, Skill_ID1, Score1) VALUES (800000, 1800000, 30000, "HKT", "Web Development Intern", "6 months", 20005, 4);
+
+INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Offer_ID) VALUES (50100000, 25200000, 1800000, 100000);
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100100, 50100000, 18, '2020-02-03 08:18:15');
+
+INSERT INTO Jobs (Offer_ID, Employer_ID, Job_type_ID, Job_title, Job_description, Skill_ID1, Score1) VALUES (100000, 25200000, 30000, "Default Job", "Default Job Description", 20000, 10);
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Insert Organizations records
+
+INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1000, "LinkToFYP Administration Section");
 
 INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1001, "Department of Computer Science, Hong Kong Baptist Univeristy");
 
@@ -221,6 +260,8 @@ INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1004, "De
 
 
 // Insert Skills records
+
+INSERT INTO Skills (Skill_ID, Organization_ID, Skill_name, Category) VALUES (20000, 1000, "Communication", "ReadyInUse");
 
 INSERT INTO Skills (Skill_ID, Organization_ID, Skill_name, Category) VALUES (20001, 1001, "JavaScript", "ReadyInUse");
 
@@ -236,6 +277,8 @@ INSERT INTO Skills (Skill_ID, Organization_ID, Skill_name, Category) VALUES (200
 
 // Insert Job Types records
 
+INSERT INTO Job_types (Job_type_ID, Organization_ID, Job_type_name, Category) VALUES (30000, 1000, "Marketing", "ReadyInUse");
+
 INSERT INTO Job_types (Job_type_ID, Organization_ID, Job_type_name, Category) VALUES (30001, 1001, "Web Development", "NotInUse");
 
 INSERT INTO Job_types (Job_type_ID, Organization_ID, Job_type_name, Category) VALUES (30002, 1001, "Full Stack Developer", "NotInUse");
@@ -248,6 +291,8 @@ INSERT INTO Job_types (Job_type_ID, Organization_ID, Job_type_name, Category) VA
 
 
 // Insert Years records
+
+INSERT INTO Years (Year_ID, Organization_ID, Year_name, Category) VALUES (700, 1000, "2022-2023", "ReadyInUse");
 
 INSERT INTO Years (Year_ID, Organization_ID, Year_name, Category) VALUES (701, 1001, "2018-2019", "ReadyInUse");
 
@@ -266,6 +311,8 @@ INSERT INTO Years (Year_ID, Organization_ID, Year_name, Category) VALUES (705, 1
 
 // Staffs (Users)
 
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1099999998, 1000, "Default", "Default", "Default", "Default", "Male", "Default", "Default", "default@gmail.com", "Default0", "Admin");
+
 INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000001, 1001, "Hong Wai", "Fung", "雄偉", "馮", "Male", "Hong Kong", "+852 50000021", "hongwai@gmail.com", "Pw25200001", "Admin");
 
 INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000002, 1001, "Wai Yan", "Yeung", "慧欣", "楊", "Female", "Hong Kong", "+852 50000022", "waiyan@gmail.com", "Pw25200002", "Admin");
@@ -276,6 +323,9 @@ INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_c
 
 //Students (Users)
 
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1099999999, 1000, "Default1", "Default1", "Default1", "Default1", "Male", "Default1", "Default1", "default@gmail.com", "Default1", "Student");
+
 INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000005, 1001, "Tai Man", "Chan", "大文", "陳", "Male", "Hong Kong", "+852 50000001", "taiman@gmail.com", "Pw1800001", "Student");
 
 INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000006, 1001,  "Siu Man", "Wong", "小文", "黃", "Male", "Hong Kong", "+852 50000002", "siuman@gmail.com", "Pw1800002", "Student");
@@ -285,6 +335,8 @@ INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_c
 INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000008, 1002, "Wing Yan", "Wong", "穎欣", "王", "Female", "Hong Kong", "+852 50000004", "wingyan@gmail.com", "Pw1800004", "Student");
 
 // Employers  (Users)
+
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000000, 1000, "Default2", "Default2", "Default2", "Default2", "Male", "Default2", "Default2", "default@gmail.com", "Default2", "Employer");
 
 INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000009, 1001, "Hong Yan", "Chan", "浩欣", "陳", "Female", "Hong Kong", "+852 50000011", "hongyan@gmail.com", "Pw25200001", "Employer");
 
@@ -298,6 +350,8 @@ INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_c
 
 // Insert Staffs records
 
+INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100000, 1099999998);
+
 INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100001, 1100000001);
 
 INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100002, 1100000002);
@@ -310,17 +364,21 @@ INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100004, 1100000004);
 
 // Insert Students records without "FYP_photo" & "FYP_document"
 
-INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3) VALUES (1800001, 1100000005, 701, 1.20, "FYP_name_1", "A-", "FYP_background_1", "FYP_link_1", 20001, 9, 20003, 10, 20004, 4);
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, FYP_name, FYP_final_grade, FYP_background, FYP_link) VALUES (1800000, 1099999999, 701, 1.00, "Yes", "FYP_name_default", "A", "FYP_background_default", "FYP_link_default");
 
-INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2) VALUES (1800002, 1100000006, 702, 2.54, "FYP_name_2", "A", "FYP_background_2", "FYP_link_2", 20001, 5, 20004, 7);
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3) VALUES (1800001, 1100000005, 701, 1.20, "Yes", "FYP_name_1", "A-", "FYP_background_1", "FYP_link_1", 20001, 9, 20003, 10, 20004, 4);
 
-INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2) VALUES (1800003, 1100000007, 702, 3.34, "FYP_name_3", "B+", "FYP_background_3", "FYP_link_3", 20003, 8, 20004, 10);
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2) VALUES (1800002, 1100000006, 702, 2.54, "Yes", "FYP_name_2", "A", "FYP_background_2", "FYP_link_2", 20001, 5, 20004, 7);
 
-INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1) VALUES (1800004, 1100000008, 704, 2.95, "FYP_name_4", "B-", "FYP_background_4", "FYP_link_4", 20005, 9);
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2) VALUES (1800003, 1100000007, 702, 3.34, "Yes", "FYP_name_3", "B+", "FYP_background_3", "FYP_link_3", 20003, 8, 20004, 10);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1) VALUES (1800004, 1100000008, 704, 2.95, "FYP_name_4", "B-", "Yes", "FYP_background_4", "FYP_link_4", 20005, 9);
 
 
 
 // Insert Employers records
+
+INSERT INTO Employers (Employer_ID, User_ID, Company_name) VALUES (25200000, 1100000000, 'Company_default');
 
 INSERT INTO Employers (Employer_ID, User_ID, Company_name) VALUES (25200001, 1100000009, 'Company A');
 
@@ -333,20 +391,19 @@ INSERT INTO Employers (Employer_ID, User_ID, Company_name) VALUES (25200004, 110
 
 // Insert Status records
 
-INSERT INTO Status (Status_ID, Status_name) VALUES (18, 'Job Found');
+INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (19, 'Default_Status', 'Default_Description', -5, 1000); 
 
-INSERT INTO Status (Status_ID, Status_name) VALUES (19, 'Withdraw');
+INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (20, 'Applied', 'You have sent a hiring request to the organization/department. The organization/department will start to follow up in the latest stage.', 0, 1001);
 
-INSERT INTO Status (Status_ID, Status_name) VALUES (20, 'Available');
+INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (21, 'In Progress', 'The organization/department starts to follow up your request. Please wait for the response from the organization/department.', 1, 1001);
 
-INSERT INTO Status (Status_ID, Status_name) VALUES (21, 'Applied');
+INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (22, 'Process Completed', 'The hiring process is completed. It is expected that the request should not be withdrawn.', 2, 1001);
 
-INSERT INTO Status (Status_ID, Status_name) VALUES (22, 'Processing');
-
-INSERT INTO Status (Status_ID, Status_name) VALUES (23, 'Matched');
-
+INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (23, 'Withdraw', 'The hiring process is withdrawn.', 12, 1001); 
 
 // Insert Work_experiences records
+
+Insert INTO Work_experiences (Work_ID, Student_ID, Job_type_ID, Company_name, Job_title, Duration, Skill_ID1, Score1) VALUES (800000, 1800000, 30000, "HKT", "Web Development Intern", "6 months", 20005, 4);
 
 Insert INTO Work_experiences (Work_ID, Student_ID, Job_type_ID, Company_name, Job_title, Duration, Skill_ID1, Score1, Skill_ID2, Score2) VALUES (800001, 1800001, 30002, "Google", "Software Engineering Intern", "8 weeks", 20001, 8, 20003, 6);
 
@@ -360,30 +417,37 @@ Insert INTO Work_experiences (Work_ID, Student_ID, Job_type_ID, Company_name, Jo
 
 // Insert Students_Employers records
 
-INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Order_ID) VALUES (50100001, 25200001, 1800002, 100001);
+INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Offer_ID) VALUES (50100000, 25200000, 1800000, 100000);
 
-INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Order_ID) VALUES (50100002, 25200002, 1800003, 100003);
+INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Offer_ID) VALUES (50100001, 25200001, 1800002, 100001);
 
-INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Order_ID) VALUES (50100003, 25200001, 1800001, 100002);
+INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Offer_ID) VALUES (50100002, 25200002, 1800003, 100003);
 
-INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Order_ID) VALUES (50100004, 25200003, 1800002, 100004);
+INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Offer_ID) VALUES (50100003, 25200001, 1800001, 100002);
 
+INSERT INTO Students_Employers (Application_ID, Employer_ID, Student_ID, Offer_ID) VALUES (50100004, 25200003, 1800002, 100004);
 
 
 // Insert StatusRecords records
 
-INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100100, 50100001, 21, '2019-10-31 17:10:06');
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100100, 50100000, 18, '2020-02-03 08:18:15');
 
-INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100101, 50100002, 21, '2019-10-15 18:19:18');
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100101, 50100001, 20, '2019-10-31 17:10:06');
 
-INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100102, 50100001, 22, '2019-11-03 20:20:20');
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100102, 50100002, 20, '2019-10-15 18:19:18');
 
-INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100103, 50100001, 23, '2019-11-07 08:09:09');
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100103, 50100001, 21, '2019-11-03 20:20:20');
 
-INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100104, 50100003, 21, '2020-02-07 03:15:15');
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100104, 50100001, 22, '2019-11-07 08:09:09');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100105, 50100003, 20, '2020-02-07 03:15:15');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100106, 50100004, 20, '2020-02-03 08:18:15');
 
 
 // Insert Jobs records
+
+INSERT INTO Jobs (Offer_ID, Employer_ID, Job_type_ID, Job_title, Job_description, Skill_ID1, Score1) VALUES (100000, 25200000, 30000, "Default Job", "Default Job Description", 20000, 10);
 
 INSERT INTO Jobs (Offer_ID, Employer_ID, Job_type_ID, Job_title, Job_description, Skill_ID1, Score1, Skill_ID2, Score2, Skill_ID3, Score3) VALUES (100001, 25200001, 30001, "Web Development Programmer (Urgent)", 
 "Web Developer Responsibilities: - Website and software application designing, building, or maintaining.",
@@ -406,79 +470,198 @@ INSERT INTO Jobs (Offer_ID, Employer_ID, Job_type_ID, Job_title, Job_description
 // Complicated SQL Queries Draft
 ////////////////////////////////////////////////////////////////////
 
-
 // AdminMain.js
 // Extract Application Records with the MOST UPDATED status 
+// (WITH APPLY DATE: Date of "Apply" Status)
 // (descending Application_ID & date)
 
-
-select 
-staR.Application_ID AS Application_ID,
-stuEmp.Employer_ID AS Employer_ID,
-stuEmp.Student_ID AS Student_ID,
-sta.Status_name AS Status_name,
-sta.Status_ID AS Status_ID,
-staR.Status_change_date AS Status_change_date,
-use1.First_name AS Stu_first_name,
-use1.Last_name AS Stu_last_name,
-use2.First_name AS Emp_first_name,
-use2.Last_name AS Emp_last_name
-from 
-Students_Employers stuEmp,
-Students stu,
-Employers emp, 
-statusrecords staR, 
-status sta,
-Users use1,
+SELECT 
+yy.Status_change_date AS apply_date,
+temp.Application_ID AS application_ID,
+temp.Employer_ID AS employer_ID,
+temp.Student_ID AS student_ID,
+temp.Status_name AS status_name,
+temp.Status_ID AS status_ID,
+temp.Status_change_date AS status_change_date,
+temp.stu_first_name AS stu_first_name,
+temp.stu_last_name AS stu_last_name,
+temp.emp_first_name AS emp_first_name,
+temp.emp_last_name AS emp_last_name,
+temp.offer_ID AS offer_ID,
+temp.job_title AS job_title  
+FROM 
+statusrecords yy, 
+(SELECT 
+staR.Application_ID AS application_ID,
+stuEmp.Employer_ID AS employer_ID,
+stuEmp.Student_ID AS student_ID,
+sta.Status_name AS status_name,
+sta.Status_ID AS status_ID,
+staR.Status_change_date AS status_change_date,
+use1.First_name AS stu_first_name,
+use1.Last_name AS stu_last_name,
+use2.First_name AS emp_first_name,
+use2.Last_name AS emp_last_name,
+job.offer_ID AS offer_ID,
+job.job_title AS job_title  
+FROM 
+Students_Employers stuEmp INNER JOIN
+Students stu INNER JOIN
+Employers emp INNER JOIN
+statusrecords staR INNER JOIN
+status sta INNER JOIN
+Jobs job INNER JOIN  
+Users use1 INNER JOIN
 Users use2
-where 
+ON 
 use1.User_ID=stu.User_ID AND
 use2.User_ID=emp.User_ID AND
 stu.Student_ID=stuEmp.Student_ID AND 
 emp.Employer_ID=stuEmp.Employer_ID AND
 stuEmp.Application_ID=staR.Application_ID AND
-staR.status_ID = sta.status_ID
+staR.status_ID = sta.status_ID AND 
+stuEmp.offer_ID = job.offer_ID AND 
+use2.Organization_ID = 1001 AND
+use1.Organization_ID = 1001 
 AND NOT EXISTS (
-select * from 
+SELECT * FROM 
 statusrecords star2, 
 status sta2 
-where 
+WHERE 
+staR2.status_ID = sta2.status_ID AND 
+sta2.status_order > sta.status_order AND 
+staR.Application_ID = staR2.Application_ID
+)) temp
+WHERE 
+temp.application_ID = yy.application_ID AND
+yy.status_ID = 20
+ORDER BY 
+temp.Status_change_date DESC
+;
+
+
+
+// Extract Application Records with the MOST UPDATED status 
+// (descending Application_ID & date)
+
+SELECT 
+staR.Application_ID AS application_ID,
+stuEmp.Employer_ID AS employer_ID,
+stuEmp.Student_ID AS student_ID,
+sta.Status_name AS status_name,
+sta.Status_ID AS status_ID,
+staR.Status_change_date AS status_change_date,
+use1.First_name AS stu_first_name,
+use1.Last_name AS stu_last_name,
+use2.First_name AS emp_first_name,
+use2.Last_name AS emp_last_name,
+job.offer_ID AS offer_ID,
+job.job_title AS job_title 
+FROM 
+Students_Employers stuEmp INNER JOIN
+Students stu INNER JOIN
+Employers emp INNER JOIN
+statusrecords staR INNER JOIN
+status sta INNER JOIN
+Jobs job INNER JOIN  
+Users use1 INNER JOIN
+Users use2
+ON 
+use1.User_ID=stu.User_ID AND
+use2.User_ID=emp.User_ID AND
+stu.Student_ID=stuEmp.Student_ID AND 
+emp.Employer_ID=stuEmp.Employer_ID AND
+stuEmp.Application_ID=staR.Application_ID AND
+staR.status_ID = sta.status_ID AND 
+stuEmp.offer_ID = job.offer_ID AND 
+use2.Organization_ID = 1001 AND
+use1.Organization_ID = 1001 
+AND NOT EXISTS (
+SELECT * FROM 
+statusrecords star2, 
+status sta2 
+WHERE 
 staR2.status_ID = sta2.status_ID AND 
 staR2.status_ID > sta.status_ID AND 
 staR.Application_ID = staR2.Application_ID
 )
-order by
+ORDER BY 
 staR.Status_change_date DESC;
-
-
 
 
 //Extract Application Records of all history (ALL STATUS CHANGE)
 //(all status stated of an application with the record of time change)
 // (descending Application_ID & date)
 
-select
-staR.Application_ID AS Application_ID,
-stuEmp.Employer_ID AS Employer_ID,
-emp.First_name AS Emp_first_name,
-emp.Last_name AS Emp_last_name, 
-stuEmp.Student_ID AS Student_ID,
-stu.First_name AS Stu_first_name,
-stu.Last_name AS Stu_last_name,
-sta.Status_name AS Status_name,
-staR.Status_change_date AS Status_change_date 
-from
+SELECT 
+staR.Application_ID AS application_ID,
+stuEmp.Employer_ID AS employer_ID,
+stuEmp.Student_ID AS student_ID,
+sta.Status_name AS status_name,
+sta.Status_ID AS status_ID,
+staR.Status_change_date AS status_change_date,
+use1.First_name AS stu_first_name,
+use1.Last_name AS stu_last_name,
+use2.First_name AS emp_first_name,
+use2.Last_name AS emp_last_name,
+job.offer_ID AS offer_ID,
+job.job_title AS job_title 
+FROM 
 Students_Employers stuEmp INNER JOIN
-Students stu INNER JOIN 
-Employers emp INNER JOIN 
-StatusRecords staR INNER JOIN
-Status sta
-ON
+Students stu INNER JOIN
+Employers emp INNER JOIN
+statusrecords staR INNER JOIN
+status sta INNER JOIN
+Jobs job INNER JOIN  
+Users use1 INNER JOIN
+Users use2
+ON 
+use1.User_ID=stu.User_ID AND
+use2.User_ID=emp.User_ID AND
 stu.Student_ID=stuEmp.Student_ID AND 
 emp.Employer_ID=stuEmp.Employer_ID AND
 stuEmp.Application_ID=staR.Application_ID AND
-staR.Status_ID=sta.Status_ID
-order by
+staR.status_ID = sta.status_ID AND 
+stuEmp.offer_ID = job.offer_ID AND 
+use2.Organization_ID = 1001 AND
+use1.Organization_ID = 1001 
+ORDER BY 
+staR.Status_change_date DESC;
+
+
+SELECT 
+staR.Application_ID AS application_ID,
+stuEmp.Employer_ID AS employer_ID,
+stuEmp.Student_ID AS student_ID,
+sta.Status_name AS status_name,
+sta.Status_ID AS status_ID,
+staR.Status_change_date AS status_change_date,
+use1.First_name AS stu_first_name,
+use1.Last_name AS stu_last_name,
+use2.First_name AS emp_first_name,
+use2.Last_name AS emp_last_name,
+job.offer_ID AS offer_ID,
+job.job_title AS job_title 
+FROM 
+Students_Employers stuEmp INNER JOIN
+Students stu INNER JOIN
+Employers emp INNER JOIN
+statusrecords staR INNER JOIN
+status sta INNER JOIN
+Jobs job INNER JOIN  
+Users use1 INNER JOIN
+Users use2
+ON 
+use1.User_ID=stu.User_ID AND
+use2.User_ID=emp.User_ID AND
+stu.Student_ID=stuEmp.Student_ID AND 
+emp.Employer_ID=stuEmp.Employer_ID AND
+stuEmp.Application_ID=staR.Application_ID AND
+staR.status_ID = sta.status_ID AND 
+stuEmp.offer_ID = job.offer_ID AND 
+use2.Organization_ID = 1001 AND
+use1.Organization_ID = 1001 
+ORDER BY 
 staR.Status_change_date DESC;
 
 
@@ -601,6 +784,7 @@ Student_ID int,
 User_ID int,
 Year_ID int,
 cGPA numeric(3,2),
+hasJob varchar(255),
 FYP_name varchar(255),
 FYP_final_grade varchar(255),
 FYP_background varchar(8000),
@@ -670,13 +854,16 @@ create table Students_Employers (
 Application_ID int,
 Student_ID int NOT NULL,
 Employer_ID int NOT NULL,
-Order_ID int NOT NULL,
+Offer_ID int NOT NULL,
 PRIMARY KEY (Application_ID)
 );
 
 create table Status (
 Status_ID int,
 Status_name varchar(255) NOT NULL,
+Status_description varchar(255) NOT NULL,
+Status_order int NOT NULL, 
+Organization_ID int NOT NULL,
 PRIMARY KEY (Status_ID)
 );
 

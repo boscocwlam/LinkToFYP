@@ -19,8 +19,10 @@ const AdminOption = () => {
       <Container>
         <Container>
           <div className="mt-4"></div>
-          <h2 className="title90 page7">Configurations</h2>
+          <h2 className="title90 page7">List Configuration</h2>
+          <h6 className="title90">This part is designed for you to create option lists of "Skills", "Job Types" and "FYP-performing Years". The function is used for future selection by students, employers or other staffs and indication of information.</h6>
         </Container>
+
 
         <div className="mt-4"></div>
         <AdminOptionSkill />
@@ -28,6 +30,7 @@ const AdminOption = () => {
         <AdminOptionJobType />
         <div className="mt-4"></div>
         <AdminOptionYear />
+        <div className="mt-4"></div>
       </Container>
     </div>
   );

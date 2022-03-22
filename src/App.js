@@ -39,13 +39,15 @@ import StudentMain from "./student/StudentMain";
 import StudentProfileUpdatePersonal from "./student/StudentProfileUpdatePersonal";
 import StudentProfileUpdateFYP from "./student/StudentProfileUpdateFYP";
 import StudentProfileUpdateWork from "./student/StudentProfileUpdateWork";
-
+import StudentProfileAddWork from "./student/StudentProfileAddWork";
 
 // Admin
 // Settings
 import AdminMain from "./admin/AdminMain";
 import AdminProfileUpdatePersonal from "./admin/AdminProfileUpdatePersonal";
 import AdminOption from "./admin/AdminOption";
+import AdminStatus from "./admin/AdminStatus";
+import AdminSetUp from "./admin/AdminSetUp";
 
 // Account Registration
 import AdminAddStuAccount from "./admin/AdminAddStuAccount";
@@ -59,12 +61,17 @@ import AdminStuProfileDetail from "./admin/AdminStuProfileDetail";
 import AdminStuProfileDetailUpdatePersonal from "./admin/AdminStuProfileDetailUpdatePersonal";
 import AdminStuProfileDetailUpdateFYP from "./admin/AdminStuProfileDetailUpdateFYP";
 import AdminStuProfileDetailUpdateWork from "./admin/AdminStuProfileDetailUpdateWork";
+import AdminStuProfileDetailAddWork from "./admin/AdminStuProfileDetailAddWork";
 import AdminAdmProfile from "./admin/AdminAdmProfile";
 import AdminAdmProfileDetail from "./admin/AdminAdmProfileDetail";
 import AdminEmpProfile from "./admin/AdminEmpProfile";
 import AdminEmpProfileDetail from "./admin/AdminEmpProfileDetail";
+import AdminEmpProfileDetailAddJob from "./admin/AdminEmpProfileDetailAddJob";
+import AdminEmpProfileDetailUpdateJob from "./admin/AdminEmpProfileDetailUpdateJob";
 import AdminEmpProfileDetailUpdatePersonal from "./admin/AdminEmpProfileDetailUpdatePersonal";
 import AdminApplication from "./admin/AdminApplication";
+import AdminApplicationDetail from "./admin/AdminApplicationDetail";
+
 
 // Analytic Tools
 import AdminDashboard from "./admin/AdminDashboard";
@@ -79,7 +86,12 @@ import EmployerStuProfile from "./employer/EmployerStuProfile";
 import EmployerSurvey from "./employer/EmployerSurvey";
 import EmployerJob from "./employer/EmployerJob";
 import EmployerJobUpdate from "./employer/EmployerJobUpdate";
-
+import EmployerJobAdd from "./employer/EmployerJobAdd";
+import EmployerApply from "./employer/EmployerApply";
+import EmployerApply2 from "./employer/EmployerApply2";
+import EmployerApply3 from "./employer/EmployerApply3";
+import EmployerApplication from "./employer/EmployerApplication";
+import EmployerApplicationDetail from "./employer/EmployerApplicationDetail";
 
 //Page
 import SearchStudent from "./page/SearchStudent";
@@ -127,13 +139,15 @@ function App() {
         <Route exact path="/student/profile/self/update/personal" element={<LogRegStudentProtectedRoute><StudentProfileUpdatePersonal /></LogRegStudentProtectedRoute>} />
         <Route exact path="/student/profile/self/update/fyp" element={<LogRegStudentProtectedRoute><StudentProfileUpdateFYP /></LogRegStudentProtectedRoute>} />
         <Route exact path="/student/profile/self/update/work/:id" element={<LogRegStudentProtectedRoute><StudentProfileUpdateWork /></LogRegStudentProtectedRoute>} />
-
+        <Route exact path="/student/profile/self/add/work" element={<LogRegStudentProtectedRoute><StudentProfileAddWork /></LogRegStudentProtectedRoute>} />
 
         {/* admin */}
         {/* Settings */}
         <Route exact path="/admin/main" element={<LogRegAdminProtectedRoute><AdminMain /></LogRegAdminProtectedRoute>} />
-        <Route exact path="/admin/option" element={<LogRegAdminProtectedRoute><AdminOption /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/profile/self/update/personal" element={<LogRegAdminProtectedRoute><AdminProfileUpdatePersonal /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/option" element={<LogRegAdminProtectedRoute><AdminOption /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/status" element={<LogRegAdminProtectedRoute><AdminStatus /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/setup" element={<LogRegAdminProtectedRoute><AdminSetUp /></LogRegAdminProtectedRoute>} />
         {/* Account Registration */}
         <Route exact path="/admin/addstuaccount" element={<LogRegAdminProtectedRoute><AdminAddStuAccount /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/addstuaccount/complete" element={<LogRegAdminProtectedRoute><AdminAddStuAccount2 /></LogRegAdminProtectedRoute>} />
@@ -145,26 +159,37 @@ function App() {
         <Route exact path="/admin/profile/student/detail/update/personal/:id" element={<LogRegAdminProtectedRoute><AdminStuProfileDetailUpdatePersonal /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/profile/student/detail/update/fyp/:id" element={<LogRegAdminProtectedRoute><AdminStuProfileDetailUpdateFYP /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/profile/student/detail/update/work/:id/:wid" element={<LogRegAdminProtectedRoute><AdminStuProfileDetailUpdateWork /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/profile/student/detail/add/work/:id" element={<LogRegAdminProtectedRoute><AdminStuProfileDetailAddWork /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/profile/admin" element={<LogRegAdminProtectedRoute><AdminAdmProfile /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/profile/admin/detail/:id" element={<LogRegAdminProtectedRoute><AdminAdmProfileDetail /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/profile/employer" element={<LogRegAdminProtectedRoute><AdminEmpProfile /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/profile/employer/detail/:id" element={<LogRegAdminProtectedRoute><AdminEmpProfileDetail /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/profile/employer/detail/add/job/:id" element={<LogRegAdminProtectedRoute><AdminEmpProfileDetailAddJob /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/profile/employer/detail/update/job/:id/:jid" element={<LogRegAdminProtectedRoute><AdminEmpProfileDetailUpdateJob /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/profile/employer/detail/update/personal/:id" element={<LogRegAdminProtectedRoute>< AdminEmpProfileDetailUpdatePersonal/></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/application" element={<LogRegAdminProtectedRoute><AdminApplication /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/application/detail/:id" element={<LogRegAdminProtectedRoute><AdminApplicationDetail /></LogRegAdminProtectedRoute>} />
         {/* Analytic Tools */}
         <Route exact path="/admin/dashboard" element={<LogRegAdminProtectedRoute><AdminDashboard /></LogRegAdminProtectedRoute>} />
 
         
 
         {/* employers */}
-        <Route exact path="/employer/main" element={<LogRegEmployerProtectedRoute><EmployerMain /></LogRegEmployerProtectedRoute> }/>
+        <Route exact path="/employer/main/:id" element={<LogRegEmployerProtectedRoute><EmployerMain /></LogRegEmployerProtectedRoute> }/>
         <Route exact path="/employer/profile" element={<LogRegEmployerProtectedRoute><EmployerProfile /></LogRegEmployerProtectedRoute> }/>
         <Route exact path="/employer/profile/self/update/personal" element={<LogRegEmployerProtectedRoute><EmployerProfileUpdatePersonal /></LogRegEmployerProtectedRoute> }/>
         <Route exact path="/employer/search" element={<LogRegEmployerProtectedRoute><EmployerSearch /></LogRegEmployerProtectedRoute> }/>
-        <Route exact path="/employer/stuprofile" element={<LogRegEmployerProtectedRoute><EmployerStuProfile /></LogRegEmployerProtectedRoute> }/>
+        <Route exact path="/employer/stuprofile/:id" element={<LogRegEmployerProtectedRoute><EmployerStuProfile /></LogRegEmployerProtectedRoute> }/>
         <Route exact path="/employer/survey" element={<LogRegEmployerProtectedRoute><EmployerSurvey /></LogRegEmployerProtectedRoute> }/>
         <Route exact path="/employer/job" element={<LogRegEmployerProtectedRoute><EmployerJob /></LogRegEmployerProtectedRoute> }/>
         <Route exact path="/employer/job/update/:id" element={<LogRegEmployerProtectedRoute><EmployerJobUpdate /></LogRegEmployerProtectedRoute> }/>
+        <Route exact path="/employer/job/add" element={<LogRegEmployerProtectedRoute><EmployerJobAdd /></LogRegEmployerProtectedRoute> }/>
+        <Route exact path="/employer/apply/:id" element={<LogRegEmployerProtectedRoute><EmployerApply /></LogRegEmployerProtectedRoute> }/>
+        <Route exact path="/employer/apply/next/:id/:jid" element={<LogRegEmployerProtectedRoute><EmployerApply2 /></LogRegEmployerProtectedRoute> }/>
+        <Route exact path="/employer/apply/submit/:id/:jid" element={<LogRegEmployerProtectedRoute><EmployerApply3 /></LogRegEmployerProtectedRoute> }/>
+        <Route exact path="/employer/application" element={<LogRegEmployerProtectedRoute><EmployerApplication /></LogRegEmployerProtectedRoute> }/>
+        <Route exact path="/employer/application/detail/:id" element={<LogRegEmployerProtectedRoute><EmployerApplicationDetail /></LogRegEmployerProtectedRoute> }/>
+
 
         {/* page */}
         <Route exact path="/studentProfile" element={<StudentProfile />} />

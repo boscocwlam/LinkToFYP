@@ -18,6 +18,24 @@ app.use(
     credentials: true,
   })
 );
+
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
+
+// const headers = {
+//   "Content-Type": "application/json",
+//   Authorization: apiKey,
+// };
+// const url = "http://localhost:5000/api/expenses/get-expenses";
+
+// axios.get(url, { headers });
+
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -124,6 +142,94 @@ app.post("/OrganizationCreate", (req, res) => {
     }
   );
 });
+
+//LogRegOrganizationAddAccount2.js (Default Data)
+app.post("/InputDefaultData1", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const status_ID = req.body.status_ID_0;
+
+  db.query(
+    "INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (?, 'Withdraw', 'The hiring process is withdrawn.', 12, ?)",
+    [status_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+//LogRegOrganizationAddAccount2.js (Default Data)
+app.post("/InputDefaultData2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const status_ID = req.body.status_ID_1;
+
+  db.query(
+    "INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (?, 'Applied', 'You have sent a hiring request to the organization/department. The organization/department will start to follow up in the latest stage.', 0, ?)",
+    [status_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+//LogRegOrganizationAddAccount2.js (Default Data)
+app.post("/InputDefaultData3", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const status_ID = req.body.status_ID_2;
+
+  db.query(
+    "INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (?, 'In Progress', 'The organization/department starts to follow up your request. Please wait for the response from the organization/department.', 1, ?)",
+    [status_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+//LogRegOrganizationAddAccount2.js (Default Data)
+app.post("/InputDefaultData4", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const status_ID = req.body.status_ID_3;
+
+  db.query(
+    "INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (?, 'Process Completed', 'The hiring process is completed. It is expected that the request should not be withdrawn.', 2, ?)",
+    [status_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send("value inserted");
+      }
+    }
+  );
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 // LogReg (Employer)
 ///////////////////////////////////////////////////////////////////////////////
@@ -733,19 +839,6 @@ app.get("/getUpdatedStatusList", (req, res) => {
   );
 });
 
-// AdminApplication.js
-app.get("/getStatus", (req, res) => {
-  const status_ID = req.query.status_ID;
-  db.query("select ", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result);
-      res.send(result);
-    }
-  });
-});
-
 //AdminAddStuAccount.js, AdminAddAdmAccount.js,
 app.get("/generateUserIDandPW", (req, res) => {
   console.log(req.query.text);
@@ -1059,8 +1152,39 @@ app.post("/postskills", (req, res) => {
 app.post("/checkExistSkill", (req, res) => {
   const skill_ID = req.body.id;
   db.query(
-    "SELECT ((SELECT COALESCE(count(skill_ID),0) FROM Students_Skills where skill_ID = ?) + (SELECT COALESCE(count(skill_ID),0) FROM Employers_Scores where skill_ID = ?))AS checkNum",
-    [skill_ID, skill_ID],
+    "SELECT ((SELECT COALESCE(count(fyp_skill_ID1),0) FROM Students where fyp_skill_ID1 = ?) + " +
+      "(SELECT COALESCE(count(fyp_skill_ID2),0) FROM Students where fyp_skill_ID2 = ?) + " +
+      "(SELECT COALESCE(count(fyp_skill_ID3),0) FROM Students where fyp_skill_ID3 = ?) + " +
+      "(SELECT COALESCE(count(fyp_skill_ID4),0) FROM Students where fyp_skill_ID4 = ?) + " +
+      "(SELECT COALESCE(count(fyp_skill_ID5),0) FROM Students where fyp_skill_ID5 = ?) + " +
+      "(SELECT COALESCE(count(skill_ID1),0) FROM Work_experiences where skill_ID1 = ?) + " +
+      "(SELECT COALESCE(count(skill_ID2),0) FROM Work_experiences where skill_ID2 = ?) + " +
+      "(SELECT COALESCE(count(skill_ID3),0) FROM Work_experiences where skill_ID3 = ?) + " +
+      "(SELECT COALESCE(count(skill_ID4),0) FROM Work_experiences where skill_ID4 = ?) + " +
+      "(SELECT COALESCE(count(skill_ID5),0) FROM Work_experiences where skill_ID5 = ?) + " +
+      "(SELECT COALESCE(count(skill_ID1),0) FROM Jobs where skill_ID1 = ?) + " +
+      "(SELECT COALESCE(count(skill_ID2),0) FROM Jobs where skill_ID2 = ?) + " +
+      "(SELECT COALESCE(count(skill_ID3),0) FROM Jobs where skill_ID3 = ?) + " +
+      "(SELECT COALESCE(count(skill_ID4),0) FROM Jobs where skill_ID4 = ?) + " +
+      "(SELECT COALESCE(count(skill_ID5),0) FROM Jobs where skill_ID5 = ?) " +
+      ") AS checkNum ",
+    [
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+      skill_ID,
+    ],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -1161,7 +1285,7 @@ app.post("/postjobtypes", (req, res) => {
 app.post("/checkExistJobType", (req, res) => {
   const job_type_ID = req.body.id;
   db.query(
-    "SELECT ((SELECT COALESCE(count(job_type_ID),0) FROM Employers where job_type_ID = ?) + (SELECT COALESCE(count(job_type_ID),0) FROM Work_experiences where job_type_ID = ?))AS checkNum",
+    "SELECT ((SELECT COALESCE(count(job_type_ID),0) FROM Jobs where job_type_ID = ?) + (SELECT COALESCE(count(job_type_ID),0) FROM Work_experiences where job_type_ID = ?))AS checkNum",
     [job_type_ID, job_type_ID],
     (err, result) => {
       if (err) {
@@ -1612,9 +1736,22 @@ app.post("/deleteStudentProfile", (req, res) => {
 app.post("/deleteStudentProfile2", (req, res) => {
   const user_ID = req.body.user_ID;
 
+  db.query("DELETE FROM Users WHERE user_ID = ? ", [user_ID], (err, result) => {
+    if (err) {
+      res.send({ err: err });
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+//AdminStatus.js
+app.post("/getApplyStatus", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+
   db.query(
-    "DELETE FROM Users WHERE user_ID = ? ",
-    [user_ID],
+    "SELECT status_ID, status_name, status_description, status_order FROM Status WHERE organization_ID = ? AND status_order = 0 ",
+    [organization_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -1624,6 +1761,344 @@ app.post("/deleteStudentProfile2", (req, res) => {
     }
   );
 });
+
+//AdminStatus.js
+app.post("/getStatus", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+
+  db.query(
+    `SELECT status_ID, status_name, status_description, status_order FROM Status WHERE organization_ID = ? AND status_order > 0 AND status_order < (SELECT status_order from status where organization_ID = ? AND status_name = "Process Completed") ORDER BY status_order ASC`,
+    [organization_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminStatus.js
+app.post("/getStatus2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+
+  db.query(
+    `SELECT status_ID, status_name, status_description, status_order FROM Status WHERE organization_ID = ? AND status_order >= 0 AND status_order < (SELECT status_order from status where organization_ID = ? AND status_name = "Process Completed") ORDER BY status_order ASC`,
+    [organization_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminStatus.js
+app.post("/getCompleteStatus", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `SELECT status_ID, status_name, status_description, status_order FROM Status WHERE organization_ID = ? AND status_name = "Process Completed" AND status_ID < (select status_ID from Status where status_name = "Withdraw" and organization_ID = ?)`,
+    [organization_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminStatus.js
+app.post("/getStatusOne", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const status_ID = req.body.status_ID;
+
+  db.query(
+    "SELECT status_ID, status_order, status_name, status_description FROM Status WHERE organization_ID = ? AND status_ID = ? ",
+    [organization_ID, status_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminStatus.js
+app.post("/updateStatusChange", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const status_ID = req.body.status_ID;
+  const status_name = req.body.status_name;
+  const status_description = req.body.status_description;
+
+  db.query(
+    "UPDATE Status SET status_name = ?, status_description = ? WHERE status_ID = ? AND organization_ID = ?",
+    [status_name, status_description, status_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminStatus.js
+app.post("/deleteStatus", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const status_ID = req.body.status_ID;
+
+  db.query(
+    "UPDATE Status SET status_order = -1 WHERE status_ID = ? AND organization_ID = ?",
+    [status_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminStatus.js
+app.post("/updateOrderD", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const status_order = req.body.status_order;
+
+  db.query(
+    "UPDATE Status SET status_order = status_order - 1 WHERE status_order > ? AND organization_ID = ?",
+    [status_order, organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminStatus.js
+app.get("/generateStatusID", (req, res) => {
+  db.query(
+    "select (MAX(Status_ID) + 1) AS status_ID from Status",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminStatus.js
+app.post("/addStatus", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const status_ID = req.body.status_ID;
+  const status_name = req.body.status_name;
+  const status_description = req.body.status_description;
+  const status_order = req.body.status_order;
+
+  db.query(
+    "INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (?,?,?,?,?)",
+    [status_ID, status_name, status_description, status_order, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminStatus.js
+app.post("/updateOrderA", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const status_order = req.body.status_order;
+
+  db.query(
+    "UPDATE Status SET status_order = status_order + 1 WHERE status_order >= ? AND organization_ID = ?",
+    [status_order, organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+// AdminApplication.js
+app.post("/viewApplication", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+
+  db.query(
+    "SELECT " +
+      "yy.Status_change_date AS apply_date, " +
+      "temp.Application_ID AS application_ID, " +
+      "temp.Employer_ID AS employer_ID, " +
+      "temp.Student_ID AS student_ID, " +
+      "temp.Status_name AS status_name, " +
+      "temp.Status_ID AS status_ID, " +
+      "temp.Status_change_date AS status_change_date, " +
+      "temp.stu_first_name AS stu_first_name, " +
+      "temp.stu_last_name AS stu_last_name, " +
+      "temp.emp_first_name AS emp_first_name, " +
+      "temp.emp_last_name AS emp_last_name, " +
+      "temp.offer_ID AS offer_ID, " +
+      "temp.job_title AS job_title   " +
+      "FROM  " +
+      "statusrecords yy,  " +
+      "(SELECT  " +
+      "staR.Application_ID AS application_ID, " +
+      "stuEmp.Employer_ID AS employer_ID, " +
+      "stuEmp.Student_ID AS student_ID, " +
+      "sta.Status_name AS status_name, " +
+      "sta.Status_ID AS status_ID, " +
+      "staR.Status_change_date AS status_change_date, " +
+      "use1.First_name AS stu_first_name, " +
+      "use1.Last_name AS stu_last_name, " +
+      "use2.First_name AS emp_first_name, " +
+      "use2.Last_name AS emp_last_name, " +
+      "job.offer_ID AS offer_ID, " +
+      "job.job_title AS job_title   " +
+      "FROM  " +
+      "Students_Employers stuEmp INNER JOIN " +
+      "Students stu INNER JOIN " +
+      "Employers emp INNER JOIN " +
+      "statusrecords staR INNER JOIN " +
+      "status sta INNER JOIN " +
+      "Jobs job INNER JOIN   " +
+      "Users use1 INNER JOIN " +
+      "Users use2 " +
+      "ON  " +
+      "use1.User_ID=stu.User_ID AND " +
+      "use2.User_ID=emp.User_ID AND " +
+      "stu.Student_ID=stuEmp.Student_ID AND  " +
+      "emp.Employer_ID=stuEmp.Employer_ID AND " +
+      "stuEmp.Application_ID=staR.Application_ID AND " +
+      "staR.status_ID = sta.status_ID AND  " +
+      "stuEmp.offer_ID = job.offer_ID AND  " +
+      "use2.Organization_ID = ? AND " +
+      "use1.Organization_ID = ?  " +
+      "AND NOT EXISTS ( " +
+      "SELECT * FROM  " +
+      "statusrecords star2,  " +
+      "status sta2  " +
+      "WHERE  " +
+      "staR2.status_ID = sta2.status_ID AND  " +
+      "sta2.status_order > sta.status_order AND " +
+      "staR.Application_ID = staR2.Application_ID " +
+      ")) temp " +
+      "WHERE  " +
+      "temp.application_ID = yy.application_ID AND " +
+      "yy.status_ID = 20 " +
+      "ORDER BY  " +
+      "temp.Status_change_date DESC",
+    [organization_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminApplicationDetail.js
+app.post("/getNextStatus", (req, res) => {
+  const application_ID = req.body.application_ID;
+  db.query(
+    "select status_name, status_ID from status where status_order = 1 + (select max(status_order) from statusrecords, status where status.status_ID = statusrecords.status_ID and application_ID = ?)",
+    [application_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminApplicationDetail.js
+app.get("/getRecordID", (req, res) => {
+  db.query(
+    "select (MAX(Record_ID) + 1) AS record_ID from StatusRecords",
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminApplicationDetail.js
+app.post("/addStatusUpdateRecord", (req, res) => {
+  const record_ID = req.body.record_ID;
+  const application_ID = req.body.application_ID;
+  const status_ID = req.body.status_ID;
+
+  db.query(
+    "INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (?,?,?, now())",
+    [record_ID, application_ID, status_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminApplicationDetail.js
+app.post("/checkWithdrawID", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `select status_ID from status where organization_ID = ? and status_name = "Withdraw"`,
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1679,6 +2154,23 @@ app.get("/getStudentFYP", (req, res) => {
 // StudentMain.js
 app.post("/getStudentWorkExperiences", (req, res) => {
   const user_ID = req.body.user_ID;
+
+  db.query(
+    "SELECT work_ID, company_name, job_title, job_type_ID, job_type_ID AS job_type_name, duration, skill_ID1, score1, skill_ID1 AS skill_name1, skill_ID2, score2, skill_ID2 AS skill_name2, skill_ID3, score3, skill_ID3 AS skill_name3, skill_ID4, score4, skill_ID4 AS skill_name4, skill_ID5, score5, skill_ID5 AS skill_name5  FROM Students stu, Work_experiences wor WHERE stu.student_ID = wor.student_ID AND stu.user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+// StudentMain.js
+app.post("/getStudentWorkExperiences2", (req, res) => {
+  const user_ID = req.body.stuUID;
 
   db.query(
     "SELECT work_ID, company_name, job_title, job_type_ID, job_type_ID AS job_type_name, duration, skill_ID1, score1, skill_ID1 AS skill_name1, skill_ID2, score2, skill_ID2 AS skill_name2, skill_ID3, score3, skill_ID3 AS skill_name3, skill_ID4, score4, skill_ID4 AS skill_name4, skill_ID5, score5, skill_ID5 AS skill_name5  FROM Students stu, Work_experiences wor WHERE stu.student_ID = wor.student_ID AND stu.user_ID = ?",
@@ -1823,7 +2315,7 @@ app.post("/getStudentFYP1", (req, res) => {
 app.post("/getJobTypes", (req, res) => {
   const organization_ID = req.body.organization_ID;
   db.query(
-    "SELECT job_type_ID, job_type_name FROM Job_types WHERE organization_ID = ?",
+    `SELECT job_type_ID, job_type_name FROM Job_types WHERE organization_ID = ? AND category = "ReadyInUse" `,
     [organization_ID],
     (err, result) => {
       if (err) {
@@ -1939,29 +2431,96 @@ app.post("/deleteEmployerProfile", (req, res) => {
 app.post("/deleteEmployerProfile2", (req, res) => {
   const user_ID = req.body.user_ID;
 
+  db.query("DELETE FROM Users WHERE user_ID = ? ", [user_ID], (err, result) => {
+    if (err) {
+      res.send({ err: err });
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+// StudentProfileAddWork.js
+app.get("/generateWorkID", (req, res) => {
   db.query(
-    "DELETE FROM Users WHERE user_ID = ? ",
-    [user_ID],
+    "SELECT (MAX(work_ID) + 1) AS work_ID FROM Work_experiences",
     (err, result) => {
       if (err) {
-        res.send({ err: err });
+        console.log(err);
       } else {
+        console.log(result);
         res.send(result);
       }
     }
   );
 });
 
+//StudentProfileAddWork.js
+app.post("/getStudentID", (req, res) => {
+  const user_ID = req.body.user_ID;
+  db.query(
+    "SELECT student_ID FROM Students WHERE user_ID = ? ",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+//StudentProfileAddWork.js
+app.post("/addWorkExperience", (req, res) => {
+  const work_ID = req.body.work_ID;
+  const student_ID = req.body.student_ID;
+  const company_name = req.body.company_name;
+  const job_type_ID = req.body.job_type_ID;
+  const job_title = req.body.job_title;
+  const duration = req.body.duration;
+  const skill_ID1 = req.body.skill_ID1;
+  const skill_ID2 = req.body.skill_ID2;
+  const skill_ID3 = req.body.skill_ID3;
+  const skill_ID4 = req.body.skill_ID4;
+  const skill_ID5 = req.body.skill_ID5;
+  const score1 = req.body.score1;
+  const score2 = req.body.score2;
+  const score3 = req.body.score3;
+  const score4 = req.body.score4;
+  const score5 = req.body.score5;
 
-
-
-
-
-
-
-
-
+  db.query(
+    "INSERT INTO Work_experiences (work_ID, student_ID, company_name, job_type_ID, job_title, duration, skill_ID1, skill_ID2, skill_ID3, skill_ID4, skill_ID5, score1, score2,  score3, score4, score5) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
+    [
+      work_ID,
+      student_ID,
+      company_name,
+      job_type_ID,
+      job_title,
+      duration,
+      skill_ID1,
+      skill_ID2,
+      skill_ID3,
+      skill_ID4,
+      skill_ID5,
+      score1,
+      score2,
+      score3,
+      score4,
+      score5,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2123,7 +2682,22 @@ app.post("/updateJobPosted", (req, res) => {
   const score5 = req.body.score5;
   db.query(
     "UPDATE Jobs SET job_description = ?, job_type_ID = ?, job_title = ?, skill_ID1 = ?, skill_ID2 = ?, skill_ID3 = ?, skill_ID4 = ?, skill_ID5 = ?, score1 = ?, score2 = ?, score3 = ?, score4 = ?, score5 = ? WHERE offer_ID = ? ",
-    [job_description, job_type_ID, job_title, skill_ID1, skill_ID2, skill_ID3, skill_ID4, skill_ID5, score1, score2, score3, score4, score5, offer_ID],
+    [
+      job_description,
+      job_type_ID,
+      job_title,
+      skill_ID1,
+      skill_ID2,
+      skill_ID3,
+      skill_ID4,
+      skill_ID5,
+      score1,
+      score2,
+      score3,
+      score4,
+      score5,
+      offer_ID,
+    ],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -2135,28 +2709,435 @@ app.post("/updateJobPosted", (req, res) => {
   );
 });
 
+// EmployerJob.js
+app.post("/deleteJob", (req, res) => {
+  const offer_ID = req.body.offer_ID;
 
+  db.query("DELETE FROM Jobs WHERE offer_ID = ?", [offer_ID], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send(result);
+    }
+  });
+});
 
+// EmployerJob.js
+app.get("/generateOfferID", (req, res) => {
+  db.query(
+    "SELECT (MAX(offer_ID) + 1) AS offer_ID FROM Jobs",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+// EmployerJobAdd.js
+app.post("/getEmployerID", (req, res) => {
+  const user_ID = req.body.user_ID;
+  db.query(
+    "SELECT employer_ID FROM Employers WHERE user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+// EmployerJobAdd.js
+app.post("/addJobPosted", (req, res) => {
+  const offer_ID = req.body.offer_ID;
+  const employer_ID = req.body.employer_ID;
+  const job_description = req.body.job_description;
+  const job_type_ID = req.body.job_type_ID;
+  const job_title = req.body.job_title;
+  const skill_ID1 = req.body.skill_ID1;
+  const skill_ID2 = req.body.skill_ID2;
+  const skill_ID3 = req.body.skill_ID3;
+  const skill_ID4 = req.body.skill_ID4;
+  const skill_ID5 = req.body.skill_ID5;
+  const score1 = req.body.score1;
+  const score2 = req.body.score2;
+  const score3 = req.body.score3;
+  const score4 = req.body.score4;
+  const score5 = req.body.score5;
+  db.query(
+    "INSERT INTO Jobs (offer_ID, employer_ID, job_description, job_type_ID, job_title, skill_ID1, skill_ID2, skill_ID3, skill_ID4, skill_ID5, score1, score2, score3, score4, score5) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
+    [
+      offer_ID,
+      employer_ID,
+      job_description,
+      job_type_ID,
+      job_title,
+      skill_ID1,
+      skill_ID2,
+      skill_ID3,
+      skill_ID4,
+      skill_ID5,
+      score1,
+      score2,
+      score3,
+      score4,
+      score5,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+// EmployerMain.js
+app.post("/getStudentData1", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT organization_name, Users.user_ID AS user_ID, year_name, first_name, last_name, first_name_chi, last_name_chi, gender, city, email_address, Students.user_ID AS user_ID, cGPA, fyp_name, fyp_final_grade, fyp_background, fyp_link, fyp_skill_ID1, fyp_score1, fyp_skill_ID2, fyp_score2, fyp_skill_ID3, fyp_score3, fyp_skill_ID4, fyp_score4, fyp_skill_ID5, fyp_score5, fyp_skill_ID1 AS fyp_skill_name1, fyp_skill_ID2 AS fyp_skill_name2, fyp_skill_ID3 AS fyp_skill_name3, fyp_skill_ID4 AS fyp_skill_name4, fyp_skill_ID5 AS fyp_skill_name5 FROM Years, Students, Users, Organizations WHERE Years.year_ID = Students.year_ID AND Users.user_ID = Students.user_ID AND Organizations.organization_ID = Users.organization_ID AND Users.organization_ID = ?",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+//EmployerMain.js
+app.post("/getJobTypes2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `SELECT job_type_ID, job_type_name FROM Job_types WHERE organization_ID = ? `,
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+//EmployerMain.js
+app.post("/getStudentFromEmployerApply", (req, res) => {
+  const user_ID = req.body.stuUser_ID;
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `SELECT student_ID, organization_name, first_name, last_name, first_name_chi, last_name_chi, year_name from Users, Students stu, Years, Organizations WHERE Organizations.organization_ID = Users.organization_ID AND Users.user_ID = stu.user_ID AND stu.year_ID = Years.year_ID AND Users.User_ID = ? AND Users.organization_ID = ?`,
+    [user_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+// EmployerJob.js
+app.post("/getJobs1", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const user_ID = req.body.user_ID;
+  const student_ID = req.body.student_ID;
 
+  db.query(
+    "SELECT offer_ID, job_title FROM Jobs WHERE Employers.employer_ID = Jobs.employer_ID AND user_ID = ? AND organization_ID = ?",
+    [user_ID, organization_ID, student_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+//EmployerApply2js
+app.get("/generateApplicationID", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select (MAX(Application_ID) + 1) AS newApplication_ID, null AS newApplication_name from Students_Employers",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+//EmployerApply2js
+app.get("/generateRecordID", (req, res) => {
+  console.log(req.query.text);
+  db.query(
+    "select (MAX(record_ID) + 1) AS newRecord_ID, null AS newRecord_name from StatusRecords",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+//EmployerApply2js
+app.post("/checkApplicationDuplicated", (req, res) => {
+  const employer_ID = req.body.employer_ID;
+  const student_ID = req.body.student_ID;
+  const offer_ID = req.body.offer_ID;
 
+  db.query(
+    "select count(offer_ID) AS countNum from students_employers stuEmp, statusrecords sta where stuEmp.application_ID = sta.application_ID and offer_ID = ? and employer_ID = ? and student_ID = ? and status_order > 0",
+    [offer_ID, employer_ID, student_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+//EmployerApply2js
+app.post("/addApplication", (req, res) => {
+  const application_ID = req.body.application_ID;
+  const employer_ID = req.body.employer_ID;
+  const student_ID = req.body.student_ID;
+  const offer_ID = req.body.offer_ID;
 
+  db.query(
+    "INSERT INTO Students_Employers (application_ID, employer_ID, student_ID, offer_ID) VALUES (?,?,?,?)",
+    [application_ID, employer_ID, student_ID, offer_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+//EmployerApply2js
+app.post("/addRecord", (req, res) => {
+  const record_ID = req.body.record_ID;
+  const application_ID = req.body.application_ID;
 
+  db.query(
+    "INSERT INTO StatusRecords (record_ID, application_ID, Status_change_date, Status_ID) VALUES (?,?, now() , 20)",
+    [record_ID, application_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+// EmployerApplication.js
+app.post("/viewEmpApplication", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const user_ID = req.body.user_ID;
 
+  db.query(
+    "SELECT " +
+      "yy.Status_change_date AS apply_date, " +
+      "temp.Application_ID AS application_ID, " +
+      "temp.Employer_ID AS employer_ID, " +
+      "temp.Student_ID AS student_ID, " +
+      "temp.Status_name AS status_name, " +
+      "temp.Status_ID AS status_ID, " +
+      "temp.Status_change_date AS status_change_date, " +
+      "temp.stu_first_name AS stu_first_name, " +
+      "temp.stu_last_name AS stu_last_name, " +
+      "temp.emp_first_name AS emp_first_name, " +
+      "temp.emp_last_name AS emp_last_name, " +
+      "temp.offer_ID AS offer_ID, " +
+      "temp.job_title AS job_title   " +
+      "FROM  " +
+      "statusrecords yy,  " +
+      "(SELECT  " +
+      "staR.Application_ID AS application_ID, " +
+      "stuEmp.Employer_ID AS employer_ID, " +
+      "stuEmp.Student_ID AS student_ID, " +
+      "sta.Status_name AS status_name, " +
+      "sta.Status_ID AS status_ID, " +
+      "staR.Status_change_date AS status_change_date, " +
+      "use1.First_name AS stu_first_name, " +
+      "use1.Last_name AS stu_last_name, " +
+      "use2.First_name AS emp_first_name, " +
+      "use2.Last_name AS emp_last_name, " +
+      "job.offer_ID AS offer_ID, " +
+      "job.job_title AS job_title   " +
+      "FROM  " +
+      "Students_Employers stuEmp INNER JOIN " +
+      "Students stu INNER JOIN " +
+      "Employers emp INNER JOIN " +
+      "statusrecords staR INNER JOIN " +
+      "status sta INNER JOIN " +
+      "Jobs job INNER JOIN   " +
+      "Users use1 INNER JOIN " +
+      "Users use2 " +
+      "ON  " +
+      "use1.User_ID=stu.User_ID AND " +
+      "use2.User_ID=emp.User_ID AND " +
+      "stu.Student_ID=stuEmp.Student_ID AND  " +
+      "emp.Employer_ID=stuEmp.Employer_ID AND " +
+      "stuEmp.Application_ID=staR.Application_ID AND " +
+      "staR.status_ID = sta.status_ID AND  " +
+      "stuEmp.offer_ID = job.offer_ID AND  " +
+      "use2.User_ID = ? AND " +
+      "use2.Organization_ID = ? AND " +
+      "use1.Organization_ID = ?  " +
+      "AND NOT EXISTS ( " +
+      "SELECT * FROM  " +
+      "statusrecords star2,  " +
+      "status sta2  " +
+      "WHERE  " +
+      "staR2.status_ID = sta2.status_ID AND  " +
+      "sta2.status_order > sta.status_order AND  " +
+      "staR.Application_ID = staR2.Application_ID " +
+      ")) temp " +
+      "WHERE  " +
+      "temp.application_ID = yy.application_ID AND " +
+      "yy.status_ID = 20 " +
+      "ORDER BY  " +
+      "temp.Status_change_date DESC",
+    [user_ID, organization_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+//EmployerApplication.js
+app.post("/getStatusDetail", (req, res) => {
+  const organization_ID = req.body.organization_ID;
 
+  db.query(
+    "SELECT status_ID, status_name, status_description, status_order FROM Status WHERE organization_ID = ? AND status_order >= 0 ORDER BY status_order ASC",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
+//EmployerApplicationDetail.js
+app.post("/getWorkFlow", (req, res) => {
+  const application_ID = req.body.application_ID;
+
+  db.query(
+    "select status.status_ID AS status_ID, status_name, status_change_date from statusrecords, status where statusrecords.status_ID = status.status_ID and application_ID = ? order by record_ID ASC",
+    [application_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//EmployerApplicationDetail.js
+app.post("/getRequestInfo", (req, res) => {
+  const application_ID = req.body.application_ID;
+
+  db.query(
+    "SELECT  " +
+      "stuEmp.Application_ID AS application_ID, " +
+      "stuEmp.Employer_ID AS employer_ID, " +
+      "stuEmp.Student_ID AS student_ID, " +
+      "job.offer_ID AS offer_ID, " +
+      "job.job_title AS job_title,   " +
+      "jt.job_type_name AS job_type_name,  " +
+      "use1.First_name AS stu_first_name, " +
+      "use1.Last_name AS stu_last_name, " +
+      "use2.First_name AS emp_first_name, " +
+      "use2.Last_name AS emp_last_name, " +
+      "use1.First_name_chi AS stu_first_name_chi, " +
+      "use1.Last_name_chi AS stu_last_name_chi, " +
+      "use2.First_name_chi AS emp_first_name_chi, " +
+      "use2.Last_name_chi AS emp_last_name_chi, " +
+      "org.Organization_name AS organization_name, " +
+      "yea.Year_name AS year_name, " +
+      "emp.Company_name AS company_name, " +
+      "use2.Email_address AS email_address " +
+      "FROM  " +
+      "Students_Employers stuEmp INNER JOIN " +
+      "Students stu INNER JOIN " +
+      "Employers emp INNER JOIN " +
+      "Jobs job INNER JOIN   " +
+      "Job_types jt INNER JOIN  " +
+      "Users use1 INNER JOIN " +
+      "Users use2 INNER JOIN " +
+      "Organizations org INNER JOIN " +
+      "Years yea " +
+      "ON  " +
+      "use1.User_ID=stu.User_ID AND " +
+      "use2.User_ID=emp.User_ID AND " +
+      "stu.Student_ID=stuEmp.Student_ID AND  " +
+      "emp.Employer_ID=stuEmp.Employer_ID AND " +
+      "stuEmp.offer_ID = job.offer_ID AND  " +
+      "job.job_type_ID = jt.job_type_ID AND  " +
+      "use2.organization_ID = org.organization_ID AND  " +
+      "stu.year_ID = yea.year_ID AND " +
+      "stuEmp.Application_ID = ?",
+    [application_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

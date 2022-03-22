@@ -69,3 +69,63 @@
 .text66{
     font-size: 15px;
 }
+
+.text59{
+  font-size: 9px;
+}
+
+.backFilterColor{
+  background-color: lightsalmon;
+}
+
+.boundary57{
+  border:2px solid rgb(50,50,50);
+  border-radius: 15px;
+  overflow: scroll;
+}
+
+.letter16 {
+  color: red;
+  font-family: "Gill Sans", sans-serif;
+  width: 14%;
+}
+
+.letter46{
+  color: black;
+  font-size: 16px;
+  font-family: Tahoma, sans-serif;
+}
+
+.centerObject {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sizeBtn{
+  width: 250px;
+  height: 120px;
+  font-size: 108px;
+}
+
+.arrowSize{
+  /* width:100%;  */
+  object-fit:contain;
+  width: 48px;
+}
+
+.text33{
+  color: red;
+}
+
+.table4{
+  border-collapse:collapse; 
+  table-layout:fixed;
+  width: 50%;
+}
+
+.verticalMiddle{
+  display: flex;
+  flex-direction:column;
+  align-items:baseline;
+}

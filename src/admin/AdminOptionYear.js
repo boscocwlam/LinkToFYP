@@ -134,7 +134,7 @@ export default class AdminOptionYear extends Component {
           <Container>
             <Container>
               <div className="mt-3"></div>
-              <h4 className="text88">Years (FYP-performing Years)</h4>
+              <h4 className="text88">FYP-performing Years</h4>
             </Container>
           </Container>
           {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////*/}

@@ -29,7 +29,7 @@ const StudentMain = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setStudentData(response.data);
       });
 
@@ -39,7 +39,7 @@ const StudentMain = () => {
         user_ID,
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         axios
           .post("http://localhost:3001/getSkills", {
             organization_ID,
@@ -91,7 +91,7 @@ const StudentMain = () => {
               });
             });
             setFYPData(response.data);
-            console.log(response.data);
+            // console.log(response.data);
           });
       });
 
@@ -101,11 +101,11 @@ const StudentMain = () => {
       })
       .then((response) => {
         axios
-          .post("http://localhost:3001/getJobTypes", {
+          .post("http://localhost:3001/getJobTypes2", {
             organization_ID,
           })
           .then((response2) => {
-            console.log(response2.data);
+            // console.log(response2.data);
             response.data.map((item) => {
               response2.data.map((item2) => {
                 if (item.job_type_name == item2.job_type_ID) {
@@ -120,7 +120,7 @@ const StudentMain = () => {
             organization_ID,
           })
           .then((response2) => {
-            console.log(response2.data);
+            // console.log(response2.data);
             response.data.map((item) => {
               response2.data.map((item2) => {
                 if (item.skill_name1 == item2.skill_ID) {
@@ -166,34 +166,37 @@ const StudentMain = () => {
               });
             });
             setWorkData(response.data);
-            console.log(response.data);
+            // console.log(response.data);
           });
       });
   }, []);
-
-
- 
 
   let navigate = useNavigate();
   const submitForm = (event) => {
     event.preventDefault();
     if (submitButton == "update") {
-      navigate("/student/profile/self/update/work/" + event.target.work_ID.value);
+      navigate(
+        "/student/profile/self/update/work/" + event.target.work_ID.value
+      );
     } else if (submitButton == "delete") {
-      if (window.confirm("Confrim To Delete The Work Experience?") == true) {
-      const work_ID = event.target.work_ID.value;
-      axios
-        .post("http://localhost:3001/deleteWorkExperience", {
-          work_ID
-        })
-        .then((response) => {
-          // console.log(response.data);
-          alert("Record Deleted.");
-          window.location.reload(false);
-
-        });
+      if (window.confirm("Delete Work Experience?") == true) {
+        const work_ID = event.target.work_ID.value;
+        axios
+          .post("http://localhost:3001/deleteWorkExperience", {
+            work_ID,
+          })
+          .then((response) => {
+            // console.log(response.data);
+            alert("Record Deleted.");
+            window.location.reload(false);
+          });
       }
     }
+  };
+
+  const submitForm2 = (event) => {
+    event.preventDefault();
+    navigate("/student/profile/self/add/work");
   };
 
   return (
@@ -393,6 +396,17 @@ const StudentMain = () => {
                   );
                 })}
               </Table>
+
+              <form onSubmit={submitForm2}>
+                <h6 className="letter4">
+                  Press The Button To Add New Wor Experience:
+                </h6>
+                <button className="btn btn-info input-group-addon text88">
+                  Add Work Experience
+                </button>
+                <div className="mt-3"></div>
+                <Dropdown.Divider />
+              </form>
 
               <form onSubmit={submitForm}>
                 <div>

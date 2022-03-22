@@ -35,7 +35,9 @@ const LogRegOrganizationAddAccount2 = () => {
 
   let navigate = useNavigate();
   function handleClick() {
-    alert("Both organization and personal accounts acre created. Please set up a password for your personal account.");
+    alert(
+      "Both organization and personal accounts acre created. Please set up a password for your personal account."
+    );
     localStorage.removeItem("Organization Name");
     navigate("/logreg/forgetpw/admin");
   }
@@ -67,53 +69,120 @@ const LogRegOrganizationAddAccount2 = () => {
     const phone_no = event.target.phone_no.value;
     const email_address = event.target.email_address.value;
     // const password = event.target.password.value;
-    console.log(user_ID + " " + organization_ID + " " + first_name + " " + first_name_chi + " " + last_name + " " + last_name_chi + " " + gender + " " + city + " " + phone_no + " " + email_address);
+    console.log(
+      user_ID +
+        " " +
+        organization_ID +
+        " " +
+        first_name +
+        " " +
+        first_name_chi +
+        " " +
+        last_name +
+        " " +
+        last_name_chi +
+        " " +
+        gender +
+        " " +
+        city +
+        " " +
+        phone_no +
+        " " +
+        email_address
+    );
 
     // if (event.target.confirm_password.value == password) {
     //   setLoginStatus("");
 
-      axios
+    axios
       .post("http://localhost:3001/OrganizationCreate", {
-          organization_ID,
-          organization_name
+        organization_ID,
+        organization_name,
       })
       .then((response) => {
         console.log(response.data);
-      //   handleClick();
+        //   handleClick();
       });
 
-      axios
-        .post("http://localhost:3001/StaffCreate", {
-          user_ID,
-          staff_ID
-        })
-        .then((response) => {
-          console.log(response.data);
+    axios
+      .post("http://localhost:3001/StaffCreate", {
+        user_ID,
+        staff_ID,
+      })
+      .then((response) => {
+        console.log(response.data);
         //   handleClick();
-        });
+      });
 
-      axios
-        .post("http://localhost:3001/StaffCreate2", {
-          user_ID,
-          organization_ID,
-          first_name,
-          last_name,
-          first_name_chi,
-          last_name_chi,
-          gender,
-          city,
-          phone_no,
-          email_address,
-          // password
-        })
-        .then((response) => {
-          console.log(response.data);
-          handleClick();
-        });
-    // } 
-    // else {
-    //   setLoginStatus("***Passwords do not match. Please enter again.");
-    // }
+    axios
+      .post("http://localhost:3001/StaffCreate2", {
+        user_ID,
+        organization_ID,
+        first_name,
+        last_name,
+        first_name_chi,
+        last_name_chi,
+        gender,
+        city,
+        phone_no,
+        email_address,
+        // password
+      })
+      .then((response) => {
+        console.log(response.data);
+        handleClick();
+      });
+
+    //////////////////////////////////////////////////////////////////////////////
+    // Set Up Default Data
+    ////////////////////////
+
+    // Workflow Status
+
+    axios
+      .get("http://localhost:3001/generateStatusID", {
+      })
+      .then((response) => {
+        console.log(response.data);
+        const status_ID_0 = response.data[0].status_ID;
+        const status_ID_1 = response.data[0].status_ID + 1;
+        const status_ID_2 = response.data[0].status_ID + 2;
+        const status_ID_3 = response.data[0].status_ID + 3;
+
+        axios
+          .post("http://localhost:3001/InputDefaultData1", {
+            organization_ID,
+            status_ID_0
+          })
+          .then((response) => {
+            console.log(response.data);
+          });
+        axios
+          .post("http://localhost:3001/InputDefaultData2", {
+            organization_ID,
+            status_ID_1
+          })
+          .then((response) => {
+            console.log(response.data);
+          });
+        axios
+          .post("http://localhost:3001/InputDefaultData3", {
+            organization_ID,
+            status_ID_2
+          })
+          .then((response) => {
+            console.log(response.data);
+          });
+        axios
+          .post("http://localhost:3001/InputDefaultData4", {
+            organization_ID,
+            status_ID_3
+          })
+          .then((response) => {
+            console.log(response.data);
+          });
+      });
+    //////////////////////////////////////////////////////////////////////////////
   };
 
   return (
@@ -124,14 +193,17 @@ const LogRegOrganizationAddAccount2 = () => {
       <div>
         <Container>
           <form onSubmit={submitForm}>
-          <div className="mt-4"></div>
+            <div className="mt-4"></div>
             <div className="auth-wrapper">
               <div className="auth-inner auth-inner2">
                 <h4 className="text1 title1">
                   Register An Educational Organization Account
                 </h4>
                 <div className="mt-4"></div>
-                <h6 className="text1">Fill in your personal information to create your own staff account.</h6>
+                <h6 className="text1">
+                  Fill in your personal information to create your own staff
+                  account.
+                </h6>
                 <Dropdown.Divider />
                 <div className="mt-4"></div>
                 <div class="row">
@@ -148,7 +220,7 @@ const LogRegOrganizationAddAccount2 = () => {
                     </div>
                   </div>
                   <div class="column">
-                  <div className="form-group text1">
+                    <div className="form-group text1">
                       <label>Email Address***</label>
                       <input
                         type="email"
@@ -218,10 +290,7 @@ const LogRegOrganizationAddAccount2 = () => {
                     <div className="form-group text1">
                       <label>Gender</label>
                       <div class="select">
-                        <select
-                          name="gender"
-                          className="bound1"
-                        >
+                        <select name="gender" className="bound1">
                           <option value="Male">&nbsp;&nbsp;Male</option>
                           <option value="Female">&nbsp;&nbsp;Female</option>
                           <option value="Others">&nbsp;&nbsp;Others</option>
@@ -254,12 +323,9 @@ const LogRegOrganizationAddAccount2 = () => {
                       />
                     </div>
                   </div>
-                  <div class="column">
-
-                  </div>
+                  <div class="column"></div>
                 </div>
                 <div className="mt-2"></div>
-
 
                 {/* <div class="row">
                   <div class="column">

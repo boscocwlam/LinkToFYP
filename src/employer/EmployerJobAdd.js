@@ -8,7 +8,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate, useParams } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-const EmployerJobUpdate = () => {
+const EmployerJobAdd = () => {
   const [skillData, setSkillData] = useState([]);
   const [jobTypeData, setJobTypeData] = useState([]);
   const [jobTitle, setJobTitle] = useState();
@@ -30,87 +30,59 @@ const EmployerJobUpdate = () => {
   const [skillName4, setSkillName4] = useState();
   const [skillName5, setSkillName5] = useState();
   const [updateStatus, setUpdateStatus] = useState();
-
-  const offer_ID = useParams().id;
   const organization_ID = localStorage.getItem("isOrganized");
   const user_ID = localStorage.getItem("isAuthenitcated");
+  const [offerID, setOfferID] = useState();
+  const [employerID, setEmployerID] = useState();
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/getJobTypes", {
-        organization_ID,
-      })
-      .then((response3) => {
-        setJobTypeData(response3.data);
-        console.log(response3.data);
-      });
+    .get("http://localhost:3001/generateOfferID", {
+    })
+    .then((response) => {
+      setOfferID(response.data[0].offer_ID);
+      console.log(response.data[0].offer_ID);
+    });
 
     axios
-      .post("http://localhost:3001/getJobType1", {
-        user_ID,
-        organization_ID,
-        offer_ID,
-      })
-      .then((response) => {
-        setJobTitle(response.data[0].job_title);
-        setJobTypeID(response.data[0].job_type_ID);
-        setJobDescription(response.data[0].job_description);
-        setSkillID1(response.data[0].skill_ID1);
-        setSkillID2(response.data[0].skill_ID2);
-        setSkillID3(response.data[0].skill_ID3);
-        setSkillID4(response.data[0].skill_ID4);
-        setSkillID5(response.data[0].skill_ID5);
-        setScore1(response.data[0].score1);
-        setScore2(response.data[0].score2);
-        setScore3(response.data[0].score3);
-        setScore4(response.data[0].score4);
-        setScore5(response.data[0].score5);
+    .post("http://localhost:3001/getEmployerID", {
+      user_ID
+    })
+    .then((response) => {
+      setEmployerID(response.data[0].employer_ID);
+      console.log(response.data[0].employer_ID);
+    });
 
-        axios
-          .post("http://localhost:3001/getSkills", {
-            organization_ID,
-          })
-          .then((response2) => {
-            console.log(response2.data);
-            setSkillData(response2.data);
-            response.data.map((item) => {
-              response2.data.map((item2) => {
-                if (item.skill_name1 == item2.skill_ID) {
-                  item.skill_name1 = item2.skill_name;
-                  setSkillName1(item2.skill_name);
-                }
-                if (item.skill_name2 == item2.skill_ID) {
-                  item.skill_name2 = item2.skill_name;
-                  setSkillName2(item2.skill_name);
-                }
-                if (item.skill_name3 == item2.skill_ID) {
-                  item.skill_name3 = item2.skill_name;
-                  setSkillName3(item2.skill_name);
-                }
-                if (item.skill_name4 == item2.skill_ID) {
-                  item.skill_name4 = item2.skill_name;
-                  setSkillName4(item2.skill_name);
-                }
-                if (item.skill_name5 == item2.skill_ID) {
-                  item.skill_name5 = item2.skill_name;
-                  setSkillName5(item2.skill_name);
-                }
-              });
-            });
-            console.log(jobTypeData);
-          });
-      });
+    axios
+    .post("http://localhost:3001/getJobTypes", {
+      organization_ID,
+    })
+    .then((response3) => {
+      setJobTypeData(response3.data);
+      console.log(response3.data);
+    });
+
+    axios
+    .post("http://localhost:3001/getSkills", {
+      organization_ID,
+    })
+    .then((response2) => {
+      console.log(response2.data);
+      setSkillData(response2.data);
+    });
+
   }, []);
 
   let navigate = useNavigate();
   function handleClick() {
-    alert("Profile Updated.");
+    alert("Job Added.");
     navigate("../employer/job");
   }
 
   const submitForm = (event) => {
     event.preventDefault();
-
+    const offer_ID = offerID;
+    const employer_ID = employerID;
     const job_type_ID = event.target.job_type_ID.value;
     const job_description = event.target.job_description.value;
     const job_title = event.target.job_title.value;
@@ -199,6 +171,8 @@ const EmployerJobUpdate = () => {
     } else {
       setUpdateStatus("");
       console.log(
+      offer_ID + " " + 
+      employer_ID + " " + 
       job_type_ID + " " + 
       job_title+ " " + 
       job_description + " " + 
@@ -213,8 +187,9 @@ const EmployerJobUpdate = () => {
       score4+ " " + 
       score5);
       axios
-        .post("http://localhost:3001/updateJobPosted", {
+        .post("http://localhost:3001/addJobPosted", {
           offer_ID,
+          employer_ID,
           job_description,
           job_type_ID,
           job_title,
@@ -242,20 +217,19 @@ const EmployerJobUpdate = () => {
       <EmployerNav />
       <Container>
         <div className="mt-4"></div>
-        <h2 className="title90">Update Job Information</h2>
+        <h2 className="title90">Add New Job</h2>
         <form onSubmit={submitForm}>
           <div className="mt-4"></div>
           <div>
             <div class="row">
               <div class="column">
                 <div className="form-group text1">
-                  <label>Job Title</label>
+                  <label>Job Title*</label>
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Job Title"
                     name="job_title"
-                    value={jobTitle}
                     onChange={(e) => setJobTitle(e.target.value)}
                     required
                   />
@@ -268,7 +242,6 @@ const EmployerJobUpdate = () => {
                     <select
                       className="bound1"
                       name="job_type_ID"
-                      value={jobTypeID}
                       onChange={(e) => setJobTypeID(e.target.value)}
                     >
                       <option value=""></option>
@@ -293,7 +266,6 @@ const EmployerJobUpdate = () => {
                   className="form-control"
                   placeholder="Description"
                   name="job_description"
-                  value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                 />
               </div>
@@ -320,7 +292,6 @@ const EmployerJobUpdate = () => {
                   <select
                     name="skill_ID1"
                     className="bound1"
-                    value={skillID1}
                     onChange={(e) => setSkillID1(e.target.value)}
                     required
                   >
@@ -342,7 +313,6 @@ const EmployerJobUpdate = () => {
                   <select
                     name="score1"
                     className="bound1"
-                    value={score1}
                     onChange={(e) => setScore1(e.target.value)}
                   >
                     <option value="1">&nbsp;&nbsp;1</option>
@@ -371,7 +341,6 @@ const EmployerJobUpdate = () => {
                   <select
                     name="skill_ID2"
                     className="bound1"
-                    value={skillID2}
                     onChange={(e) => setSkillID2(e.target.value)}
                   >
                     <option value=""> </option>
@@ -393,7 +362,6 @@ const EmployerJobUpdate = () => {
                   <select
                     name="score2"
                     className="bound1"
-                    value={score2}
                     onChange={(e) => setScore2(e.target.value)}
                   >
                     <option value=""></option>
@@ -422,7 +390,6 @@ const EmployerJobUpdate = () => {
                   <select
                     name="skill_ID3"
                     className="bound1"
-                    value={skillID3}
                     onChange={(e) => setSkillID3(e.target.value)}
                   >
                     <option value=""> </option>
@@ -444,7 +411,6 @@ const EmployerJobUpdate = () => {
                   <select
                     name="score3"
                     className="bound1"
-                    value={score3}
                     onChange={(e) => setScore3(e.target.value)}
                   >
                     <option value=""></option>
@@ -473,7 +439,6 @@ const EmployerJobUpdate = () => {
                   <select
                     name="skill_ID4"
                     className="bound1"
-                    value={skillID4}
                     onChange={(e) => setSkillID4(e.target.value)}
                   >
                     <option value=""> </option>
@@ -495,7 +460,6 @@ const EmployerJobUpdate = () => {
                   <select
                     name="score4"
                     className="bound1"
-                    value={score4}
                     onChange={(e) => setScore4(e.target.value)}
                   >
                     <option value=""></option>
@@ -524,7 +488,6 @@ const EmployerJobUpdate = () => {
                   <select
                     name="skill_ID5"
                     className="bound1"
-                    value={skillID5}
                     onChange={(e) => setSkillID5(e.target.value)}
                   >
                     <option value=""> </option>
@@ -546,7 +509,6 @@ const EmployerJobUpdate = () => {
                   <select
                     name="score5"
                     className="bound1"
-                    value={score5}
                     onChange={(e) => setScore5(e.target.value)}
                   >
                     <option value=""></option>
@@ -568,7 +530,7 @@ const EmployerJobUpdate = () => {
 
           <div className="mt-3"></div>
           <button className="btn btn-danger btn-block text1">
-            Update Information
+            Add Job
           </button>
         </form>
         <div className="mt-4"></div>
@@ -585,4 +547,4 @@ const EmployerJobUpdate = () => {
   );
 };
 
-export default EmployerJobUpdate;
+export default EmployerJobAdd;

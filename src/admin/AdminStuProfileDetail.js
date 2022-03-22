@@ -101,7 +101,7 @@ const AdminStuProfileDetail = () => {
       })
       .then((response) => {
         axios
-          .post("http://localhost:3001/getJobTypes", {
+          .post("http://localhost:3001/getJobTypes2", {
             organization_ID,
           })
           .then((response2) => {
@@ -215,6 +215,11 @@ const AdminStuProfileDetail = () => {
           navigate("/admin/profile/student");
         });
     }
+  };
+
+  const submitForm3 = (event) => {
+    event.preventDefault();
+    navigate("/admin/profile/student/detail/add/work/" + user_ID);
   };
 
   return (
@@ -415,6 +420,19 @@ const AdminStuProfileDetail = () => {
                 })}
               </Table>
 
+
+              <form onSubmit={submitForm3}>
+                <h6 className="letter4">
+                  Press The Button To Add New Wor Experience:
+                </h6>
+                <button className="btn btn-info input-group-addon text88">
+                  Add Work Experience
+                </button>
+                <div className="mt-3"></div>
+                <Dropdown.Divider />
+              </form>
+
+
               <form onSubmit={submitForm}>
                 <div>
                   <div className="mt-2"></div>
@@ -470,7 +488,7 @@ const AdminStuProfileDetail = () => {
         </form>
 
         <div className="boundary88">
-        <Dropdown.Divider />
+          <Dropdown.Divider />
           <Link
             className="btn btn-primary btn-block text1 center33"
             to={"/admin/profile/student"}

@@ -216,7 +216,6 @@ const AdminAddAdmAccount = () => {
               </div>
             </div>
             <div className="mt-3"></div>
-            <div className="mt-3"></div>
             <div class="row">
               <div class="column">
                 <div className="form-group text1">

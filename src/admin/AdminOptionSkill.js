@@ -67,10 +67,10 @@ export default class AdminOptionSkill extends Component {
         const checkNum = res.data;
         this.setState({ checkNum });
         this.state.checkNum.map((item) => {
-          // console.log(id + " " + item.checkNum);
-          if ((item.checkNum != 0) & (cat == "Trash")) {
+          console.log(id + " " + item.checkNum + cat);
+          if ((item.checkNum != 0) && (cat == "Trash")) {
             alert(
-              "Option Cannot Be Removed: The Option Exists In Some Records. "
+              "Option Cannot Be Removed: The Option Exists In Some Records. However, You May Drag To The Draft Box To Hide The Option."
             );
           } else {
             let tasks = this.state.tasks.filter((task) => {
@@ -95,7 +95,7 @@ export default class AdminOptionSkill extends Component {
             axios.get("http://localhost:3001/deleteSkill").then((res) => {
               console.log(res.data);
             });
-            window.location.reload(false);
+            // window.location.reload(false);
           }
         });
       });

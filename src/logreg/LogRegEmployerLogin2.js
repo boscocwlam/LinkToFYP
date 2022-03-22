@@ -48,7 +48,8 @@ export default function LogRegEmployerLogin2() {
           localStorage.setItem("isEncrypted", response.data.password);
           localStorage.setItem("isAuthenitcated", response.data.user);
           localStorage.removeItem("Email Address (Employer)");
-          navigate("/employer/main");
+          navigate("/employer/main/0");
+          window.location.reload(false);
         } else {
           setLoginStatus(response.data.message);
         }

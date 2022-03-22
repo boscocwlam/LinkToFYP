@@ -44,9 +44,12 @@ const AdminNav = () => {
                     Personal Profile
                   </NavDropdown.Item>
                   <NavDropdown.Item href="/admin/option">
-                    Configurations
+                    List Configuration
                   </NavDropdown.Item>
-                  <NavDropdown.Item href="/admin/main">
+                  <NavDropdown.Item href="/admin/status">
+                    Status Configuration
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/setup">
                     Set Up Guide
                   </NavDropdown.Item>
                 </NavDropdown>
@@ -71,7 +74,7 @@ const AdminNav = () => {
                     View Employer Accounts
                   </NavDropdown.Item>
                   <NavDropdown.Item href="/admin/application">
-                    View Matching Applications
+                    View Hiring Process Records
                   </NavDropdown.Item>
                 </NavDropdown>
 

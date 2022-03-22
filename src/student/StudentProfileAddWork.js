@@ -7,7 +7,7 @@ import Container from "react-bootstrap/Container";
 import Dropdown from "react-bootstrap/Dropdown";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-const StudentProfileUpdateWork = () => {
+const StudentProfileAddWork = () => {
   const [studentID, setStudentID] = useState();
   const [jobTypeData, setJobTypeData] = useState([]);
   const [skillData, setSkillData] = useState([]);
@@ -31,11 +31,24 @@ const StudentProfileUpdateWork = () => {
   const [score4, setScore4] = useState();
   const [score5, setScore5] = useState();
   const [updateStatus, setUpdateStatus] = useState();
-  const work_ID = useParams().id;
+  const [workID, setWorkID] = useState();
+  const organization_ID = localStorage.getItem("isOrganized");
+  const user_ID = localStorage.getItem("isAuthenitcated");
 
   useEffect(() => {
-    const organization_ID = localStorage.getItem("isOrganized");
-    const user_ID = localStorage.getItem("isAuthenitcated");
+    axios.get("http://localhost:3001/generateWorkID", {}).then((response) => {
+      setWorkID(response.data[0].work_ID);
+      console.log(response.data[0].work_ID);
+    });
+
+    axios
+    .post("http://localhost:3001/getStudentID", {
+      user_ID
+    })
+    .then((response) => {
+      setStudentID(response.data[0].student_ID);
+      console.log(response.data[0].student_ID);
+    });
 
     axios
       .post("http://localhost:3001/getJobTypes", {
@@ -47,62 +60,24 @@ const StudentProfileUpdateWork = () => {
       });
 
     axios
-      .post("http://localhost:3001/getStudentWorkExperiences1", {
-        work_ID,
+      .post("http://localhost:3001/getSkills", {
+        organization_ID,
       })
-      .then((response) => {
-        console.log(response.data);
-        setCompanyName(response.data[0].company_name);
-        setDuration(response.data[0].duration);
-        setJobTitle(response.data[0].job_title);
-        setJobTypeID(response.data[0].job_type_ID);
-        setStudentID(response.data[0].student_ID);
-
-        axios
-          .post("http://localhost:3001/getSkills", {
-            organization_ID,
-          })
-          .then((response2) => {
-            setSkillData(response2.data);
-            response2.data.map((item2, index2) => {
-              response.data.map((item, index1) => {
-                if (item2.skill_ID == item.skill_ID1) {
-                  setSkillID1(item.skill_ID1);
-                  setScore1(item.score1);
-                  setSkillName1(item2.skill_name);
-                } else if (item2.skill_ID == item.skill_ID2) {
-                  setSkillID2(item.skill_ID2);
-                  setScore2(item.score2);
-                  setSkillName2(item2.skill_name);
-                } else if (item2.skill_ID == item.skill_ID3) {
-                  setSkillID3(item.skill_ID3);
-                  setScore3(item.score3);
-                  setSkillName3(item2.skill_name);
-                } else if (item2.skill_ID == item.skill_ID4) {
-                  setSkillID4(item.skill_ID4);
-                  setScore4(item.score4);
-                  setSkillName4(item2.skill_name);
-                } else if (item2.skill_ID == item.skill_ID5) {
-                  setSkillID5(item.skill_ID5);
-                  setScore5(item.score5);
-                  setSkillName5(item2.skill_name);
-                }
-              });
-            });
-          });
-          console.log(jobTypeData);
+      .then((response2) => {
+        setSkillData(response2.data);
       });
   }, []);
 
   let navigate = useNavigate();
   function handleClick() {
-    alert("Profile Updated.");
+    alert("Profile Added.");
     navigate("../student/main");
   }
 
   const submitForm = (event) => {
     event.preventDefault();
     const user_ID = localStorage.getItem("isAuthenitcated");
+    const work_ID = workID;
     const student_ID = studentID;
     const company_name = event.target.company_name.value;
     const job_type_ID = event.target.job_type_ID.value;
@@ -123,21 +98,11 @@ const StudentProfileUpdateWork = () => {
     const skill_ID5 = event.target.skill_ID5.value
       ? event.target.skill_ID5.value
       : null;
-    const score1 = event.target.score1.value
-      ? event.target.score1.value
-      : null;
-    const score2 = event.target.score2.value
-      ? event.target.score2.value
-      : null;
-    const score3 = event.target.score3.value
-      ? event.target.score3.value
-      : null;
-    const score4 = event.target.score4.value
-      ? event.target.score4.value
-      : null;
-    const score5 = event.target.score5.value
-      ? event.target.score5.value
-      : null;
+    const score1 = event.target.score1.value ? event.target.score1.value : null;
+    const score2 = event.target.score2.value ? event.target.score2.value : null;
+    const score3 = event.target.score3.value ? event.target.score3.value : null;
+    const score4 = event.target.score4.value ? event.target.score4.value : null;
+    const score5 = event.target.score5.value ? event.target.score5.value : null;
     if (
       (skill_ID1 != null &&
         (skill_ID1 == skill_ID2 ||
@@ -192,24 +157,41 @@ const StudentProfileUpdateWork = () => {
       );
     } else {
       setUpdateStatus("");
-      console.log(student_ID + " " + 
-        company_name + " " + 
-        job_type_ID + " " + 
-        job_title+ " " + 
-        duration + " " + 
-        skill_ID1 + " " + 
-        skill_ID2 + " " + 
-        skill_ID3 + " " + 
-        skill_ID4 + " " + 
-        skill_ID5 + " " + 
-        score1 + " " + 
-        score2 + " " + 
-        score3 + " " + 
-        score4+ " " + 
-        score5);
+      console.log(
+        student_ID +
+          " " +
+          company_name +
+          " " +
+          job_type_ID +
+          " " +
+          job_title +
+          " " +
+          duration +
+          " " +
+          skill_ID1 +
+          " " +
+          skill_ID2 +
+          " " +
+          skill_ID3 +
+          " " +
+          skill_ID4 +
+          " " +
+          skill_ID5 +
+          " " +
+          score1 +
+          " " +
+          score2 +
+          " " +
+          score3 +
+          " " +
+          score4 +
+          " " +
+          score5
+      );
       axios
-        .post("http://localhost:3001/updateWorkExperience", {
+        .post("http://localhost:3001/addWorkExperience", {
           work_ID,
+          student_ID,
           company_name,
           job_type_ID,
           job_title,
@@ -241,7 +223,7 @@ const StudentProfileUpdateWork = () => {
       <div>
         <Container>
           <div className="mt-4"></div>
-          <h2 className="title90">Update Work Experience</h2>
+          <h2 className="title90">Add Work Experience</h2>
           <form onSubmit={submitForm}>
             <div className="mt-4"></div>
 
@@ -254,7 +236,6 @@ const StudentProfileUpdateWork = () => {
                     className="form-control"
                     placeholder="Company Name"
                     name="company_name"
-                    value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     required
                   />
@@ -268,7 +249,6 @@ const StudentProfileUpdateWork = () => {
                     className="form-control"
                     placeholder="Duration"
                     name="duration"
-                    value={duration}
                     onChange={(e) => setDuration(e.target.value)}
                   />
                 </div>
@@ -284,7 +264,6 @@ const StudentProfileUpdateWork = () => {
                     className="form-control"
                     placeholder="Job Title"
                     name="job_title"
-                    value={jobTitle}
                     onChange={(e) => setJobTitle(e.target.value)}
                     required
                   />
@@ -297,7 +276,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="job_type_ID"
                       className="bound1"
-                      value={jobTypeID}
                       onChange={(e) => setJobTypeID(e.target.value)}
                     >
                       <option value=""></option>
@@ -318,7 +296,8 @@ const StudentProfileUpdateWork = () => {
             <Dropdown.Divider />
             <div className="mt-4"></div>
             <h5 className="text1">
-              Please Choose And Rate 5 Major Skills Applied To Your Work Experience.
+              Please Choose And Rate 5 Major Skills Applied To Your Work
+              Experience.
             </h5>
             <h6 className="text1">
               *** You May Leave It Blank If All Other Fields That Are Not
@@ -335,7 +314,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="skill_ID1"
                       className="bound1"
-                      value={skillID1}
                       onChange={(e) => setSkillID1(e.target.value)}
                       required
                     >
@@ -357,7 +335,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="score1"
                       className="bound1"
-                      value={score1}
                       onChange={(e) => setScore1(e.target.value)}
                     >
                       <option value="1">&nbsp;&nbsp;1</option>
@@ -386,7 +363,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="skill_ID2"
                       className="bound1"
-                      value={skillID2}
                       onChange={(e) => setSkillID2(e.target.value)}
                     >
                       <option value=""> </option>
@@ -408,7 +384,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="score2"
                       className="bound1"
-                      value={score2}
                       onChange={(e) => setScore2(e.target.value)}
                     >
                       <option value=""></option>
@@ -437,7 +412,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="skill_ID3"
                       className="bound1"
-                      value={skillID3}
                       onChange={(e) => setSkillID3(e.target.value)}
                     >
                       <option value=""> </option>
@@ -459,7 +433,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="score3"
                       className="bound1"
-                      value={score3}
                       onChange={(e) => setScore3(e.target.value)}
                     >
                       <option value=""></option>
@@ -488,7 +461,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="skill_ID4"
                       className="bound1"
-                      value={skillID4}
                       onChange={(e) => setSkillID4(e.target.value)}
                     >
                       <option value=""> </option>
@@ -510,7 +482,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="score4"
                       className="bound1"
-                      value={score4}
                       onChange={(e) => setScore4(e.target.value)}
                     >
                       <option value=""></option>
@@ -539,7 +510,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="skill_ID5"
                       className="bound1"
-                      value={skillID5}
                       onChange={(e) => setSkillID5(e.target.value)}
                     >
                       <option value=""> </option>
@@ -561,7 +531,6 @@ const StudentProfileUpdateWork = () => {
                     <select
                       name="score5"
                       className="bound1"
-                      value={score5}
                       onChange={(e) => setScore5(e.target.value)}
                     >
                       <option value=""></option>
@@ -582,7 +551,9 @@ const StudentProfileUpdateWork = () => {
             </div>
 
             <div className="mt-3"></div>
-            <button className="btn btn-danger btn-block text1">Update Work Experience</button>
+            <button className="btn btn-danger btn-block text1">
+              Add Work Experience
+            </button>
           </form>
           <div className="mt-4"></div>
           <Dropdown.Divider />
@@ -599,4 +570,4 @@ const StudentProfileUpdateWork = () => {
   );
 };
 
-export default StudentProfileUpdateWork;
+export default StudentProfileAddWork;

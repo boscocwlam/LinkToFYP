@@ -183,3 +183,21 @@
 .boundary88{
   width: 80%;
 }
+
+.boundary35{
+  border:2px solid rgb(50,50,50);
+  border-radius: 15px;
+  width: 100%;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.ttt3{
+  width: 50%;
+}
+
+.sameline2{
+  display: inline-block;
+}

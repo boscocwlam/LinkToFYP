@@ -29,8 +29,14 @@ const AdminStuProfile = () => {
         organization_ID,
       })
       .then((response) => {
-        setYearData(response.data);
-        setYearChosen(response.data[0].year_ID);
+        console.log(response.data);
+        if (response.data.length > 0) {
+          setYearData(response.data);
+          setYearChosen(response.data[0].year_ID);
+        }else{
+          setYearData([]);
+          setYearChosen("");
+        }
       });
   }, []);
 
@@ -146,5 +152,3 @@ const AdminStuProfile = () => {
 };
 
 export default AdminStuProfile;
-
-

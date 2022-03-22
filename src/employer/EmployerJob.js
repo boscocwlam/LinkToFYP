@@ -11,6 +11,8 @@ const EmployerJob = () => {
   const [jobData, setJobData] = useState([]);
   const user_ID = localStorage.getItem("isAuthenitcated");
   const organization_ID = localStorage.getItem("isOrganized");
+  const [submitButton, setSubmitButton] = useState([]);
+  const [recordStatus, setRecordStatus] = useState();
 
   useEffect(() => {
     axios
@@ -72,6 +74,11 @@ const EmployerJob = () => {
               });
             });
             setJobData(response.data);
+            if (response.data.length == 0) {
+              setRecordStatus("No Job Record. Please Add New Jobs.");
+            } else {
+              setRecordStatus("");
+            }
             console.log(response.data);
           });
       });
@@ -80,7 +87,27 @@ const EmployerJob = () => {
   let navigate = useNavigate();
   const submitForm = (event) => {
     event.preventDefault();
-    navigate("/employer/job/update/" + event.target.offer_ID.value);
+    if (submitButton == "update") {
+      navigate("/employer/job/update/" + event.target.offer_ID.value);
+    } else if (submitButton == "delete") {
+      if (window.confirm("Delete Job?") == true) {
+        const offer_ID = event.target.offer_ID.value;
+        axios
+          .post("http://localhost:3001/deleteJob", {
+            offer_ID,
+          })
+          .then((response) => {
+            // console.log(response.data);
+            alert("Record Deleted.");
+            window.location.reload(false);
+          });
+      }
+    }
+  };
+
+  const submitForm2 = (event) => {
+    event.preventDefault();
+    navigate("/employer/job/add");
   };
 
   return (
@@ -90,11 +117,13 @@ const EmployerJob = () => {
         <Container>
           <div className="mt-4"></div>
           <h2 className="title90">Job Posted</h2>
-          <div className="mt-4"></div>
         </Container>
       </Container>
 
       <Container>
+        <div className="mt-4"></div>
+        <h6 className="letter4">{recordStatus}</h6>
+        <div className="mt-4"></div>
         {jobData.map((item) => {
           return (
             <div>
@@ -149,14 +178,27 @@ const EmployerJob = () => {
           );
         })}
 
+        <form onSubmit={submitForm2}>
+          <div className="mt-2"></div>
+          <div className="boundary88">
+            <Dropdown.Divider />
+          </div>
+          <h6 className="letter4">Press The Button To Add New Offered Job:</h6>
+          <button className="btn btn-info input-group-addon text88">
+            Add Job
+          </button>
+          <div className="mt-3"></div>
+        </form>
+
         <form onSubmit={submitForm}>
           <div>
             <div className="mt-2"></div>
             <div className="boundary88">
               <Dropdown.Divider />
             </div>
-            <h6 className="letter4">Information For Offered Job (Choose From The Dropbox):</h6>
-        
+            <h6 className="letter4">
+              Information For Offered Job (Choose From The Dropbox):
+            </h6>
             <div className="form-group text1">
               <div class="select">
                 <select
@@ -176,8 +218,18 @@ const EmployerJob = () => {
               </div>
             </div>
             <div className="mt-3"></div>
-            <button className="btn btn-danger input-group-addon text88">
-              Update
+            <button
+              className="btn btn-danger input-group-addon text88"
+              onClick={(e) => setSubmitButton("update")}
+            >
+              Update Job
+            </button>
+            &nbsp;&nbsp;&nbsp;
+            <button
+              className="btn btn-warning input-group-addon text88"
+              onClick={(e) => setSubmitButton("delete")}
+            >
+              Delete Job
             </button>
           </div>
         </form>

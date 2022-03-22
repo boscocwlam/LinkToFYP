@@ -1,5 +1,5 @@
 import React from "react";
-import EmployerNav from "./EmployerNav";
+import AdminNav from "./AdminNav";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
@@ -8,7 +8,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate, useParams } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-const EmployerJobUpdate = () => {
+const AdminEmpProfileDetailUpdateJob = () => {
   const [skillData, setSkillData] = useState([]);
   const [jobTypeData, setJobTypeData] = useState([]);
   const [jobTitle, setJobTitle] = useState();
@@ -31,9 +31,9 @@ const EmployerJobUpdate = () => {
   const [skillName5, setSkillName5] = useState();
   const [updateStatus, setUpdateStatus] = useState();
 
-  const offer_ID = useParams().id;
+  const offer_ID = useParams().jid;
   const organization_ID = localStorage.getItem("isOrganized");
-  const user_ID = localStorage.getItem("isAuthenitcated");
+  const user_ID = useParams().id;
 
   useEffect(() => {
     axios
@@ -105,7 +105,7 @@ const EmployerJobUpdate = () => {
   let navigate = useNavigate();
   function handleClick() {
     alert("Profile Updated.");
-    navigate("../employer/job");
+    navigate("/admin/profile/employer/detail/" + user_ID);
   }
 
   const submitForm = (event) => {
@@ -239,7 +239,7 @@ const EmployerJobUpdate = () => {
 
   return (
     <div>
-      <EmployerNav />
+      <AdminNav />
       <Container>
         <div className="mt-4"></div>
         <h2 className="title90">Update Job Information</h2>
@@ -575,7 +575,7 @@ const EmployerJobUpdate = () => {
         <Dropdown.Divider />
         <Link
           className="btn btn-primary btn-block text1 center33"
-          to={"/employer/job"}
+          to={"/admin/profile/employer/detail/" + user_ID}
         >
           Return To Previous Page
         </Link>
@@ -585,4 +585,4 @@ const EmployerJobUpdate = () => {
   );
 };
 
-export default EmployerJobUpdate;
+export default AdminEmpProfileDetailUpdateJob;
