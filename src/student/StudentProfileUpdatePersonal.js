@@ -15,6 +15,9 @@ const StudentProfileUpdatePersonal = () => {
   const [city, setCity] = useState();
   const [phoneNo, setPhoneNo] = useState();
   const [emailAddress, setEmailAddress] = useState();
+  const [firstNameChi, setFirstNameChi] = useState();
+  const [lastNameChi, setLastNameChi] = useState();
+
 
   useEffect(() => {
     const organization_ID = localStorage.getItem("isOrganized");
@@ -29,7 +32,7 @@ const StudentProfileUpdatePersonal = () => {
     //   });
 
     axios
-      .post("http://localhost:3001/getStudentPersonalInfo", {
+      .post("http://localhost:3001/getStudentPersonalInfo2", {
         user_ID,
       })
       .then((response) => {
@@ -37,6 +40,8 @@ const StudentProfileUpdatePersonal = () => {
         setCity(response.data.city);
         setEmailAddress(response.data.email_address);
         setPhoneNo(response.data.phone_no);
+        setFirstNameChi(response.data.first_name_chi);
+        setLastNameChi(response.data.last_name_chi);
       });
   }, []);
 
@@ -53,6 +58,8 @@ const StudentProfileUpdatePersonal = () => {
     const city = event.target.city.value;
     const phone_no = event.target.phone_no.value;
     const email_address = event.target.email_address.value;
+    const first_name_chi = event.target.first_name_chi.value;
+    const last_name_chi = event.target.last_name_chi.value;
 
     axios
       .post("http://localhost:3001/updateStudentPersonalInfo", {
@@ -61,6 +68,8 @@ const StudentProfileUpdatePersonal = () => {
         city,
         phone_no,
         email_address,
+        first_name_chi,
+        last_name_chi
       })
       .then((response) => {
         console.log(response.data);
@@ -81,6 +90,36 @@ const StudentProfileUpdatePersonal = () => {
           <form onSubmit={submitForm}>
             <div className="mt-4"></div>
 
+            <div class="row">
+              <div class="column">
+                <div className="form-group text1">
+                  <label>First Name (Chinese)</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="First Name (Chinese)"
+                    name="first_name_chi"
+                    value={firstNameChi}
+                    onChange={(e) => setFirstNameChi(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              <div class="column">
+                <div className="form-group text1">
+                  <label>Last Name (Chinese)</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Last Name (Chinese)"
+                    name="last_name_chi"
+                    value={lastNameChi}
+                    onChange={(e) => setLastNameChi(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="mt-3"></div>
             <div class="row">
               <div class="column">
                 <div className="form-group text1">

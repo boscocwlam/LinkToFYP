@@ -1,0 +1,120 @@
+SELECT 
+stuEmp.Application_ID AS application_ID,
+stuEmp.Employer_ID AS employer_ID,
+stuEmp.Student_ID AS student_ID,
+job.offer_ID AS offer_ID,
+job.job_title AS job_title,  
+jt.job_type_name AS job_type_name, 
+use1.First_name AS stu_first_name,
+use1.Last_name AS stu_last_name,
+use2.First_name AS emp_first_name,
+use2.Last_name AS emp_last_name,
+use1.First_name_chi AS stu_first_name_chi,
+use1.Last_name_chi AS stu_last_name_chi,
+use2.First_name_chi AS emp_first_name_chi,
+use2.Last_name_chi AS emp_last_name_chi,
+org.Organization_ID AS organization_ID,
+yea.Year_name AS year_name,
+emp.Company_name AS company_name,
+use2.Email_address AS email_address 
+FROM 
+Students_Employers stuEmp INNER JOIN
+Students stu INNER JOIN
+Employers emp INNER JOIN
+Jobs job INNER JOIN  
+Job_types jt INNER JOIN 
+Users use1 INNER JOIN
+Users use2 INNER JOIN
+Organizations org INNER JOIN
+Years yea 
+ON 
+use1.User_ID=stu.User_ID AND
+use2.User_ID=emp.User_ID AND
+stu.Student_ID=stuEmp.Student_ID AND 
+emp.Employer_ID=stuEmp.Employer_ID AND
+stuEmp.offer_ID = job.offer_ID AND 
+job.job_type_ID = jt.job_type_ID AND 
+use2.organization_ID = org.organization_ID AND 
+stu.year_ID = yea.year_ID AND 
+stuEmp.Application_ID = 50100001;
+
+
+
+Raw Data For Normalization
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800005, 1100000013, 702, 20004, 9, 20010, 10, 20011, 7, 20008, 4, 20018, 8);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800006, 1100000014, 702, 20004, 9, 20015, 10, 20016, 4, 20006, 2, 20021, 10);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800007, 1100000015, 702, 20015, 2, 20017, 6, 20014, 7, 20022, 5, 20020, 10);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800008, 1100000016, 702, 20023, 9, 20012, 7, 20009, 5, 20010, 4, 20012, 5);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800009, 1100000017, 702, 20012, 9, 20010, 8, 20018, 5, 20008, 6, 20013, 3);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800010, 1100000018, 702, 20010, 9, 20011, 10, 200113 7, 20004, 4, 20014, 8);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800011, 1100000019, 702, 20002, 9, 20009, 10, 20013, 9, 20018, 4, 20017, 8);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800012, 1100000020, 702, 20002, 9, 20003, 6, 20007, 7, 20010, 3, 20008, 10);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800013, 1100000021, 702, 20004, 9, 20013, 10, 20018, 4, 20008, 4, 20018, 8);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800014, 1100000022, 702, 20008, 9, 20009, 10, 20007, 7, 20002, 4, 20022, 8);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800015, 1100000023, 703, 20023, 7, 20019, 1, 20001, 7, 20007, 6, 20015, 2);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800016, 1100000024, 703, 20018, 2, 20011, 10, 20016, 5, 20012, 4, 20013, 3);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800017, 1100000025, 703, 20001, 9, 20018, 1, 20011, 5, 20008, 5, 20014, 5);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800018, 1100000026, 703, 20008, 9, 20002, 10, 20011, 7, 20022, 4, 20013, 8);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800019, 1100000027, 703, 20001, 4, 20011, 10, 20012, 7, 20009, 4, 20019, 8);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800020, 1100000028, 703, 20010, 9, 20011, 8, 20012, 7, 20008, 4, 20018, 10);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800021, 1100000029, 703, 20005, 10, 20020, 10, 20019, 10, 20018, 4, 20015, 3);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800022, 1100000030, 703, 20014, 10, 20011, 1, 20013, 7, 20008, 8, 20018, 1);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800023, 1100000031, 703, 20014, 6, 20012, 6, 20015, 6, 20009, 6, 20016, 3);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800024, 1100000032, 702, 20023, 9, 20020, 5, 20011, 4, 20008, 2, 20016, 9);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800025, 1100000033, 702, 20001, 9, 20002, 10, 20003, 3, 20009, 4, 20014, 8);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800026, 1100000034, 702, 20009, 9, 20006, 5, 20007, 7, 20008, 4, 20012, 3);
+
+INSERT INTO Students (Student_ID, User_ID, Year_ID, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3, FYP_skill_ID4, FYP_score4, FYP_skill_ID5, FYP_score5) VALUES (1800027, 1100000035, 702, 20014, 9, 20011, 8, 20001, 7, 20009, 10, 20019, 8);
+
+
+
+
+
+
+
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000013, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000014, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000015, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000016, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000017, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000018, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000019, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000020, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000021, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000022, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000023, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000024, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000025, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000026, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000027, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000028, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000029, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000030, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000031, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000032, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000033, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000034, 1001);
+INSERT INTO Users (User_ID, Organization_ID) VALUES (1100000035, 1001);
+
+

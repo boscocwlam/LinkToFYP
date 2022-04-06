@@ -82,7 +82,7 @@ const EmployerApplication = () => {
                     <td className="letter16">STUDENT ID</td>
                     <td className="letter16">STUDENT NAME (ENGLISH)</td>
                     <td className="letter16">JOB TITLE</td>
-                    <td className="letter16">APPLIED DATE</td>
+                    <td className="letter16">SUBMITTED DATE</td>
                     <td className="letter16">CURRENT STATUS</td>
                     <td className="letter16">STATUS MODIFIED DATE</td>
                   </tr>

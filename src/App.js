@@ -40,6 +40,10 @@ import StudentProfileUpdatePersonal from "./student/StudentProfileUpdatePersonal
 import StudentProfileUpdateFYP from "./student/StudentProfileUpdateFYP";
 import StudentProfileUpdateWork from "./student/StudentProfileUpdateWork";
 import StudentProfileAddWork from "./student/StudentProfileAddWork";
+import StudentApplication from "./student/StudentApplication";
+import StudentApplicationDetail from "./student/StudentApplicationDetail";
+import StudentPreferences from "./student/StudentPreferences";
+import StudentDashboard from "./student/StudentDashboard";
 
 // Admin
 // Settings
@@ -74,7 +78,11 @@ import AdminApplicationDetail from "./admin/AdminApplicationDetail";
 
 
 // Analytic Tools
-import AdminDashboard from "./admin/AdminDashboard";
+import AdminDashboardStudent from "./admin/AdminDashboardStudent";
+import AdminDashboardStudentYear from "./admin/AdminDashboardStudentYear";
+import AdminDashboardStudentYear2 from "./admin/AdminDashboardStudentYear2";
+import AdminDashboardEmployer from "./admin/AdminDashboardEmployer";
+import AdminDashboardApplication from "./admin/AdminDashboardApplication";
 
 
 //Employer
@@ -92,6 +100,7 @@ import EmployerApply2 from "./employer/EmployerApply2";
 import EmployerApply3 from "./employer/EmployerApply3";
 import EmployerApplication from "./employer/EmployerApplication";
 import EmployerApplicationDetail from "./employer/EmployerApplicationDetail";
+import EmployerDashboard from "./employer/EmployerDashboard";
 
 //Page
 import SearchStudent from "./page/SearchStudent";
@@ -140,6 +149,10 @@ function App() {
         <Route exact path="/student/profile/self/update/fyp" element={<LogRegStudentProtectedRoute><StudentProfileUpdateFYP /></LogRegStudentProtectedRoute>} />
         <Route exact path="/student/profile/self/update/work/:id" element={<LogRegStudentProtectedRoute><StudentProfileUpdateWork /></LogRegStudentProtectedRoute>} />
         <Route exact path="/student/profile/self/add/work" element={<LogRegStudentProtectedRoute><StudentProfileAddWork /></LogRegStudentProtectedRoute>} />
+        <Route exact path="/student/application" element={<LogRegStudentProtectedRoute><StudentApplication /></LogRegStudentProtectedRoute>} />
+        <Route exact path="/student/application/detail/:id" element={<LogRegStudentProtectedRoute><StudentApplicationDetail /></LogRegStudentProtectedRoute>} />
+        <Route exact path="/student/preferences" element={<LogRegStudentProtectedRoute><StudentPreferences /></LogRegStudentProtectedRoute>} />
+        <Route exact path="/student/dashboard" element={<LogRegStudentProtectedRoute><StudentDashboard /></LogRegStudentProtectedRoute>} />
 
         {/* admin */}
         {/* Settings */}
@@ -170,7 +183,11 @@ function App() {
         <Route exact path="/admin/application" element={<LogRegAdminProtectedRoute><AdminApplication /></LogRegAdminProtectedRoute>} />
         <Route exact path="/admin/application/detail/:id" element={<LogRegAdminProtectedRoute><AdminApplicationDetail /></LogRegAdminProtectedRoute>} />
         {/* Analytic Tools */}
-        <Route exact path="/admin/dashboard" element={<LogRegAdminProtectedRoute><AdminDashboard /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/dashboard/student" element={<LogRegAdminProtectedRoute><AdminDashboardStudent /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/dashboard/student/year" element={<LogRegAdminProtectedRoute><AdminDashboardStudentYear /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/dashboard/student/year/:id" element={<LogRegAdminProtectedRoute><AdminDashboardStudentYear2 /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/dashboard/employer" element={<LogRegAdminProtectedRoute><AdminDashboardEmployer /></LogRegAdminProtectedRoute>} />
+        <Route exact path="/admin/dashboard/application" element={<LogRegAdminProtectedRoute><AdminDashboardApplication /></LogRegAdminProtectedRoute>} />
 
         
 
@@ -189,6 +206,7 @@ function App() {
         <Route exact path="/employer/apply/submit/:id/:jid" element={<LogRegEmployerProtectedRoute><EmployerApply3 /></LogRegEmployerProtectedRoute> }/>
         <Route exact path="/employer/application" element={<LogRegEmployerProtectedRoute><EmployerApplication /></LogRegEmployerProtectedRoute> }/>
         <Route exact path="/employer/application/detail/:id" element={<LogRegEmployerProtectedRoute><EmployerApplicationDetail /></LogRegEmployerProtectedRoute> }/>
+        <Route exact path="/employer/dashboard" element={<LogRegEmployerProtectedRoute><EmployerDashboard /></LogRegEmployerProtectedRoute> }/>
 
 
         {/* page */}

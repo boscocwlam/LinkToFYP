@@ -67,6 +67,7 @@ User_ID int,
 Year_ID int,
 cGPA numeric(3,2),
 hasJob varchar(255),
+receiveJob varchar(255),
 FYP_name varchar(255),
 FYP_final_grade varchar(255),
 FYP_background varchar(8000),
@@ -249,7 +250,7 @@ INSERT INTO Jobs (Offer_ID, Employer_ID, Job_type_ID, Job_title, Job_description
 
 INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1000, "LinkToFYP Administration Section");
 
-INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1001, "Department of Computer Science, Hong Kong Baptist Univeristy");
+INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1001, "Department of Journalism, Hong Kong Baptist Univeristy");
 
 INSERT INTO Organizations (Organization_ID, Organization_name) VALUES (1002, "Department of Medicine, The Chinese Univeristy of Hong Kong");
 
@@ -313,13 +314,13 @@ INSERT INTO Years (Year_ID, Organization_ID, Year_name, Category) VALUES (705, 1
 
 INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1099999998, 1000, "Default", "Default", "Default", "Default", "Male", "Default", "Default", "default@gmail.com", "Default0", "Admin");
 
-INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000001, 1001, "Hong Wai", "Fung", "雄偉", "馮", "Male", "Hong Kong", "+852 50000021", "hongwai@gmail.com", "Pw25200001", "Admin");
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000001, 1001, "Hong Wai", "Fung", "雄偉", "馮", "Male", "Hong Kong", "+852 50000021", "hongwai@gmail.com", "Pw2100001", "Admin");
 
-INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000002, 1001, "Wai Yan", "Yeung", "慧欣", "楊", "Female", "Hong Kong", "+852 50000022", "waiyan@gmail.com", "Pw25200002", "Admin");
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000002, 1001, "Wai Yan", "Yeung", "慧欣", "楊", "Female", "Hong Kong", "+852 50000022", "waiyan@gmail.com", "Pw2100002", "Admin");
 
-INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000003, 1001, "Wing Chun", "Lam", "永駿", "林", "Male", "Hong Kong", "+852 50000023", "wingchun@gmail.com", "Pw25200003", "Admin");
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000003, 1001, "Wing Chun", "Lam", "永駿", "林", "Male", "Hong Kong", "+852 50000023", "wingchun@gmail.com", "Pw2100003", "Admin");
 
-INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000004, 1002, "Tung Yan", "Wong", "東茵", "黃", "Female", "Hong Kong", "+852 50000024", "tungyan@gmail.com", "Pw25200004", "Admin");
+INSERT INTO Users (User_ID, Organization_ID, First_name, Last_name, First_name_chi, Last_name_chi, Gender, City, Phone_no, Email_address, Password, Role) VALUES (1100000004, 1002, "Tung Yan", "Wong", "東茵", "黃", "Female", "Hong Kong", "+852 50000024", "tungyan@gmail.com", "Pw2100004", "Admin");
 
 //Students (Users)
 
@@ -364,15 +365,16 @@ INSERT INTO Staffs (Staff_ID, User_ID) VALUES (2100004, 1100000004);
 
 // Insert Students records without "FYP_photo" & "FYP_document"
 
-INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, FYP_name, FYP_final_grade, FYP_background, FYP_link) VALUES (1800000, 1099999999, 701, 1.00, "Yes", "FYP_name_default", "A", "FYP_background_default", "FYP_link_default");
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, receiveJob, FYP_name, FYP_final_grade, FYP_background, FYP_link) VALUES (1800000, 1099999999, 701, 1.00, "No", "Yes", "FYP_name_default", "A", "FYP_background_default", "FYP_link_default");
 
-INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3) VALUES (1800001, 1100000005, 701, 1.20, "Yes", "FYP_name_1", "A-", "FYP_background_1", "FYP_link_1", 20001, 9, 20003, 10, 20004, 4);
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, receiveJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2, FYP_skill_ID3, FYP_score3) VALUES (1800001, 1100000005, 701, 1.20, "Yes", "Yes", "FYP_name_1", "A-", "FYP_background_1", "FYP_link_1", 20001, 9, 20003, 10, 20004, 4);
 
-INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2) VALUES (1800002, 1100000006, 702, 2.54, "Yes", "FYP_name_2", "A", "FYP_background_2", "FYP_link_2", 20001, 5, 20004, 7);
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, receiveJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2) VALUES (1800002, 1100000006, 702, 2.54, "Yes", "Yes", "FYP_name_2", "A", "FYP_background_2", "FYP_link_2", 20001, 5, 20004, 7);
 
-INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2) VALUES (1800003, 1100000007, 702, 3.34, "Yes", "FYP_name_3", "B+", "FYP_background_3", "FYP_link_3", 20003, 8, 20004, 10);
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, receiveJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1, FYP_skill_ID2, FYP_score2) VALUES (1800003, 1100000007, 702, 3.34, "No", "Yes", "FYP_name_3", "B+", "FYP_background_3", "FYP_link_3", 20003, 8, 20004, 10);
 
-INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1) VALUES (1800004, 1100000008, 704, 2.95, "FYP_name_4", "B-", "Yes", "FYP_background_4", "FYP_link_4", 20005, 9);
+INSERT INTO Students (Student_ID, User_ID, Year_ID, cGPA, hasJob, receiveJob, FYP_name, FYP_final_grade, FYP_background, FYP_link, FYP_skill_ID1, FYP_score1) VALUES (1800004, 1100000008, 704, 2.95, "No", "Yes", "FYP_name_4", "B-", "FYP_background_4", "FYP_link_4", 20005, 9);
+
 
 
 
@@ -393,13 +395,15 @@ INSERT INTO Employers (Employer_ID, User_ID, Company_name) VALUES (25200004, 110
 
 INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (19, 'Default_Status', 'Default_Description', -5, 1000); 
 
-INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (20, 'Applied', 'You have sent a hiring request to the organization/department. The organization/department will start to follow up in the latest stage.', 0, 1001);
+INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (20, 'Application Submitted', 'You have sent a hiring request to the organization/department. The organization/department will start to follow up in the latest stage.', 0, 1001);
 
-INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (21, 'In Progress', 'The organization/department starts to follow up your request. Please wait for the response from the organization/department.', 1, 1001);
+INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (21, 'Application In Progress', 'The organization/department starts to follow up your request. Please wait for the response from the organization/department.', 1, 1001);
 
-INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (22, 'Process Completed', 'The hiring process is completed. It is expected that the request should not be withdrawn.', 2, 1001);
+INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (22, 'Waiting For Approval By Department', 'You are currently waiting for the approval by the department. Please wait for the response from the organization/department. ', 2, 1001);
 
-INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (23, 'Withdraw', 'The hiring process is withdrawn.', 12, 1001); 
+INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (23, 'Process Completed', 'The hiring process is completed. It is expected that the request should not be withdrawn.', 3, 1001);
+
+INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (24, 'Withdraw', 'The hiring process is withdrawn.', 13, 1001); 
 
 // Insert Work_experiences records
 
@@ -438,11 +442,23 @@ INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_d
 
 INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100103, 50100001, 21, '2019-11-03 20:20:20');
 
-INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100104, 50100001, 22, '2019-11-07 08:09:09');
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100104, 50100003, 20, '2020-02-07 03:15:15');
 
-INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100105, 50100003, 20, '2020-02-07 03:15:15');
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100105, 50100004, 20, '2020-02-03 08:18:15');
 
-INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100106, 50100004, 20, '2020-02-03 08:18:15');
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100106, 50100005, 20, '2022-03-27 19:05:28');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100107, 50100004, 21, '2022-04-01 16:37:22');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100108, 50100004, 22, '2022-04-01 16:38:23');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100109, 50100004, 23, '2022-04-01 16:40:23');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100110, 50100003, 21, '2022-04-02 12:40:23');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100111, 50100003, 22, '2022-04-02 14:10:23');
+
+INSERT INTO StatusRecords (Record_ID, Application_ID, Status_ID, Status_change_date) VALUES (400100112, 50100003, 23, '2022-04-02 18:12:23');
 
 
 // Insert Jobs records
@@ -785,6 +801,7 @@ User_ID int,
 Year_ID int,
 cGPA numeric(3,2),
 hasJob varchar(255),
+receiveJob varchar(255),
 FYP_name varchar(255),
 FYP_final_grade varchar(255),
 FYP_background varchar(8000),

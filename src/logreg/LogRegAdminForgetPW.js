@@ -53,7 +53,7 @@ const LogRegAdminForgetPW = () => {
           <div className="auth-wrapper">
             <div className="auth-inner">
               <form onSubmit={handleSubmit}>
-                <h4 className="text1 title1">Set Your Password</h4>
+                <h4 className="text1 title1">Set Your Password (Staffs)</h4>
                 <div className="mt-4"></div>
                 <div className="mt-2"></div>
                 <div className="form-group text1">

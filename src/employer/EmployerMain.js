@@ -601,7 +601,6 @@ const EmployerMain = () => {
                       >
                         {item.first_name} {item.last_name} {item.last_name_chi}
                         {item.first_name_chi}
-                        {item.user_ID}
                       </a>
                       <div className="mt-2"></div>
                       <span className="card-text text66">
@@ -697,7 +696,7 @@ const EmployerMain = () => {
                               {item.fyp_score5}
                             </h6>
                             <div className="mt-4"></div>
-                            <img className="picture00" src={BG1} alt="BG1" />
+                            {/* <img className="picture00" src={BG1} alt="BG1" /> */}
                             <div className="mt-4"></div>
                             <h6>Link:</h6>
                             <div className="mt-2"></div>

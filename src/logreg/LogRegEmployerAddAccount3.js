@@ -164,7 +164,7 @@ export default function LogRegEmployerLogin2() {
                 </div>
                 <div className="mt-4"></div>
                 <button className="btn btn-danger btn-block text1">
-                  Log In
+                  Sign Up
                 </button>
                 <div className="mt-4"></div>
                 <h6 className="loginStatus">{loginStatus}</h6>

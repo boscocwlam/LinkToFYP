@@ -15,9 +15,7 @@ import { useNavigate } from "react-router-dom";
 // import NavbarOffcanvas from "react-bootstrap/NavbarOffcanvas";
 // import Offcanvas from "react-bootstrap/Offcanvas";
 
-
 const StudentNav = () => {
-
   let navigate = useNavigate();
   function handleClick() {
     navigate("/");
@@ -47,13 +45,22 @@ const StudentNav = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
-                {/* <Nav.Link href="/student/main">
-                  <p1 className="word">HomePage</p1>
-                </Nav.Link> */}
+              <Nav.Link href="/student/main">
+                  <p1 className="word">Personal Profile</p1>
+                </Nav.Link>
+                <Nav.Link href="/student/preferences">
+                  <p1 className="word">Preferences</p1>
+                </Nav.Link>
+                <Nav.Link href="/student/dashboard">
+                  <p1 className="word">Dashboard</p1>
+                </Nav.Link>
+                <Nav.Link href="/student/application">
+                  <p1 className="word">Hiring Process Records</p1>
+                </Nav.Link>
               </Nav>
               <NavDropdown.Divider />
               <Nav>
-                <Nav.Link href="/" onClick={()=>handleClick()}>
+                <Nav.Link href="/" onClick={() => handleClick()}>
                   <p1 className="word">Logout</p1>
                 </Nav.Link>
               </Nav>

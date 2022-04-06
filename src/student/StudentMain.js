@@ -453,7 +453,10 @@ const StudentMain = () => {
             </Container>
           </Container>
         </div>
+        <div className="mt-4"></div>
+        {/* <a className="btn btn-danger input-group-addon text88" href="/student/preferences">Next</a> */}
       </Container>
+      <div className="mt-4"></div>
     </div>
   );
 };

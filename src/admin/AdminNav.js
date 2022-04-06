@@ -44,14 +44,14 @@ const AdminNav = () => {
                     Personal Profile
                   </NavDropdown.Item>
                   <NavDropdown.Item href="/admin/option">
-                    List Configuration
+                    Option Configuration
                   </NavDropdown.Item>
                   <NavDropdown.Item href="/admin/status">
                     Status Configuration
                   </NavDropdown.Item>
-                  <NavDropdown.Item href="/admin/setup">
+                  {/* <NavDropdown.Item href="/admin/setup">
                     Set Up Guide
-                  </NavDropdown.Item>
+                  </NavDropdown.Item> */}
                 </NavDropdown>
 
                 <NavDropdown title="Account Registration" className="word">
@@ -78,9 +78,18 @@ const AdminNav = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
 
-                <NavDropdown title="Analytic Tools" className="word">
-                  <NavDropdown.Item href="/admin/dashboard">
-                    Dashboard
+                <NavDropdown title="Dashboard" className="word">
+                  <NavDropdown.Item href="/admin/dashboard/student">
+                    Students' Ability (All Year)
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/dashboard/student/year">
+                    Students' Ability (One Year)
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/dashboard/employer">
+                    Employers' Needs
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/dashboard/application">
+                    Hiring Process
                   </NavDropdown.Item>
                 </NavDropdown>
               </Nav>

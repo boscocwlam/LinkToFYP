@@ -37,11 +37,11 @@ const HomeNav = () => {
               </Nav>
               {/* <NavDropdown.Divider /> */}
               <Nav>
-              <NavDropdown title="About Us" className="word" >
+              {/* <NavDropdown title="About Us" className="word" >
                   <NavDropdown.Item href="/">Our Purpose</NavDropdown.Item>
                   <NavDropdown.Item href="/">Functionality</NavDropdown.Item>
                   <NavDropdown.Item href="/">Contact Us</NavDropdown.Item>
-                </NavDropdown>
+                </NavDropdown> */}
                 <NavDropdown title="Login" className="word" >
                   <NavDropdown.Item href="/logreg/login/employer">Employers</NavDropdown.Item>
                   <NavDropdown.Item href="/logreg/login/student">Students</NavDropdown.Item>

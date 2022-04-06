@@ -18,8 +18,18 @@ const EmployerStuProfile = () => {
   const user_ID = useParams().id;
   const organization_ID = localStorage.getItem("isOrganized");
   const [submitButton, setSubmitButton] = useState([]);
+  const [receiveJob, setReceiveJob] = useState([]);
 
   useEffect(() => {
+    axios
+      .post("http://localhost:3001/getReceiveJob1", {
+        user_ID,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setReceiveJob(response.data);
+      });
+
     axios
       .get("http://localhost:3001/getStudentPersonalInfo1", {
         params: {
@@ -411,18 +421,29 @@ const EmployerStuProfile = () => {
         </div>
         <div className="mt-4"></div>
         <div className="boundary88">
-          <Link
-            className="btn btn-danger btn-block text1 center33"
-            to={"/employer/apply/" + user_ID}
-          >
-            Hire Student
-          </Link>
+          {receiveJob.map((item) => {
+            return (
+              <Link
+                className="btn btn-danger btn-block text1 center33"
+                to={"/employer/apply/" + user_ID}
+              >
+                Hire Student
+              </Link>
+            );
+          })}
           &nbsp;&nbsp;&nbsp;
           <Link
             className="btn btn-danger btn-block text1 center33"
             to={"/employer/main/0"}
           >
-            Return To Homepage
+            Go To Homepage
+          </Link>
+          &nbsp;&nbsp;&nbsp;
+          <Link
+            className="btn btn-danger btn-block text1 center33"
+            to={"/employer/search"}
+          >
+            Go To Search Page
           </Link>
           <div className="mt-4"></div>
         </div>

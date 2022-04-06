@@ -249,7 +249,7 @@ const EmployerJobUpdate = () => {
             <div class="row">
               <div class="column">
                 <div className="form-group text1">
-                  <label>Job Title</label>
+                  <label>Job Title*</label>
                   <input
                     type="text"
                     className="form-control"
@@ -263,13 +263,14 @@ const EmployerJobUpdate = () => {
               </div>
               <div class="column">
                 <div className="form-group text1">
-                  <label>Job Type</label>
+                  <label>Job Type*</label>
                   <div class="select">
                     <select
                       className="bound1"
                       name="job_type_ID"
                       value={jobTypeID}
                       onChange={(e) => setJobTypeID(e.target.value)}
+                      required
                     >
                       <option value=""></option>
                       {jobTypeData.map((item) => {
@@ -315,7 +316,7 @@ const EmployerJobUpdate = () => {
           <div className="row">
             <div className="column">
               <div className="form-group text1">
-                <label>Skill 1</label>
+                <label>Skill 1*</label>
                 <div class="select">
                   <select
                     name="skill_ID1"
@@ -337,13 +338,14 @@ const EmployerJobUpdate = () => {
             </div>
             <div className="column">
               <div className="form-group text1">
-                <label>Score</label>
+                <label>Score*</label>
                 <div class="select">
                   <select
                     name="score1"
                     className="bound1"
                     value={score1}
                     onChange={(e) => setScore1(e.target.value)}
+                    required
                   >
                     <option value="1">&nbsp;&nbsp;1</option>
                     <option value="2">&nbsp;&nbsp;2</option>

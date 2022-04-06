@@ -69,7 +69,7 @@ export default class AdminOptionJobType extends Component {
           console.log(id + " " + item.checkNum);
           if ((item.checkNum != 0) & (cat == "Trash")) {
             alert(
-              "Option Cannot Be Removed: The Option Exists In Some Records. "
+              "Option Cannot Be Removed: The Option Exists In Some Profiles. However, you May Drag To The Draft Box To Hide The Option "
             );
           } else {
             let tasks = this.state.tasks.filter((task) => {

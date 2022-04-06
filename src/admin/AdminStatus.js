@@ -11,6 +11,7 @@ import arrow from "../Arrow.png";
 const AdminStatus = () => {
   const organization_ID = localStorage.getItem("isOrganized");
   const [comment, setComment] = useState();
+  const [commentC, setCommentC] = useState();
 
   const [statusData, setStatusData] = useState([]);
   const [statusData2, setStatusData2] = useState([]);
@@ -60,14 +61,14 @@ const AdminStatus = () => {
         setStatusData(response.data);
       });
 
-      axios
+    axios
       .post("http://localhost:3001/getStatus2", {
         organization_ID,
       })
       .then((response) => {
-        response.data.map(item => {
+        response.data.map((item) => {
           item.status_order = item.status_order + 1;
-        })
+        });
         setStatusData2(response.data);
       });
 
@@ -129,46 +130,50 @@ const AdminStatus = () => {
 
   const submitUpdate = (event) => {
     event.preventDefault();
-
-    if (submitButton == "save") {
-      const status_ID = changeStatusID;
-      const status_name = changeStatusName;
-      const status_description = changeStatusDesc;
-      axios
-        .post("http://localhost:3001/updateStatusChange", {
-          organization_ID,
-          status_ID,
-          status_name,
-          status_description,
-        })
-        .then((response) => {
-          console.log(response.data);
-        });
-      alert("Save Changes.");
-      window.location.reload(false);
-    } else if (submitButton == "delete") {
-      if (window.confirm("Delete Status?") == true) {
+    if (!(changeStatusName == "Application Submitted" || changeStatusName == "Process Completed" ||  changeStatusName == "Withdraw")) {
+      setCommentC("");
+      if (submitButton == "save") {
         const status_ID = changeStatusID;
-        const status_order = changeStatusOrder;
+        const status_name = changeStatusName;
+        const status_description = changeStatusDesc;
         axios
-          .post("http://localhost:3001/deleteStatus", {
+          .post("http://localhost:3001/updateStatusChange", {
             organization_ID,
             status_ID,
+            status_name,
+            status_description,
           })
           .then((response) => {
             console.log(response.data);
           });
-        axios
-          .post("http://localhost:3001/updateOrderD", {
-            organization_ID,
-            status_order,
-          })
-          .then((response) => {
-            console.log(response.data);
-          });
-        alert("Status Deleted.");
+        alert("Save Changes.");
         window.location.reload(false);
+      } else if (submitButton == "delete") {
+        if (window.confirm("Delete Status?") == true) {
+          const status_ID = changeStatusID;
+          const status_order = changeStatusOrder;
+          axios
+            .post("http://localhost:3001/deleteStatus", {
+              organization_ID,
+              status_ID,
+            })
+            .then((response) => {
+              console.log(response.data);
+            });
+          axios
+            .post("http://localhost:3001/updateOrderD", {
+              organization_ID,
+              status_order,
+            })
+            .then((response) => {
+              console.log(response.data);
+            });
+          alert("Status Deleted.");
+          window.location.reload(false);
+        }
       }
+    }else{
+      setCommentC("You Cannot Use This Name As The Status Name.");
     }
   };
 
@@ -194,51 +199,51 @@ const AdminStatus = () => {
 
   const submitAdd = (event) => {
     event.preventDefault();
-    if(!(addStatusName == "Applied" || addStatusName == "Process Completed")){
+    if (!(addStatusName == "Application Submitted" || addStatusName == "Process Completed" || addStatusName == "Withdraw")) {
+      setComment("");
+      axios
+        .get("http://localhost:3001/generateStatusID", {})
+        .then((response) => {
+          const status_ID = response.data[0].status_ID;
+          const status_name = addStatusName;
+          const status_description = addStatusDesc;
+          const status_order = addStatusOrder;
+          console.log(
+            status_ID +
+              " " +
+              status_name +
+              " " +
+              status_description +
+              " " +
+              status_order
+          );
 
-      axios.get("http://localhost:3001/generateStatusID", {}).then((response) => {
-        const status_ID = response.data[0].status_ID;
-        const status_name = addStatusName;
-        const status_description = addStatusDesc;
-        const status_order = addStatusOrder;
-        console.log(
-          status_ID +
-            " " +
-            status_name +
-            " " +
-            status_description +
-            " " +
-            status_order
-        );
-  
-        axios
-          .post("http://localhost:3001/updateOrderA", {
-            organization_ID,
-            status_order,
-          })
-          .then((response3) => {
-            console.log(response3.data);
-          });
-  
-        axios
-          .post("http://localhost:3001/addStatus", {
-            organization_ID,
-            status_ID,
-            status_name,
-            status_description,
-            status_order,
-          })
-          .then((response2) => {
-            console.log(response2.data);
-          });
-        alert("Status Added.");
-        window.location.reload(false);
-      });
+          axios
+            .post("http://localhost:3001/updateOrderA", {
+              organization_ID,
+              status_order,
+            })
+            .then((response3) => {
+              console.log(response3.data);
+            });
 
-    }else{
+          axios
+            .post("http://localhost:3001/addStatus", {
+              organization_ID,
+              status_ID,
+              status_name,
+              status_description,
+              status_order,
+            })
+            .then((response2) => {
+              console.log(response2.data);
+            });
+          alert("Status Added.");
+          window.location.reload(false);
+        });
+    } else {
       setComment("You Cannot Use This Name As The Status Name.");
     }
-
   };
 
   return (
@@ -448,6 +453,7 @@ const AdminStatus = () => {
                       </button>
                       <div className="mt-4"></div>
                     </form>
+                    <h6 className="loginStatus">{commentC}</h6>
                   </div>
                 );
               })}

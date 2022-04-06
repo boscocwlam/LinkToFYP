@@ -292,6 +292,14 @@ const AdminStuProfileDetail = () => {
                           {parseFloat(item.cGPA).toFixed(2)}
                         </td>
                       </tr>
+                      <tr>
+                        <td className="letter3">JOB FOUND ?</td>
+                        <td className="letter4">{item.hasJob}</td>
+                      </tr>
+                      <tr>
+                        <td className="letter3">JOB INVITATION RECEIVED ?</td>
+                        <td className="letter4">{item.receiveJob}</td>
+                      </tr>
                       <div className="mt-3"></div>
                     </tbody>
                   );

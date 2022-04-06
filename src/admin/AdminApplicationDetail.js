@@ -19,6 +19,7 @@ const AdminApplicationDetail = () => {
   const [nextStatusData, setNextStatusData] = useState([]);
   const [submitButton, setSubmitButton] = useState();
   const [recordID, setRecordID] = useState();
+  const [stuUser_ID, setStuUser_ID] = useState();
 
   useEffect(() => {
     axios
@@ -51,6 +52,7 @@ const AdminApplicationDetail = () => {
       })
       .then((response) => {
         console.log(response.data);
+        setStuUser_ID(response.data[0].stuUser_ID);
         setInfoData(response.data);
       });
 
@@ -103,6 +105,19 @@ const AdminApplicationDetail = () => {
           .then((response) => {
             console.log(response.data);
           });
+
+        if(nextStatusName == "Process Completed"){
+          const user_ID = stuUser_ID;
+          const hasJob = "Yes";
+          axios
+          .post("http://localhost:3001/updateHasJob", {
+            user_ID,
+            hasJob
+          })
+          .then((response) => {
+            console.log(response.data);
+          });
+        }
 
         window.location.reload(false);
       }

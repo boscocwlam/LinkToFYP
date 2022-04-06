@@ -209,7 +209,7 @@ const StudentProfileUpdateFYP = () => {
               </div>
             </div>
             <div className="mt-3"></div>
-            <div className="row">
+            {/* <div className="row">
               <div className="column">
                 <div className="form-group text1">
                   <label>Documents Attached</label>
@@ -236,7 +236,7 @@ const StudentProfileUpdateFYP = () => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="mt-4"></div>
             <Dropdown.Divider />
             <div className="mt-4"></div>

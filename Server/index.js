@@ -168,7 +168,7 @@ app.post("/InputDefaultData2", (req, res) => {
   const status_ID = req.body.status_ID_1;
 
   db.query(
-    "INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (?, 'Applied', 'You have sent a hiring request to the organization/department. The organization/department will start to follow up in the latest stage.', 0, ?)",
+    "INSERT INTO Status (Status_ID, Status_name, Status_description, Status_order, Organization_ID) VALUES (?, 'Application Submitted', 'You have sent a hiring request to the organization/department. The organization/department will start to follow up in the latest stage.', 0, ?)",
     [status_ID, organization_ID],
     (err, result) => {
       if (err) {
@@ -781,11 +781,11 @@ app.get("/getAdminPersonalInfo", (req, res) => {
 });
 
 // AdminProfileUpdatePersonal.js
-app.post("/getAdminPersonalInfo", (req, res) => {
+app.post("/getAdminPersonalInfo2", (req, res) => {
   const user_ID = req.body.user_ID;
 
   db.query(
-    "SELECT gender, city, email_address, phone_no FROM Users WHERE Users.user_ID = ?",
+    "SELECT gender, city, email_address, phone_no, first_name_chi, last_name_chi FROM Users WHERE Users.user_ID = ?",
     [user_ID],
     (err, result) => {
       if (err) {
@@ -796,6 +796,8 @@ app.post("/getAdminPersonalInfo", (req, res) => {
           city: result[0].city,
           email_address: result[0].email_address,
           phone_no: result[0].phone_no,
+          first_name_chi: result[0].first_name_chi,
+          last_name_chi: result[0].last_name_chi
         });
       }
     }
@@ -809,10 +811,12 @@ app.post("/updateAdminPersonalInfo", (req, res) => {
   const city = req.body.city;
   const email_address = req.body.email_address;
   const phone_no = req.body.phone_no;
+  const first_name_chi = req.body.first_name_chi;
+  const last_name_chi = req.body.last_name_chi;
 
   db.query(
-    "UPDATE Users SET gender = ?, city = ?, email_address = ?, phone_no = ? WHERE user_ID = ?",
-    [gender, city, email_address, phone_no, user_ID],
+    "UPDATE Users SET gender = ?, city = ?, email_address = ?, phone_no = ?, first_name_chi = ?, last_name_chi = ? WHERE user_ID = ?",
+    [gender, city, email_address, phone_no, first_name_chi, last_name_chi, user_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -1072,22 +1076,6 @@ app.post("/emailPWremainssame", (req, res) => {
       } else {
         console.log(result);
         res.send(email_address + " " + password);
-      }
-    }
-  );
-});
-
-//AdminDashboard.js
-app.get("/getPopularJobs", (req, res) => {
-  console.log(req.query.text);
-  db.query(
-    "SELECT job_type_name AS JobType, COUNT(emp.Job_type_ID) AS Frequency from Employers emp, Job_types job WHERE emp.Job_Type_ID = job.Job_Type_ID GROUP BY emp.Job_type_ID ORDER BY Frequency desc limit 10;",
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send(result);
       }
     }
   );
@@ -1800,8 +1788,8 @@ app.post("/getStatus2", (req, res) => {
 app.post("/getCompleteStatus", (req, res) => {
   const organization_ID = req.body.organization_ID;
   db.query(
-    `SELECT status_ID, status_name, status_description, status_order FROM Status WHERE organization_ID = ? AND status_name = "Process Completed" AND status_ID < (select status_ID from Status where status_name = "Withdraw" and organization_ID = ?)`,
-    [organization_ID, organization_ID],
+    `SELECT status_ID, status_name, status_description, status_order FROM Status WHERE organization_ID = ? AND status_name = "Process Completed"`,
+    [organization_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -2088,6 +2076,549 @@ app.post("/checkWithdrawID", (req, res) => {
   );
 });
 
+//AdminDashboardStudent.js
+app.post("/totalStudents", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "select count(student_ID) AS num from students, users where students.user_ID = users.user_ID and organization_ID = ?",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardStudent.js
+app.post("/studentsHaveAJob", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `SELECT COUNT(student_ID) AS num FROM Students, Users WHERE Students.user_ID = Users.user_ID AND Students.hasJob = "Yes" AND Users.organization_ID = ?`,
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardStudent.js
+app.post("/cGPAbyAllData", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT cGPA, student_ID FROM Students, Users WHERE Students.user_ID = Users.user_ID AND organization_ID = ?",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardStudent.js
+app.post("/fypGradebyAllData", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT fyp_final_grade AS name, count(student_ID) AS value FROM Students, Users WHERE Students.user_ID = Users.user_ID AND organization_ID = ? GROUP BY name ORDER BY name ASC",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardStudent.js
+app.post("/numberExperiencebyAllData", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "select number, count(student_ID) AS Students from (SELECT Students.student_ID AS student_ID,count(Students.student_ID) AS number FROM Work_experiences, Students, Users WHERE Users.user_ID = Students.user_ID AND Students.student_ID = Work_experiences.student_ID AND organization_ID = ? GROUP BY student_ID) AS temp GROUP BY number ORDER BY number ASC",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardStudent.js
+app.post("/fypMostUsedSkills", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT skill_name AS name, sum(score) AS Score FROM Skills, " + 
+    "((SELECT fyp_skill_ID1 AS skill_ID, fyp_score1 AS score FROM Students) UNION " + 
+    "(SELECT fyp_skill_ID2 AS skill_ID, fyp_score2 AS score FROM Students) UNION " + 
+    "(SELECT fyp_skill_ID3 AS skill_ID, fyp_score3 AS score FROM Students) UNION " + 
+    "(SELECT fyp_skill_ID4 AS skill_ID, fyp_score4 AS score FROM Students) UNION " + 
+    "(SELECT fyp_skill_ID5 AS skill_ID, fyp_score5 AS score FROM Students)) AS temp " + 
+    "WHERE temp.skill_ID = Skills.skill_ID AND Skills.organization_ID = ? " + 
+    "GROUP BY Skills.skill_ID ORDER BY score DESC LIMIT 10 ",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardStudent.js
+app.post("/workMostUsedSkills", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT skill_name AS name, sum(score) AS Score FROM Skills, Students, Users, " + 
+    "((SELECT skill_ID1 AS skill_ID, score1 AS score, Student_ID FROM Work_experiences) UNION " + 
+    "(SELECT skill_ID2 AS skill_ID, score2 AS score, Student_ID FROM Work_experiences) UNION " + 
+    "(SELECT skill_ID3 AS skill_ID, score3 AS score, Student_ID FROM Work_experiences) UNION " + 
+    "(SELECT skill_ID4 AS skill_ID, score4 AS score, Student_ID FROM Work_experiences) UNION " + 
+    "(SELECT skill_ID5 AS skill_ID, score5 AS score, Student_ID FROM Work_experiences)) AS temp " + 
+    "WHERE temp.skill_ID = Skills.skill_ID AND Students.student_ID = temp.student_ID AND " + 
+    "Students.user_ID = Users.user_ID AND Users.organization_ID = ? " + 
+    "GROUP BY Skills.skill_ID ORDER BY score DESC LIMIT 10 ",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardEmployer.js
+app.post("/jobFromJobTypeData", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT job_type_name AS JobType, COUNT(Jobs.job_type_ID) AS Frequency FROM Jobs, Job_types WHERE Jobs.job_type_ID = Job_types.job_type_ID AND organization_ID = ? GROUP BY Jobs.job_type_ID ORDER BY Frequency DESC LIMIT 10",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardEmployer.js
+app.post("/mostPopularJobData", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `SELECT job_type_name AS JobType, COUNT(Jobs.job_type_ID) AS Frequency FROM Job_types, Jobs, Students_Employers, StatusRecords, Status WHERE Job_types.job_type_ID = Jobs.Job_type_ID AND Jobs.offer_ID = Students_Employers.offer_ID AND Students_Employers.application_ID = StatusRecords.application_ID AND StatusRecords.status_ID = Status.status_ID AND Status.status_name = "Process Completed" AND Status.organization_ID = ? GROUP BY Jobs.job_type_ID ORDER BY Frequency DESC LIMIT 10`,
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardEmployer.js
+app.post("/mostWantedSkillData", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT skill_name AS name, sum(score) AS Score FROM Skills, " + 
+    "((SELECT skill_ID1 AS skill_ID, score1 AS score FROM Jobs) UNION " + 
+    "(SELECT skill_ID2 AS skill_ID, score2 AS score FROM Jobs) UNION " + 
+    "(SELECT skill_ID3 AS skill_ID, score3 AS score FROM Jobs) UNION " + 
+    "(SELECT skill_ID4 AS skill_ID, score4 AS score FROM Jobs) UNION " + 
+    "(SELECT skill_ID5 AS skill_ID, score5 AS score FROM Jobs)) AS temp " + 
+    "WHERE temp.skill_ID = Skills.skill_ID AND Skills.organization_ID = ? " + 
+    "GROUP BY Skills.skill_ID ORDER BY score DESC LIMIT 10 ",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardEmployer.js
+app.post("/totalEmployers", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "select count(employer_ID) AS num from employers, users where employers.user_ID = users.user_ID and organization_ID = ?",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardEmployer.js
+app.post("/averageApplications", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT (SELECT COUNT(application_ID) FROM students_employers, Employers, Users where students_employers.employer_ID = Employers.employer_ID AND Employers.user_ID = Users.user_ID AND Users.organization_ID = ?) / (SELECT COUNT(employer_ID) FROM Employers, Users WHERE Employers.user_ID = Users.user_ID AND Users.organization_ID = ?) AS avg",
+    [organization_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardApplication.js
+app.post("/percentageOfEachProcessStageData", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `select status_name As Status, status.status_ID AS status_ID, (count(status.status_ID) / (SELECT COUNT(Status.status_ID) FROM statusrecords, status where statusrecords.status_ID = status.status_ID and status.organization_ID = ? and status_name = "Application Submitted") * 100) AS Percentage from statusrecords, status where statusrecords.status_ID = status.status_ID and status.organization_ID = ? group by status.status_ID order by status_order ASC`,
+    [organization_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardApplication.js
+app.post("/percentageOfEachProcessStageData2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `SELECT status_ID, status_name as Status, status_order FROM status WHERE status_order >= 0 AND status_name != "Withdraw" AND organization_ID = ? ORDER BY status_order ASC`,
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardApplication.js
+app.post("/noOfEachProcessStage", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "select status_name As Status, status.status_ID AS status_ID, count(status.status_ID) as num from statusrecords, status where statusrecords.status_ID = status.status_ID and status.organization_ID = ? group by status.status_ID order by status_order ASC",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardApplication.js
+app.post("/noOfEachProcessStage2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `SELECT status_ID, status_name as Status, status_order FROM status WHERE status_order >= 0 AND status_name != "Withdraw" AND organization_ID = ? ORDER BY status_order ASC`,
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardApplication.js
+app.post("/totalApplications", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    "SELECT count(application_ID) AS num FROM Students_employers, Students, Users WHERE Students_employers.student_ID = Students.student_ID AND Students.user_ID = Users.user_ID AND Users.organization_ID = ?",
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardApplication.js
+app.post("/totalCompletedApplications", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `select count(application_ID) as num from statusrecords, status where statusrecords.status_ID = status.status_ID and status_name = "Process Completed" and organization_ID = ? `,
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardApplication.js
+app.post("/percentageReceiveInvitation", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `SELECT (SELECT COUNT(student_ID) FROM Students, Users WHERE Students.user_ID = Users.user_ID AND Users.organization_ID = ? AND Students.receiveJob = "Yes") / (SELECT COUNT(student_ID) FROM Students, Users WHERE Students.user_ID = Users.user_ID AND Users.organization_ID = ?) AS num`,
+    [organization_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardApplication.js
+app.post("/noOfApplicationSubmitted", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  db.query(
+    `select application_ID, month(status_change_date) as month from statusrecords, status where statusrecords.status_ID = status.status_ID and status_name = "Application Submitted" and organization_ID = ? `,
+    [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardStudentYear2.js
+app.post("/totalStudents2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const year_ID = req.body.year_ID;
+  db.query(
+    "select count(student_ID) AS num from students, users, years where students.user_ID = users.user_ID and users.organization_ID = ? and years.organization_ID = ? and years.year_ID = students.year_ID and years.year_ID = ?",
+    [organization_ID, organization_ID, year_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardStudentYear2.js
+app.post("/studentsHaveAJob2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const year_ID = req.body.year_ID;
+  db.query(
+    `SELECT COUNT(student_ID) AS num FROM Students, Users, Years WHERE Students.user_ID = Users.user_ID AND Students.hasJob = "Yes" AND Users.organization_ID = ? AND Students.year_ID = Years.year_ID AND Years.year_ID = ?`,
+    [organization_ID, year_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardStudentYear2.js
+app.post("/cGPAbyAllData2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const year_ID = req.body.year_ID;
+  db.query(
+    "SELECT cGPA, student_ID FROM Students, Users, Years WHERE Students.user_ID = Users.user_ID AND Users.organization_ID = ? AND Students.year_ID = Years.year_ID AND Years.year_ID = ?",
+    [organization_ID, year_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardStudentYear2.js
+app.post("/fypGradebyAllData2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const year_ID = req.body.year_ID;
+  db.query(
+    "SELECT fyp_final_grade AS name, count(student_ID) AS value FROM Students, Users, Years WHERE Students.user_ID = Users.user_ID AND Users.organization_ID = ? AND Students.year_ID = Years.year_ID AND Years.year_ID = ? GROUP BY name ORDER BY name ASC",
+    [organization_ID, year_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardStudentYear2.js
+app.post("/numberExperiencebyAllData2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const year_ID = req.body.year_ID;
+  db.query(
+    "select number, count(student_ID) AS Students from (SELECT Students.student_ID AS student_ID,count(Students.student_ID) AS number FROM Work_experiences, Students, Users, Years WHERE Users.user_ID = Students.user_ID AND Students.student_ID = Work_experiences.student_ID AND Users.organization_ID = ? AND Students.year_ID = Years.year_ID AND Years.year_ID = ? GROUP BY student_ID) AS temp GROUP BY number ORDER BY number ASC",
+    [organization_ID, year_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardStudentYear2.js
+app.post("/fypMostUsedSkills2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const year_ID = req.body.year_ID;
+  db.query(
+    "SELECT skill_name AS name, sum(score) AS Score FROM Skills, Years, " + 
+    "((SELECT fyp_skill_ID1 AS skill_ID, fyp_score1 AS score, year_ID FROM Students) UNION " + 
+    "(SELECT fyp_skill_ID2 AS skill_ID, fyp_score2 AS score, year_ID FROM Students) UNION " + 
+    "(SELECT fyp_skill_ID3 AS skill_ID, fyp_score3 AS score, year_ID FROM Students) UNION " + 
+    "(SELECT fyp_skill_ID4 AS skill_ID, fyp_score4 AS score, year_ID FROM Students) UNION " + 
+    "(SELECT fyp_skill_ID5 AS skill_ID, fyp_score5 AS score, year_ID FROM Students)) AS temp " + 
+    "WHERE temp.skill_ID = Skills.skill_ID AND Skills.organization_ID = ? " + 
+    "AND Years.organization_ID = ? AND temp.year_ID = Years.year_ID AND Years.year_ID = ?" + 
+    "GROUP BY Skills.skill_ID ORDER BY score DESC LIMIT 10 ",
+    [organization_ID, organization_ID, year_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+//AdminDashboardStudentYear2.js
+app.post("/workMostUsedSkills2", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const year_ID = req.body.year_ID;
+  db.query(
+    "SELECT skill_name AS name, sum(score) AS Score FROM Skills, Students, Users, Years, " + 
+    "((SELECT skill_ID1 AS skill_ID, score1 AS score, Student_ID FROM Work_experiences) UNION " + 
+    "(SELECT skill_ID2 AS skill_ID, score2 AS score, Student_ID FROM Work_experiences) UNION " + 
+    "(SELECT skill_ID3 AS skill_ID, score3 AS score, Student_ID FROM Work_experiences) UNION " + 
+    "(SELECT skill_ID4 AS skill_ID, score4 AS score, Student_ID FROM Work_experiences) UNION " + 
+    "(SELECT skill_ID5 AS skill_ID, score5 AS score, Student_ID FROM Work_experiences)) AS temp " + 
+    "WHERE temp.skill_ID = Skills.skill_ID AND Students.student_ID = temp.student_ID AND " + 
+    "Students.user_ID = Users.user_ID AND Users.organization_ID = ? AND Years.organization_ID = ? AND " + 
+    "Students.year_ID = Years.year_ID AND Years.year_ID = ? " + 
+    "GROUP BY Skills.skill_ID ORDER BY score DESC LIMIT 10 ",
+    [organization_ID, organization_ID, year_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//AdminDashboardStudentYear2.js
+app.post("/getYearName", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const year_ID = req.body.year_ID;
+  db.query(
+    "SELECT year_name FROM Years WHERE year_ID = ? AND organization_ID = ?",
+    [year_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2122,7 +2653,7 @@ app.get("/getStudentPersonalInfo1", (req, res) => {
   const organization_ID = req.query.organization_ID;
 
   db.query(
-    `SELECT student_ID, organization_name, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, email_address, cGPA , year_name from Users, Students stu, Years, Organizations WHERE Organizations.organization_ID = Users.organization_ID AND Users.user_ID = stu.user_ID AND stu.year_ID = Years.year_ID AND Users.User_ID = ? AND Users.organization_ID = ?`,
+    `SELECT student_ID, organization_name, hasJob, receiveJob, first_name, last_name, first_name_chi, last_name_chi, gender, city, phone_no, email_address, cGPA , year_name from Users, Students stu, Years, Organizations WHERE Organizations.organization_ID = Users.organization_ID AND Users.user_ID = stu.user_ID AND stu.year_ID = Years.year_ID AND Users.User_ID = ? AND Users.organization_ID = ?`,
     [user_ID, organization_ID],
     (err, result) => {
       if (err) {
@@ -2186,11 +2717,11 @@ app.post("/getStudentWorkExperiences2", (req, res) => {
 });
 
 // StudentProfileUpdatePersonal.js
-app.post("/getStudentPersonalInfo", (req, res) => {
+app.post("/getStudentPersonalInfo2", (req, res) => {
   const user_ID = req.body.user_ID;
 
   db.query(
-    "SELECT gender, city, email_address, phone_no FROM Users WHERE user_ID = ?",
+    "SELECT gender, city, email_address, phone_no, first_name_chi, last_name_chi FROM Users WHERE user_ID = ?",
     [user_ID],
     (err, result) => {
       if (err) {
@@ -2201,6 +2732,8 @@ app.post("/getStudentPersonalInfo", (req, res) => {
           city: result[0].city,
           email_address: result[0].email_address,
           phone_no: result[0].phone_no,
+          first_name_chi: result[0].first_name_chi,
+          last_name_chi: result[0].last_name_chi
         });
       }
     }
@@ -2214,10 +2747,12 @@ app.post("/updateStudentPersonalInfo", (req, res) => {
   const city = req.body.city;
   const email_address = req.body.email_address;
   const phone_no = req.body.phone_no;
+  const first_name_chi = req.body.first_name_chi;
+  const last_name_chi = req.body.last_name_chi;
 
   db.query(
-    "UPDATE Users SET gender = ?, city = ?, email_address = ?, phone_no = ? WHERE user_ID = ?",
-    [gender, city, email_address, phone_no, user_ID],
+    "UPDATE Users SET gender = ?, city = ?, email_address = ?, phone_no = ?, first_name_chi = ?, last_name_chi = ? WHERE user_ID = ?",
+    [gender, city, email_address, phone_no, first_name_chi, last_name_chi, user_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -2522,6 +3057,162 @@ app.post("/addWorkExperience", (req, res) => {
   );
 });
 
+// StudentApplication.js
+app.post("/viewStuApplication", (req, res) => {
+  const organization_ID = req.body.organization_ID;
+  const user_ID = req.body.user_ID;
+
+  db.query(
+    "SELECT " +
+      "yy.Status_change_date AS apply_date, " +
+      "temp.Application_ID AS application_ID, " +
+      "temp.Employer_ID AS employer_ID, " +
+      "temp.Student_ID AS student_ID, " +
+      "temp.Status_name AS status_name, " +
+      "temp.Status_ID AS status_ID, " +
+      "temp.Status_change_date AS status_change_date, " +
+      "temp.stu_first_name AS stu_first_name, " +
+      "temp.stu_last_name AS stu_last_name, " +
+      "temp.emp_first_name AS emp_first_name, " +
+      "temp.emp_last_name AS emp_last_name, " +
+      "temp.offer_ID AS offer_ID, " +
+      "temp.job_title AS job_title   " +
+      "FROM  " +
+      "statusrecords yy,  " +
+      "(SELECT  " +
+      "staR.Application_ID AS application_ID, " +
+      "stuEmp.Employer_ID AS employer_ID, " +
+      "stuEmp.Student_ID AS student_ID, " +
+      "sta.Status_name AS status_name, " +
+      "sta.Status_ID AS status_ID, " +
+      "staR.Status_change_date AS status_change_date, " +
+      "use1.First_name AS stu_first_name, " +
+      "use1.Last_name AS stu_last_name, " +
+      "use2.First_name AS emp_first_name, " +
+      "use2.Last_name AS emp_last_name, " +
+      "job.offer_ID AS offer_ID, " +
+      "job.job_title AS job_title   " +
+      "FROM  " +
+      "Students_Employers stuEmp INNER JOIN " +
+      "Students stu INNER JOIN " +
+      "Employers emp INNER JOIN " +
+      "statusrecords staR INNER JOIN " +
+      "status sta INNER JOIN " +
+      "Jobs job INNER JOIN   " +
+      "Users use1 INNER JOIN " +
+      "Users use2 " +
+      "ON  " +
+      "use1.User_ID=stu.User_ID AND " +
+      "use2.User_ID=emp.User_ID AND " +
+      "stu.Student_ID=stuEmp.Student_ID AND  " +
+      "emp.Employer_ID=stuEmp.Employer_ID AND " +
+      "stuEmp.Application_ID=staR.Application_ID AND " +
+      "staR.status_ID = sta.status_ID AND  " +
+      "stuEmp.offer_ID = job.offer_ID AND  " +
+      "use1.User_ID = ? AND " +
+      "use2.Organization_ID = ? AND " +
+      "use1.Organization_ID = ?  " +
+      "AND NOT EXISTS ( " +
+      "SELECT * FROM  " +
+      "statusrecords star2,  " +
+      "status sta2  " +
+      "WHERE  " +
+      "staR2.status_ID = sta2.status_ID AND  " +
+      "sta2.status_order > sta.status_order AND  " +
+      "staR.Application_ID = staR2.Application_ID " +
+      ")) temp " +
+      "WHERE  " +
+      "temp.application_ID = yy.application_ID AND " +
+      "yy.status_ID = 20 " +
+      "ORDER BY  " +
+      "temp.Status_change_date DESC",
+    [user_ID, organization_ID, organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentPreferences.js
+app.post("/getHasJob", (req, res) => {
+  const user_ID = req.body.user_ID;
+  db.query(
+    "SELECT hasJob from Students WHERE user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentPreferences.js
+app.post("/getReceiveJob", (req, res) => {
+  const user_ID = req.body.user_ID;
+  db.query(
+    "SELECT receiveJob from Students WHERE user_ID = ?",
+    [user_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentPreferences.js
+app.post("/updateHasJob", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const hasJob = req.body.hasJob;
+  db.query(
+    "UPDATE Students SET hasJob = ? WHERE user_ID = ? ",
+    [hasJob, user_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//StudentPreferences.js
+app.post("/updateReceiveJob", (req, res) => {
+  const user_ID = req.body.user_ID;
+  const receiveJob = req.body.receiveJob;
+  db.query(
+    "UPDATE Students SET receiveJob = ? WHERE user_ID = ? ",
+    [receiveJob, user_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2551,13 +3242,14 @@ app.post("/getEmployerPersonalInfo1", (req, res) => {
   const user_ID = req.body.user_ID;
 
   db.query(
-    "SELECT gender, city, email_address, phone_no, first_name, last_name, first_name_chi, last_name_chi FROM Users, Employers WHERE Employers.user_ID = Users.user_ID AND Users.user_ID = ?",
+    "SELECT employer_ID, gender, city, email_address, phone_no, first_name, last_name, first_name_chi, last_name_chi FROM Users, Employers WHERE Employers.user_ID = Users.user_ID AND Users.user_ID = ?",
     [user_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });
       } else {
         res.send({
+          employer_ID: result[0].employer_ID,
           gender: result[0].gender,
           city: result[0].city,
           email_address: result[0].email_address,
@@ -2806,8 +3498,25 @@ app.post("/addJobPosted", (req, res) => {
 app.post("/getStudentData1", (req, res) => {
   const organization_ID = req.body.organization_ID;
   db.query(
-    "SELECT organization_name, Users.user_ID AS user_ID, year_name, first_name, last_name, first_name_chi, last_name_chi, gender, city, email_address, Students.user_ID AS user_ID, cGPA, fyp_name, fyp_final_grade, fyp_background, fyp_link, fyp_skill_ID1, fyp_score1, fyp_skill_ID2, fyp_score2, fyp_skill_ID3, fyp_score3, fyp_skill_ID4, fyp_score4, fyp_skill_ID5, fyp_score5, fyp_skill_ID1 AS fyp_skill_name1, fyp_skill_ID2 AS fyp_skill_name2, fyp_skill_ID3 AS fyp_skill_name3, fyp_skill_ID4 AS fyp_skill_name4, fyp_skill_ID5 AS fyp_skill_name5 FROM Years, Students, Users, Organizations WHERE Years.year_ID = Students.year_ID AND Users.user_ID = Students.user_ID AND Organizations.organization_ID = Users.organization_ID AND Users.organization_ID = ?",
+    `SELECT organization_name, Users.user_ID AS user_ID, year_name, first_name, last_name, first_name_chi, last_name_chi, gender, city, email_address, Students.user_ID AS user_ID, cGPA, fyp_name, fyp_final_grade, fyp_background, fyp_link, fyp_skill_ID1, fyp_score1, fyp_skill_ID2, fyp_score2, fyp_skill_ID3, fyp_score3, fyp_skill_ID4, fyp_score4, fyp_skill_ID5, fyp_score5, fyp_skill_ID1 AS fyp_skill_name1, fyp_skill_ID2 AS fyp_skill_name2, fyp_skill_ID3 AS fyp_skill_name3, fyp_skill_ID4 AS fyp_skill_name4, fyp_skill_ID5 AS fyp_skill_name5 FROM Years, Students, Users, Organizations WHERE Years.year_ID = Students.year_ID AND Users.user_ID = Students.user_ID AND Organizations.organization_ID = Users.organization_ID AND Students.receiveJob = "Yes" AND Users.organization_ID = ?`,
     [organization_ID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.send(result);
+      }
+    }
+  );
+});
+
+//EmployerMain.js
+app.post("/getReceiveJob1", (req, res) => {
+  const user_ID = req.body.user_ID;
+  db.query(
+    `SELECT receiveJob FROM Students WHERE receiveJob = "Yes" AND user_ID = ? `,
+    [user_ID],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -2913,7 +3622,7 @@ app.post("/checkApplicationDuplicated", (req, res) => {
   const offer_ID = req.body.offer_ID;
 
   db.query(
-    "select count(offer_ID) AS countNum from students_employers stuEmp, statusrecords sta where stuEmp.application_ID = sta.application_ID and offer_ID = ? and employer_ID = ? and student_ID = ? and status_order > 0",
+    "select count(offer_ID) AS countNum from students_employers stuEmp, statusrecords sta where stuEmp.application_ID = sta.application_ID and offer_ID = ? and employer_ID = ? and student_ID = ? ",
     [offer_ID, employer_ID, student_ID],
     (err, result) => {
       if (err) {
@@ -3089,6 +3798,7 @@ app.post("/getRequestInfo", (req, res) => {
 
   db.query(
     "SELECT  " +
+      "stu.user_ID AS stuUser_ID, " + 
       "stuEmp.Application_ID AS application_ID, " +
       "stuEmp.Employer_ID AS employer_ID, " +
       "stuEmp.Student_ID AS student_ID, " +

@@ -51,12 +51,16 @@ const EmployerNav = () => {
                   <Nav.Link href="/employer/job">
                     <p1 className="word">Job Posted</p1>
                   </Nav.Link>
-                  <Nav.Link href="/employer/application">
-                    <p1 className="word">Hiring Process Records</p1>
-                  </Nav.Link>
                   <Nav.Link href="/employer/search">
                     <p1 className="word">Search Students</p1>
                   </Nav.Link>
+                  <Nav.Link href="/employer/application">
+                    <p1 className="word">Hiring Process Records</p1>
+                  </Nav.Link>
+                  <Nav.Link href="/employer/dashboard">
+                    <p1 className="word">Dashboard</p1>
+                  </Nav.Link>
+
                 </Nav>
                 <NavDropdown.Divider />
                 <Nav>

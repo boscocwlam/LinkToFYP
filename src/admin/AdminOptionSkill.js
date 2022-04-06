@@ -70,7 +70,7 @@ export default class AdminOptionSkill extends Component {
           console.log(id + " " + item.checkNum + cat);
           if ((item.checkNum != 0) && (cat == "Trash")) {
             alert(
-              "Option Cannot Be Removed: The Option Exists In Some Records. However, You May Drag To The Draft Box To Hide The Option."
+              "Option Cannot Be Removed: The Option Exists In Some Profiles. However, You May Drag To The Draft Box To Hide The Option."
             );
           } else {
             let tasks = this.state.tasks.filter((task) => {

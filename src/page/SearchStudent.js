@@ -5,7 +5,7 @@ import axios from "axios";
 import Studentprofile from "./StudentProfile";
 import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
-import AdminDashboard from "../admin/AdminDashboard";
+import AdminDashboard from "../admin/AdminDashboardStudent";
 
 const SearchStudent = () => {
   const [studentData, setStudentData] = useState([]);

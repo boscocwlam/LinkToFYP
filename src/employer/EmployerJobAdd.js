@@ -237,12 +237,13 @@ const EmployerJobAdd = () => {
               </div>
               <div class="column">
                 <div className="form-group text1">
-                  <label>Job Type</label>
+                  <label>Job Type*</label>
                   <div class="select">
                     <select
                       className="bound1"
                       name="job_type_ID"
                       onChange={(e) => setJobTypeID(e.target.value)}
+                      required
                     >
                       <option value=""></option>
                       {jobTypeData.map((item) => {
@@ -287,7 +288,7 @@ const EmployerJobAdd = () => {
           <div className="row">
             <div className="column">
               <div className="form-group text1">
-                <label>Skill 1</label>
+                <label>Skill 1*</label>
                 <div class="select">
                   <select
                     name="skill_ID1"
@@ -308,7 +309,7 @@ const EmployerJobAdd = () => {
             </div>
             <div className="column">
               <div className="form-group text1">
-                <label>Score</label>
+                <label>Score*</label>
                 <div class="select">
                   <select
                     name="score1"

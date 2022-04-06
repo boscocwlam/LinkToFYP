@@ -57,7 +57,7 @@ const EmployerApply = () => {
     const offer_ID = event.target.offer_ID.value;
     const student_ID = studentData[0].student_ID;
     const employer_ID = employerID[0].employer_ID;
-    console.log(offer_ID);
+    console.log(offer_ID + " " + student_ID + " " + employer_ID);
     axios
       .post("http://localhost:3001/checkApplicationDuplicated", {
         student_ID,
@@ -67,11 +67,12 @@ const EmployerApply = () => {
       .then((response) => {
         console.log(response.data[0].countNum);
         if (response.data[0].countNum == 0) {
+          console.log("Hi");
           setAddStatus("");
           navigate("/employer/apply/next/" + stuUser_ID + "/" + offer_ID );
         } else {
           setAddStatus(
-            "You Have Already Requested A Matching-up Process With The Student For This Particular Job."
+            "You Have Already Requested A Hiring Process With The Student For This Particular Job."
           );
         }
       });
@@ -158,26 +159,6 @@ const EmployerApply = () => {
           <div className="mt-4"></div>
           <h6 className="loginStatus">{addStatus}</h6>
         </form>
-
-        {/* <div id="wrap">
-          <div id="left">
-            <a
-              href="/admin/addadmaccount"
-              class="btn btn-danger btn-block text1 center33"
-            >
-              Submit Matching-up Request
-            </a>
-          </div>
-          <div id="right">
-            <a
-              href="/admin/main"
-              class="btn btn-danger btn-block text1 center33"
-            >
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Go To Student
-              Profile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </a>
-          </div>
-        </div> */}
       </Container>
       <div className="mt-4"></div>
     </div>

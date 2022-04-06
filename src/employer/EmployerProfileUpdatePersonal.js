@@ -214,7 +214,7 @@ const EmployerProfileUpdatePersonal = () => {
             </div>
 
             <div className="mt-3"></div>
-            <button className="btn btn-danger btn-block text1">Confirm</button>
+            <button className="btn btn-danger btn-block text1">Update Information</button>
           </form>
           <div className="mt-4"></div>
           <Dropdown.Divider />

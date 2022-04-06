@@ -12,6 +12,36 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
   const organization_ID = localStorage.getItem("isOrganized");
   const user_ID = useParams().id;
 
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
+  const [firstNameChi, setFirstNameChi] = useState();
+  const [lastNameChi, setLastNameChi] = useState();
+  const [gender, setGender] = useState();
+  const [city, setCity] = useState();
+  const [phoneNo, setPhoneNo] = useState();
+  const [emailAddress, setEmailAddress] = useState();
+  const [employerID, setEmployerID] = useState();
+
+  useEffect(() => {
+    axios
+      .post("http://localhost:3001/getEmployerPersonalInfo1", {
+        user_ID,
+      })
+      .then((response) => {
+        console.log(response.data.first_name);
+        setEmployerID(response.data.employer_ID);
+        setFirstName(response.data.first_name);
+        setLastName(response.data.last_name);
+        setFirstNameChi(response.data.first_name_chi);
+        setLastNameChi(response.data.last_name_chi);
+        setGender(response.data.gender);
+        setCity(response.data.city);
+        setEmailAddress(response.data.email_address);
+        setPhoneNo(response.data.phone_no);
+      });
+  }, []);
+
+
   let navigate = useNavigate();
   function handleClick() {
     alert("Profile Updated.");
@@ -30,6 +60,7 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
           event.target.employer_ID.value == ""
             ? response2.data.employer_ID
             : event.target.employer_ID.value;
+
         axios
           .post("http://localhost:3001/checkEmployerIDduplicate", {
             user_ID,
@@ -92,6 +123,7 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
                 .then((response) => {
                   console.log(response.data);
                 });
+                console.log(employer_ID + " " + user_ID);
               axios
                 .post(
                   "http://localhost:3001/updateFromAdminEmployerPersonalInfo2",
@@ -123,12 +155,15 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
             <div class="row">
               <div class="column">
                 <div className="form-group text1">
-                  <label>Employer ID</label>
+                  <label>Employer ID*</label>
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Employer ID"
                     name="employer_ID"
+                    value={employerID}
+                    onChange={(e) => setEmployerID(e.target.value)}
+                    required
                   />
                 </div>
               </div>
@@ -140,23 +175,29 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
             <div class="row">
               <div class="column">
                 <div className="form-group text1">
-                  <label>First Name (English)</label>
+                  <label>First Name (English)*</label>
                   <input
                     type="text"
                     className="form-control"
                     placeholder="First Name (English)"
                     name="first_name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
                   />
                 </div>
               </div>
               <div class="column">
                 <div className="form-group text1">
-                  <label>Last Name (English)</label>
+                  <label>Last Name (English)*</label>
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Last Name (English)"
                     name="last_name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    required
                   />
                 </div>
               </div>
@@ -171,6 +212,8 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
                     className="form-control"
                     placeholder="First Name (Chinese)"
                     name="first_name_chi"
+                    value={firstNameChi}
+                    onChange={(e) => setFirstNameChi(e.target.value)}
                   />
                 </div>
               </div>
@@ -182,6 +225,8 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
                     className="form-control"
                     placeholder="Last Name (Chinese)"
                     name="last_name_chi"
+                    value={lastNameChi}
+                    onChange={(e) => setLastNameChi(e.target.value)}
                   />
                 </div>
               </div>
@@ -191,12 +236,15 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
             <div class="row">
               <div class="column">
                 <div className="form-group text1">
-                  <label>Email Address</label>
+                  <label>Email Address*</label>
                   <input
                     type="email"
                     className="form-control"
                     placeholder="Email Address"
                     name="email_address"
+                    value={emailAddress}
+                    onChange={(e) => setEmailAddress(e.target.value)}
+                    required
                   />
                 </div>
               </div>
@@ -208,6 +256,8 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
                     className="form-control"
                     placeholder="Phone Number"
                     name="phone_no"
+                    value={phoneNo}
+                    onChange={(e) => setPhoneNo(e.target.value)}
                   />
                 </div>
               </div>
@@ -218,7 +268,11 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
                 <div className="form-group text1">
                   <label>Gender</label>
                   <div class="select">
-                    <select name="gender" className="bound1">
+                    <select name="gender" 
+                    className="bound1"
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                      >
                       <option value=""></option>
                       <option value="Male">&nbsp;&nbsp;Male</option>
                       <option value="Female">&nbsp;&nbsp;Female</option>
@@ -235,12 +289,14 @@ const AdminEmpProfileDetailUpdatePersonal = () => {
                     className="form-control"
                     placeholder="Country / City"
                     name="city"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
                   />
                 </div>
               </div>
             </div>
             <div className="mt-3"></div>
-            <button className="btn btn-danger btn-block text1">Update</button>
+            <button className="btn btn-danger btn-block text1">Update Information</button>
             <div className="mt-3"></div>
             <div className="form-group text1 hide">
               <input
