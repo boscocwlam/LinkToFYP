@@ -94,7 +94,7 @@ const StudentProfileUpdateFYP = () => {
     const user_ID = localStorage.getItem("isAuthenitcated");
     const fyp_name = event.target.fyp_name.value;
     const fyp_background = event.target.fyp_background.value;
-    const fyp_document = event.target.fyp_document.value;
+    // const fyp_document = event.target.fyp_document.value;
     const fyp_link = event.target.fyp_link.value;
     const fyp_skill_ID1 = event.target.fyp_skill_ID1.value ? event.target.fyp_skill_ID1.value : null;
     const fyp_skill_ID2 = event.target.fyp_skill_ID2.value ? event.target.fyp_skill_ID2.value : null;
@@ -130,7 +130,7 @@ const StudentProfileUpdateFYP = () => {
           user_ID,
           fyp_name,
           fyp_background,
-          fyp_document,
+ 
           fyp_link,
           fyp_skill_ID1,
           fyp_skill_ID2,
@@ -252,7 +252,7 @@ const StudentProfileUpdateFYP = () => {
             <div className="row">
               <div className="column">
                 <div className="form-group text1">
-                  <label>Skill 1</label>
+                  <label>Skill 1***</label>
                   <div class="select">
                     <select
                       name="fyp_skill_ID1"
@@ -274,13 +274,14 @@ const StudentProfileUpdateFYP = () => {
               </div>
               <div className="column">
                 <div className="form-group text1">
-                  <label>Score</label>
+                  <label>Score***</label>
                   <div class="select">
                     <select
                       name="fyp_score1"
                       className="bound1"
                       value={score1}
                       onChange={(e) => setScore1(e.target.value)}
+                      required
                     >
                       <option value="1">&nbsp;&nbsp;1</option>
                       <option value="2">&nbsp;&nbsp;2</option>

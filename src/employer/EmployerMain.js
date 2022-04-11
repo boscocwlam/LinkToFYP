@@ -51,6 +51,8 @@ const EmployerMain = () => {
           .then((response2) => {
             setStuNum(response2.data.length);
             setAllStuData(response2.data);
+            console.log(response2.data);
+
 
             ////////////// Change Skill ID To Skill Name ////////////////////////////
             response2.data.map((item2) => {

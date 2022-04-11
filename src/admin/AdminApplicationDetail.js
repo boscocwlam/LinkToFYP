@@ -25,10 +25,12 @@ const AdminApplicationDetail = () => {
     axios
       .post("http://localhost:3001/getNextStatus", {
         application_ID,
+        organization_ID
       })
       .then((response) => {
         console.log(response.data);
         if (response.data.length != 0) {
+          response.data.length = 1;
           setNextStatusData(response.data);
           setNextStatusName(response.data[0].status_name);
           setNextStatusID(response.data[0].status_ID);
@@ -197,7 +199,7 @@ const AdminApplicationDetail = () => {
 
               <div className="mt-4"></div>
             </div>
-          );
+        );
         })}
 
         <div className="mt-4"></div>

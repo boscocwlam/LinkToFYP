@@ -1659,7 +1659,7 @@ app.post("/updatePersonalFYP1", (req, res) => {
   const user_ID = req.body.user_ID;
   const fyp_name = req.body.fyp_name;
   const fyp_background = req.body.fyp_background;
-  const fyp_document = req.body.fyp_document;
+
   const fyp_link = req.body.fyp_link;
   const fyp_final_grade = req.body.fyp_final_grade;
   const fyp_skill_ID1 = req.body.fyp_skill_ID1;
@@ -1674,12 +1674,12 @@ app.post("/updatePersonalFYP1", (req, res) => {
   const fyp_score5 = req.body.fyp_score5;
 
   db.query(
-    "UPDATE Students SET fyp_name = ?, fyp_final_grade = ?, fyp_background= ?, fyp_document = ?, fyp_link = ?, fyp_skill_ID1 = ?, fyp_skill_ID2 = ?, fyp_skill_ID3 = ?, fyp_skill_ID4 = ?, fyp_skill_ID5 = ?, fyp_score1 = ?, fyp_score2 = ?,  fyp_score3 = ?,  fyp_score4 = ?, fyp_score5 = ?  WHERE user_ID = ?",
+    "UPDATE Students SET fyp_name = ?, fyp_final_grade = ?, fyp_background= ?, fyp_link = ?, fyp_skill_ID1 = ?, fyp_skill_ID2 = ?, fyp_skill_ID3 = ?, fyp_skill_ID4 = ?, fyp_skill_ID5 = ?, fyp_score1 = ?, fyp_score2 = ?,  fyp_score3 = ?,  fyp_score4 = ?, fyp_score5 = ?  WHERE user_ID = ?",
     [
       fyp_name,
       fyp_final_grade,
       fyp_background,
-      fyp_document,
+
       fyp_link,
       fyp_skill_ID1,
       fyp_skill_ID2,
@@ -2013,9 +2013,10 @@ app.post("/viewApplication", (req, res) => {
 //AdminApplicationDetail.js
 app.post("/getNextStatus", (req, res) => {
   const application_ID = req.body.application_ID;
+  const organization_ID = req.body.organization_ID;
   db.query(
-    "select status_name, status_ID from status where status_order = 1 + (select max(status_order) from statusrecords, status where status.status_ID = statusrecords.status_ID and application_ID = ?)",
-    [application_ID],
+    "select status_name, status_ID from status where status_order = 1 + (select max(status_order) from statusrecords, status where status.status_ID = statusrecords.status_ID and application_ID = ?) and organization_ID = ?",
+    [application_ID, organization_ID],
     (err, result) => {
       if (err) {
         res.send({ err: err });

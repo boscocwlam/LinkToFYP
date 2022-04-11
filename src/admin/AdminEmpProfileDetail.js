@@ -236,7 +236,7 @@ const AdminEmpProfileDetail = () => {
         <div className="mt-4"></div>
         <div className="boundary33">
           <div className="mt-4"></div>
-          <h6 className="letter4">{recordStatus}</h6>
+
           <div className="mt-4"></div>
 
           <div>
@@ -245,6 +245,7 @@ const AdminEmpProfileDetail = () => {
                 <div className="mt-4"></div>
                 <h5> Posted Job Information</h5>
                 <Dropdown.Divider />
+                <h6 className="letter4">{recordStatus}</h6>
                 <div className="mt-4"></div>
                 {jobData.map((item) => {
                   return (

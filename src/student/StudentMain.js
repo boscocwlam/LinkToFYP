@@ -299,7 +299,7 @@ const StudentMain = () => {
                     <tbody>
                       <tr>
                         <td className="letter3">PROJECT NAME</td>
-                        <td className="letter4">{item.fyp_name}</td>;
+                        <td className="letter4">{item.fyp_name}</td>
                       </tr>
                       <tr>
                         <td className="letter3">FINAL GRADE</td>

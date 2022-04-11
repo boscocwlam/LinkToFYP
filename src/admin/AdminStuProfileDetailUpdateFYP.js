@@ -97,7 +97,7 @@ const AdminStuProfileDetailUpdateFYP = () => {
     event.preventDefault();
     const fyp_name = event.target.fyp_name.value;
     const fyp_background = event.target.fyp_background.value;
-    const fyp_document = event.target.fyp_document.value;
+    // const fyp_document = event.target.fyp_document.value;
     const fyp_link = event.target.fyp_link.value;
     const fyp_final_grade = event.target.fyp_final_grade.value;
     const fyp_skill_ID1 = event.target.fyp_skill_ID1.value ? event.target.fyp_skill_ID1.value : null;
@@ -136,7 +136,7 @@ const AdminStuProfileDetailUpdateFYP = () => {
           fyp_name,
           fyp_final_grade,
           fyp_background,
-          fyp_document,
+          // fyp_document,
           fyp_link,
           fyp_skill_ID1,
           fyp_skill_ID2,
@@ -228,7 +228,7 @@ const AdminStuProfileDetailUpdateFYP = () => {
               </div>
             </div>
             <div className="mt-3"></div>
-            <div className="row">
+            {/* <div className="row">
               <div className="column">
                 <div className="form-group text1">
                   <label>Document Attached</label>
@@ -255,7 +255,7 @@ const AdminStuProfileDetailUpdateFYP = () => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="mt-4"></div>
             <Dropdown.Divider />
             <div className="mt-4"></div>
@@ -271,7 +271,7 @@ const AdminStuProfileDetailUpdateFYP = () => {
             <div className="row">
               <div className="column">
                 <div className="form-group text1">
-                  <label>Skill 1</label>
+                  <label>Skill 1***</label>
                   <div class="select">
                     <select
                       name="fyp_skill_ID1"
@@ -293,13 +293,14 @@ const AdminStuProfileDetailUpdateFYP = () => {
               </div>
               <div className="column">
                 <div className="form-group text1">
-                  <label>Score</label>
+                  <label>Score***</label>
                   <div class="select">
                     <select
                       name="fyp_score1"
                       className="bound1"
                       value={score1}
                       onChange={(e) => setScore1(e.target.value)}
+                      
                     >
                       <option value="1">&nbsp;&nbsp;1</option>
                       <option value="2">&nbsp;&nbsp;2</option>
@@ -533,6 +534,7 @@ const AdminStuProfileDetailUpdateFYP = () => {
           >
             Return To Previous Page
           </Link>
+          <div className="mt-3"></div>
         </Container>
       </div>
     </div>
